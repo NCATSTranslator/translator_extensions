@@ -2,7 +2,7 @@
 {
   "info": {
     "x-translator": {
-      "api_type": "KP",
+      "component": "KP",
       "team": [
         "Service Provider"
       ]
@@ -11,11 +11,11 @@
 }
 
 ## each of the items below should fail
-## only one of the items (api_type is misspelled)
+## only one of the items (component is misspelled)
 {
   "info": {
     "x-translator": {
-      "apitype": "KP",
+      "compnent": "KP",
       "team": [
         "Service Provider"
       ]
@@ -27,7 +27,7 @@
 {
   "info": {
     "x-translator": {
-      "api_type": "KPd",
+      "component": "KPd",
       "team": [
         "Service Provider"
       ]
@@ -39,7 +39,7 @@
 {
   "info": {
     "x-translator": {
-      "api_type": "KP",
+      "component": "KP",
       "team": [
         "Service Providerd"
       ]
@@ -52,7 +52,7 @@
 {
   "info": {
     "x-translator": {
-      "api_type": "KP",
+      "component": "KP",
       "team": [
         "Service Provider",
         "Service Provider"
@@ -65,7 +65,7 @@
 {
   "info": {
     "x-translator": {
-      "api_type": "KP",
+      "component": "KP",
       "team": [
       ]
     }

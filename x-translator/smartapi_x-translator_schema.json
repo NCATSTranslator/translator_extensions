@@ -2,7 +2,7 @@
   "title": "x-translator extension within info.",
   "$schema": "http://json-schema.org/draft-04/schema#",
   "type": "object",
-  "description": "x-translator is a JSON object describes API-level, Translator-specific information. It is an extension/additional property inside the OpenAPI Info Object",
+  "description": "x-translator is a JSON object describes API-level, Translator-specific information. It is an extension/additional property inside the OpenAPI Info Object. Currently only one component-type allowed per API",
   "properties": {
     "info": {
       "type": "object",
@@ -10,17 +10,17 @@
         "x-translator": {
           "type": "object",
           "required": [
-            "api_type",
+            "component",
             "team"
           ],
           "properties": {
-            "api_type": {
+            "component": {
               "type": "string",
               "enum": [
                 "KP",
                 "ARA",
                 "ARS",
-                "SRI Service"
+                "Utility"
               ]
             },
             "team": {
