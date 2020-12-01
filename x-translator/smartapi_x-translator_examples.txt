@@ -1,0 +1,73 @@
+## this should work
+{
+  "info": {
+    "x-translator": {
+      "component": "KP",
+      "team": [
+        "Service Provider"
+      ]
+    }
+  }
+}
+
+## each of the items below should fail
+## only one of the items (component is misspelled)
+{
+  "info": {
+    "x-translator": {
+      "compnent": "KP",
+      "team": [
+        "Service Provider"
+      ]
+    }
+  }
+}
+
+## not in api_type enums
+{
+  "info": {
+    "x-translator": {
+      "component": "KPd",
+      "team": [
+        "Service Provider"
+      ]
+    }
+  }
+}
+
+## not in team enums
+{
+  "info": {
+    "x-translator": {
+      "component": "KP",
+      "team": [
+        "Service Providerd"
+      ]
+    }
+  }
+}
+
+
+## repeated items within teams
+{
+  "info": {
+    "x-translator": {
+      "component": "KP",
+      "team": [
+        "Service Provider",
+        "Service Provider"
+      ]
+    }
+  }
+}
+
+## must have at least one element in team
+{
+  "info": {
+    "x-translator": {
+      "component": "KP",
+      "team": [
+      ]
+    }
+  }
+}
