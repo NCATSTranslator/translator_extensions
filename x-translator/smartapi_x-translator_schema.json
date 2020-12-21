@@ -7,7 +7,12 @@
     "tags": {
       "type": "array",
       "items": {
-        "$ref": "#/definitions/tag"
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
       }
     },
     "info": {
@@ -107,15 +112,5 @@
         }
       }
     }
-  ], 
-  "definitions": {
-    "tag": {
-      "properties": {
-        "x-id": {
-          "type": "string",
-          "description": "The name of the tag. Recommend that you use URI to specify the concept."
-        }
-      }
-    }
-  }
+  ]
 }
