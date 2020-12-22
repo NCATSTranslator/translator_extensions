@@ -1,8 +1,8 @@
 {
   "title": "x-translator extension within info.",
-  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
-  "description": "x-translator is a JSON object describes API-level, Translator-specific information. It is an extension/additional property inside the OpenAPI Info Object. Currently only one component-type allowed per API",
+  "description": "x-translator is a JSON object describes API-level, Translator-specific information. It is an extension/additional property inside the OpenAPI Info Object. Currently only one component-type allowed per API. x-translator should be present when the translator tag is present, and vice versa.",
   "properties": {
     "info": {
       "type": "object",
@@ -53,5 +53,53 @@
         }
       }
     }
-  }
+  },
+  "allOf":[
+    {
+      "if": {
+        "required": ["info"],
+        "properties": {
+          "info": {
+            "required": ["x-translator"]
+          }
+        }
+      },
+      "then": {
+        "required": ["tags"],
+        "properties": {
+          "tags": {
+            "contains": {
+              "type": "object",
+              "required": ["name"],
+              "properties":
+              {"name": {"const": "translator"}}
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": ["tags"],
+        "properties": {
+          "tags": {
+            "contains": {
+              "type": "object",
+              "required": ["name"],
+              "properties":
+              {"name": {"const": "translator"}}
+            }
+          }
+        }
+      },
+      "then": {
+        "required": ["info"],
+        "properties": {
+          "info": {
+            "required": ["x-translator"]
+          }
+        }
+      }
+    }
+  ]
 }
