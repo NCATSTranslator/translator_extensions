@@ -4,17 +4,6 @@
   "type": "object",
   "description": "x-translator is a JSON object describes API-level, Translator-specific information. It is an extension/additional property inside the OpenAPI Info Object. Currently only one component-type allowed per API. x-translator should be present when the translator tag is present, and vice versa.",
   "properties": {
-    "tags": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          }
-        }
-      }
-    },
     "info": {
       "type": "object",
       "properties": {
