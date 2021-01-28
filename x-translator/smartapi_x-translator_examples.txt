@@ -5,10 +5,23 @@
     {"name": "biothings"}],
   "info": {
     "x-translator": {  ## required x-translator extension
-      "component": "KP",
+      "component": "KP",  ## one of several options
       "team": [
-        "Service Provider"
+        "Service Provider"  ## one of several options
       ]
+    }
+  }
+}
+
+## this should work (one team usingn a string rather than an array)
+{
+  "tags": [
+    {"name": "translator"},  ## required translator tag
+    {"name": "biothings"}],
+  "info": {
+    "x-translator": {  ## required x-translator extension
+      "component": "KP",
+      "team": "Service Provider"
     }
   }
 }
@@ -22,40 +35,7 @@
   }
 }
 
-
-## EACH OF THE ITEMS BELOW SHOULD FAIL 
-
-## x-translator present but translator tag is missing or misspelled
-## the translator tag is misspelled below
- {
-  "tags": [
-    {"name": "transltor"},
-    {"name": "biothings"}],
-  "info": {
-    "x-translator": {
-      "component": "KP",
-      "team": [
-        "Service Provider"
-      ]
-    }
-  }
-}
-
-## translator tag present but x-translator is missing or misspelled
-## the x-translator field is misspelled below
-{
-  "tags": [
-    {"name": "translator"},
-    {"name": "biothings"}],
-  "info": {
-    "x-transltor": {
-      "component": "KP",
-      "team": [
-        "Service Provider"
-      ]
-    }
-  }
-}
+## COMMON ERRORS: these should fail validation
 
 ## within x-translator, component and team both need to be present
 ## below, component is misspelled 
@@ -84,6 +64,40 @@
       "component": "thing",
       "team": [
         "outsideForNow"
+      ]
+    }
+  }
+}
+
+## OTHER ERRORS: these should fail validation
+
+## x-translator present but translator tag is missing or misspelled
+## the translator tag is misspelled below
+ {
+  "tags": [
+    {"name": "transltor"},
+    {"name": "biothings"}],
+  "info": {
+    "x-translator": {
+      "component": "KP",
+      "team": [
+        "Service Provider"
+      ]
+    }
+  }
+}
+
+## translator tag present but x-translator is missing or misspelled
+## the x-translator field is misspelled below
+{
+  "tags": [
+    {"name": "translator"},
+    {"name": "biothings"}],
+  "info": {
+    "x-transltor": {
+      "component": "KP",
+      "team": [
+        "Service Provider"
       ]
     }
   }
