@@ -1,0 +1,95 @@
+{
+  "title": "x-trapi extension within info.",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "description": "x-trapi is a JSON object that describes API-level, TRAPI-Standard-specific information. It is an extension/additional property inside the OpenAPI Info Object. x-trapi should be present when the trapi tag is present, and vice versa.",
+  "properties": {
+    "info": {
+      "type": "object",
+      "properties": {
+        "x-trapi": {
+          "type": "object",
+          "required": [
+            "version"
+          ],
+          "properties": {
+            "version": {
+              "description": "One version number (e.g. '0.9.2', '1.0.0'",
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": [
+          "info"
+        ],
+        "properties": {
+          "info": {
+            "required": [
+              "x-trapi"
+            ]
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "tags"
+        ],
+        "properties": {
+          "tags": {
+            "contains": {
+              "type": "object",
+              "required": [
+                "name"
+              ],
+              "properties": {
+                "name": {
+                  "const": "trapi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [
+          "tags"
+        ],
+        "properties": {
+          "tags": {
+            "contains": {
+              "type": "object",
+              "required": [
+                "name"
+              ],
+              "properties": {
+                "name": {
+                  "const": "trapi"
+                }
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "info"
+        ],
+        "properties": {
+          "info": {
+            "required": [
+              "x-trapi"
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

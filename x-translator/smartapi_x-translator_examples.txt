@@ -13,7 +13,7 @@
   }
 }
 
-## this should work (one team usingn a string rather than an array)
+## this should work (one team using a string rather than an array)
 {
   "tags": [
     {"name": "translator"},  ## required translator tag

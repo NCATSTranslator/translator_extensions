@@ -1,0 +1,20 @@
+## this should work
+{
+  "tags": [
+    {"name": "trapi"},  ## required trapi tag
+    {"name": "biothings"}],
+  "info": {
+    "x-trapi": {  ## required x-trapi extension
+      "version": "1.0.0"
+    }
+  }
+}
+
+## this also should work: 
+## both the x-trapi extension and the trapi tag aren't present
+{
+  "tags": [
+    {"name": "biothings"}],
+  "info": {
+  }
+}
