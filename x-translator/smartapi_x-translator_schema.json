@@ -24,55 +24,30 @@
               ]
             },
             "team": {
-              "oneOf": [
-                {
-                  "type": "string",
-                  "enum": [
-                    "Service Provider",
-                    "Multiomics Provider",
-                    "Clinical Data Provider",
-                    "Connections Hypothesis Provider",
-                    "Molecular Data Provider",
-                    "Text Mining Provider",
-                    "Exposures Provider",
-                    "Genetics Provider",
-                    "Ranking Agent",
-                    "imProving Agent",
-                    "Unsecret Agent",
-                    "Explanatory Agent",
-                    "Expander Agent",
-                    "Exploring Agent",
-                    "Link Brokers",
-                    "Standards Reference Implementation Team"
-                  ]
-                },
-                {
-                  "type": "array",
-                  "minItems": 1,
-                  "uniqueItems": true,
-                  "items": {
-                    "type": "string",
-                    "enum": [
-                      "Service Provider",
-                      "Multiomics Provider",
-                      "Clinical Data Provider",
-                      "Connections Hypothesis Provider",
-                      "Molecular Data Provider",
-                      "Text Mining Provider",
-                      "Exposures Provider",
-                      "Genetics Provider",
-                      "Ranking Agent",
-                      "imProving Agent",
-                      "Unsecret Agent",
-                      "Explanatory Agent",
-                      "Expander Agent",
-                      "Exploring Agent",
-                      "Link Brokers",
-                      "Standards Reference Implementation Team"
-                    ]
-                  }
-                }
-              ]
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "enum": [
+                  "Service Provider",
+                  "Multiomics Provider",
+                  "Clinical Data Provider",
+                  "Connections Hypothesis Provider",
+                  "Molecular Data Provider",
+                  "Text Mining Provider",
+                  "Exposures Provider",
+                  "Genetics Provider",
+                  "Ranking Agent",
+                  "imProving Agent",
+                  "Unsecret Agent",
+                  "Explanatory Agent",
+                  "Expander Agent",
+                  "Exploring Agent",
+                  "Link Brokers",
+                  "Standards Reference Implementation Team"
+                ]
+              }
             }
           }
         }

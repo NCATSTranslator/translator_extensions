@@ -1,27 +1,14 @@
 ## this should work
 {
   "tags": [
-    {"name": "translator"},  ## required translator tag
+    {"name": "translator"},  
     {"name": "biothings"}],
   "info": {
-    "x-translator": {  ## required x-translator extension
-      "component": "KP",  ## one of several options
+    "x-translator": {  
+      "component": "KP",  
       "team": [
-        "Service Provider"  ## one of several options
+        "Service Provider"  
       ]
-    }
-  }
-}
-
-## this should work (one team using a string rather than an array)
-{
-  "tags": [
-    {"name": "translator"},  ## required translator tag
-    {"name": "biothings"}],
-  "info": {
-    "x-translator": {  ## required x-translator extension
-      "component": "KP",
-      "team": "Service Provider"
     }
   }
 }
@@ -35,7 +22,21 @@
   }
 }
 
+
 ## COMMON ERRORS: these should fail validation
+
+## team's value cannot be a string (can be a one-element array) 
+{
+  "tags": [
+    {"name": "translator"},  
+    {"name": "biothings"}],
+  "info": {
+    "x-translator": {  
+      "component": "KP",
+      "team": "Service Provider"
+    }
+  }
+}
 
 ## within x-translator, component and team both need to be present
 ## below, component is misspelled 
@@ -68,6 +69,7 @@
     }
   }
 }
+
 
 ## OTHER ERRORS: these should fail validation
 
