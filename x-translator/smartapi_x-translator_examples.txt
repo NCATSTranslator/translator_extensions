@@ -1,4 +1,4 @@
-## this should work
+## this should work.
 {
   "tags": [
     {"name": "translator"},  
@@ -6,9 +6,8 @@
   "info": {
     "x-translator": {  
       "component": "KP",  
-      "team": [
-        "Service Provider"  
-      ]
+      "team": ["Service Provider"],
+      "biolink-version": "1.4.0"
     }
   }
 }
