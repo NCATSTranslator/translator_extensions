@@ -1,0 +1,22 @@
+## this should work
+{
+  "tags": [
+    {"name": "translator"},  
+    {"name": "kge"}],
+  "info": {
+    "x-kge": {  
+      "version": {
+        "latest": "1.0",
+        "others": []}
+    }
+  }
+}
+
+## this also should work: 
+## both the x-kge extension and the kge tag aren't present
+{
+  "tags": [
+    {"name": "biothings"}],
+  "info": {
+  }
+}

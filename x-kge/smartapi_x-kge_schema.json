@@ -1,0 +1,109 @@
+{
+  "title": "x-kge extension within info.",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "description": "x-kge is a JSON object that describes API-level, Translator Knowledge-Graph-Exchange-specific information. It is an extension/additional property inside the OpenAPI Info Object. x-kge should be present when the kge tag is present, and vice versa.",
+  "properties": {
+    "info": {
+      "type": "object",
+      "properties": {
+        "x-kge": {
+          "type": "object",
+          "required": [
+            "version"
+          ],
+          "properties": {
+            "version": {
+              "description": "Work-in-progress on what to include (currently requiring a latest version, and allowing other versions to be specified) and the version format (SemVar? timestamp?).",
+              "type": "object",
+              "required": [
+                "latest"
+              ],
+              "properties": {
+                "latest": {
+                  "type": "string"
+                },
+                "others": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": [
+          "info"
+        ],
+        "properties": {
+          "info": {
+            "required": [
+              "x-kge"
+            ]
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "tags"
+        ],
+        "properties": {
+          "tags": {
+            "contains": {
+              "type": "object",
+              "required": [
+                "name"
+              ],
+              "properties": {
+                "name": {
+                  "const": "kge"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [
+          "tags"
+        ],
+        "properties": {
+          "tags": {
+            "contains": {
+              "type": "object",
+              "required": [
+                "name"
+              ],
+              "properties": {
+                "name": {
+                  "const": "kge"
+                }
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "info"
+        ],
+        "properties": {
+          "info": {
+            "required": [
+              "x-kge"
+            ]
+          }
+        }
+      }
+    }
+  ]
+}
