@@ -15,12 +15,27 @@
           ],
           "properties": {
             "component": {
-              "type": "string",
-              "enum": [
-                "KP",
-                "ARA",
-                "ARS",
-                "Utility"
+              "oneOf": [
+                {"type": "string",
+                "enum": [
+                  "KP",
+                  "ARA",
+                  "ARS",
+                  "Utility"
+                ]},
+                {
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "KP",
+                      "ARA",
+                      "ARS",
+                      "Utility"
+                    ]}
+                }
               ]
             },
             "team": {
