@@ -14,6 +14,10 @@
             "team"
           ],
           "properties": {
+            "infores-curie": {
+              "type": "string",
+              "pattern": "^infores:(.+)"
+            },
             "component": {
               "type": "string",
               "enum": [
