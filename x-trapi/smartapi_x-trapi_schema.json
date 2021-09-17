@@ -24,6 +24,18 @@
               "items": {
                 "type": "string"
               }
+            },
+            "rate_limit": {
+              "description": "Maximum number of requests allowed per _minute_ from each client. -1 indicates no limit.",
+              "type": "integer",
+              "minimum": -1,
+              "default": -1
+            },
+            "batch_size_limit": {
+              "description": "Maximum number of CURIEs allowed in _any_ 'ids', 'categories', or 'predicates' list. -1 indicates no limit.",
+              "type": "integer",
+              "minimum": -1,
+              "default": -1
             }
           }
         }
