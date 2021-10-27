@@ -14,7 +14,7 @@
             "team"
           ],
           "properties": {
-            "infores-curie": {
+            "infores": {
               "type": "string",
               "pattern": "^infores:(.+)"
             },

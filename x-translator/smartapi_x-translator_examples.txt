@@ -8,6 +8,7 @@
       "component": "KP",  
       "team": ["Service Provider"],
       "biolink-version": "1.4.0"
+      "infores": "infores:biolink-api"
     }
   }
 }
