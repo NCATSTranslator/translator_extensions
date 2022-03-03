@@ -36,6 +36,11 @@
               "type": "integer",
               "minimum": -1,
               "default": -1
+            },
+            "test_data_location": {
+              "description": "URL that resolves to test data in the API's source code repository.",
+              "type": "string",
+              "format": "uri"
             }
           }
         }
