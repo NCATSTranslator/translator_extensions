@@ -27,9 +27,11 @@ An example of a valid x-translator extension in YAML is:
   - name: biothings
   info:
     x-translator:      ## required x-translator extension
+      infores: "infores:biothings"
       component: KP
       team:
       - "Service Provider"
+      biolink-version: "2.2.16"
 ```
 This same example in JSON and other examples of valid and invalid instances (in JSON) are in [this example file](https://github.com/NCATSTranslator/translator_extensions/blob/main/x-translator/smartapi_x-translator_examples.txt). 
 
