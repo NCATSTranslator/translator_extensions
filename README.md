@@ -27,7 +27,7 @@ An example of a valid x-translator extension in YAML is:
   - name: biothings
   info:
     x-translator:      ## required x-translator extension
-      infores: "infores:biothings"
+      infores: "infores:biolink-api"
       component: KP
       team:
       - "Service Provider"
