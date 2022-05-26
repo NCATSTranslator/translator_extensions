@@ -7,7 +7,7 @@
     "x-translator": {  
       "component": "KP",  
       "team": ["Service Provider"],
-      "biolink-version": "1.4.0"
+      "biolink-version": "2.2.16"
       "infores": "infores:biolink-api"
     }
   }
@@ -132,6 +132,37 @@
       "team": [
 
       ]
+    }
+  }
+}
+
+## the biolink-version should be a full SemVer, with 'major.minor.patch'
+{
+  "tags": [
+    {"name": "translator"},
+    {"name": "biothings"}],
+  "info": {
+    "x-translator": {
+      "component": "KP",
+      "team": ["Service Provider"],
+      "biolink-version": "1"
+      "infores": "infores:biolink-api"
+    }
+  }
+}
+
+## the 'infores' tag must be a full CURIE with namespace prefix `infores:`
+
+{
+  "tags": [
+    {"name": "translator"},
+    {"name": "biothings"}],
+  "info": {
+    "x-translator": {
+      "component": "KP",
+      "team": ["Service Provider"],
+      "biolink-version": "2.2.16"
+      "infores": "biolink-api"
     }
   }
 }

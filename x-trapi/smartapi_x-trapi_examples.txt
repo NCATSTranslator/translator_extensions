@@ -5,7 +5,7 @@
     {"name": "biothings"}],
   "info": {
     "x-trapi": {  ## required x-trapi extension
-      "version": "1.0.0",
+      "version": "1.2.0",
       "operations": ["OperationLookup"]
       "test_data_location": "https://github.com/biothings/biothings.api/blob/master/test_data"
     }
@@ -18,5 +18,50 @@
   "tags": [
     {"name": "biothings"}],
   "info": {
+  }
+}
+
+## COMMON ERRORS: these should fail validation
+
+## the version should be a full TRAPI SemVer, with 'major.minor.patch'
+
+{
+  "tags": [
+    {"name": "trapi"},  ## required trapi tag
+    {"name": "biothings"}],
+  "info": {
+    "x-trapi": {  ## required x-trapi extension
+      "version": "1",
+      "operations": ["OperationLookup"]
+      "test_data_location": "https://github.com/biothings/biothings.api/blob/master/test_data"
+    }
+  }
+}
+
+## operations' value cannot be a string (can be a one-element array)
+{
+  "tags": [
+    {"name": "trapi"},  ## required trapi tag
+    {"name": "biothings"}],
+  "info": {
+    "x-trapi": {  ## required x-trapi extension
+      "version": "1.2.0",
+      "operations": "OperationLookup"
+      "test_data_location": "https://github.com/biothings/biothings.api/blob/master/test_data"
+    }
+  }
+}
+
+## "test_data_location" should be an internet resolvable URL
+{
+  "tags": [
+    {"name": "trapi"},  ## required trapi tag
+    {"name": "biothings"}],
+  "info": {
+    "x-trapi": {  ## required x-trapi extension
+      "version": "1.2.0",
+      "operations": ["OperationLookup"]
+      "test_data_location": "test_data"
+    }
   }
 }
