@@ -1,4 +1,5 @@
 # translator_extensions
+
 The Translator-specific metadata extensions used in the SmartAPI registry
 
 ## x-translator
@@ -10,7 +11,7 @@ This extension is inside the OpenAPI info object and contains basic API-level me
 
 - **infores:** Information Resource CURIE identifying the Translator Resource
 - **component:** One of  "KP", "ARA", "ARS", "Utility"
-- **team**: List of contributing Translator teams (see [schema file](https://github.com/STARInformatics/translator_extensions/blob/main/x-translator/smartapi_x-translator_schema.json) for the full list)
+- **team**: List of contributing Translator teams (see [schema file](https://github.com/NCATSTranslator/translator_extensions/blob/main/x-translator/smartapi_x-translator_schema.json) for the full list)
 - **biolink-version:**  One SemVer-formatted version number (e.g. '1.8.2', '2.2.16', etc.)
 
 Associated rules:
@@ -65,4 +66,4 @@ An example of a valid x-trapi extension in YAML is:
       - OperationLookup
       test_data_location: "https://github.com/biothings/biothings.api/blob/master/test_data"  # just a fictional example link
 ```
-This same example in JSON and other examples of valid and invalid instances (in JSON) are in [this example file](https://github.com/STARInformatics/translator_extensions/blob/main/x-trapi/smartapi_x-trapi_examples.txt).
+This same example in JSON and other examples of valid and invalid instances (in JSON) are in [this example file](https://github.com/NCATSTranslator/translator_extensions/blob/main/x-trapi/smartapi_x-trapi_examples.txt).
