@@ -21,7 +21,7 @@ Associated rules:
 
 #### Examples
 
-An example of a valid x-translator extension in YAML is:  
+An example of a valid `x-translator` extension in YAML is:  
 ```
   tags:
   - name: translator    ## required translator tag
@@ -47,7 +47,7 @@ This extension's schema has been started, and registry files currently contain t
 This extension is inside the OpenAPI info object and contains basic API-level metadata. Currently, there are three (required) properties: `version`, `operations` and `test_data_location`, plus other optional ones:
 
 - **version:** States the TRAPI standard version, as a SemVer formatted number (e.g. '1.1', '1.2', '1.3'), indicating that the Translator Resource is compliant with / built to this version. The TRAPI standard and its versions can be viewed [here](https://github.com/NCATSTranslator/ReasonerAPI)."
-- **operations:** List of implemented operations, drawn from http://standards.ncats.io/operation.json
+- **operations:** List of implemented operations, drawn from [operation.json](http://standards.ncats.io/operation.json).
 - **rate_limit**: Maximum number of requests allowed per _minute_ from each client. -1 indicates no limit.
 - **batch_size_limit:** Maximum number of CURIEs allowed in _any_ 'ids', 'categories', or 'predicates' list. -1 indicates no limit.
 - **test_data_location:** URL that resolves to [SRI Testing harness](https://github.com/TranslatorSRI/SRI_testing) compliant test data in some public internet location (e.g. in the API implementation source code repository).
