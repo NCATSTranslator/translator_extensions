@@ -10,7 +10,9 @@
         "x-trapi": {
           "type": "object",
           "required": [
-            "version"
+            "version",
+            "operations",
+            "test_data_location"
           ],
           "properties": {
             "version": {

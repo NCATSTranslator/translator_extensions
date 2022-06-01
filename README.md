@@ -12,7 +12,7 @@ This extension is inside the OpenAPI info object and contains basic API-level me
 - **infores:** Information Resource CURIE identifying the Translator Resource (see the [current inventory of Infores CURIEs](https://docs.google.com/spreadsheets/d/1Ak1hRqlTLr1qa-7O0s5bqeTHukj9gSLQML1-lg6xIHM) and general information about them [here](https://docs.google.com/document/d/177sOmjTueIK4XKJ0GjxsARg909CaU71tReIehAp5DDo/edit#bookmark=id.8sdy3vk2umkd)).
 - **component:** One of  "KP", "ARA", "ARS", "Utility"
 - **team**: List of contributing Translator teams (see [schema file](https://github.com/NCATSTranslator/translator_extensions/blob/main/x-translator/smartapi_x-translator_schema.json) for the full list)
-- **biolink-version:**  One SemVer-formatted version number (e.g. '1.8.2', '2.2.16', etc.)
+- **biolink-version:**  One SemVer-formatted version number (e.g. '1.8.2', '2.2.16', etc.). This is the [release](https://github.com/biolink/biolink-model/releases) of the [Biolink Model](https://github.com/biolink/biolink-model) that to which the Translator Resource is currently compliant."
 
 Associated rules:
  

@@ -23,6 +23,43 @@
 
 ## COMMON ERRORS: these should fail validation
 
+### If "x-trapi" is given, then "version", "operations" and "test_data_location" are all mandatory.
+{
+  "tags": [
+    {"name": "trapi"},  ## required trapi tag
+    {"name": "biothings"}],
+  "info": {
+    "x-trapi": {  ## required x-trapi extension
+      "operations": ["OperationLookup"]
+      "test_data_location": "https://github.com/biothings/biothings.api/blob/master/test_data"
+    }
+  }
+}
+
+{
+  "tags": [
+    {"name": "trapi"},  ## required trapi tag
+    {"name": "biothings"}],
+  "info": {
+    "x-trapi": {  ## required x-trapi extension
+      "version": "1.2.0",
+      "test_data_location": "https://github.com/biothings/biothings.api/blob/master/test_data"
+    }
+  }
+}
+
+{
+  "tags": [
+    {"name": "trapi"},  ## required trapi tag
+    {"name": "biothings"}],
+  "info": {
+    "x-trapi": {  ## required x-trapi extension
+      "version": "1.2.0",
+      "operations": ["OperationLookup"]
+    }
+  }
+}
+
 ## the version should be a full TRAPI SemVer, with 'major.minor.patch'
 
 {
