@@ -6,7 +6,7 @@ The Translator-specific metadata extensions used in the SmartAPI registry
 
 #### Status
 
-This extension's schema has been written, and registry files currently contain this extension.
+This extension's schema has been written, and registry files currently contain this extension. It is closely related to the [TRAPI standard](https://github.com/NCATSTranslator/ReasonerAPI).
 
 #### Description
 
@@ -47,17 +47,20 @@ Other examples of valid and invalid `x-translator` annotations (in JSON) are in 
 
 #### Status
 
-This extension's schema has been started, and registry files currently contain this extension.
+This extension's schema has been started, and registry files currently contain this extension. It is closely related to the [TRAPI standard](https://github.com/NCATSTranslator/ReasonerAPI).
 
 #### Description
 
-This extension is inside the OpenAPI info object and contains basic API-level metadata. Currently, there is one required property (`version`) plus other optional ones:
+This extension is inside the OpenAPI info object and contains basic API-level metadata. Currently, there are 3 required properties (`version`, `operations`, `test_data_location`).
 
-- **version:** States the TRAPI standard version, as a SemVer formatted number (e.g. '1.1', '1.2', '1.3'), indicating that the Translator Resource is compliant with / built to this version. The TRAPI standard and its versions can be viewed [here](https://github.com/NCATSTranslator/ReasonerAPI)."
-- **operations:** List of implemented operations, drawn from [operation.json](http://standards.ncats.io/operation.json).
+Current properties include:
+
+- **version:** States the TRAPI standard version, as a SemVer formatted number (e.g. '1.1', '1.2', '1.3'), indicating that the Translator Resource is compliant with / built to this version.
+- **asyncquery:** Boolean. true if this service has TRAPI-compliant asyncquery endpoints. Otherwise, false. 
+- **operations:** List of implemented operations. Use the IDs of the operations in this [standard](http://standards.ncats.io/operation.json).
+- **batch_size_limit:** Maximum number of CURIEs allowed in _any_ 'ids', 'categories', or 'predicates' list. -1 indicates no limit. See ImplementationRules.md in the TRAPI standard github repo for details. 
 - **rate_limit**: Maximum number of requests allowed per _minute_ from each client. -1 indicates no limit.
-- **batch_size_limit:** Maximum number of CURIEs allowed in _any_ 'ids', 'categories', or 'predicates' list. -1 indicates no limit.
-- **test_data_location:** URL that resolves to [SRI Testing harness](https://github.com/TranslatorSRI/SRI_testing) compliant test data in some public internet location (e.g. in the API implementation source code repository).
+- **test_data_location:** URL that resolves to [SRI-Testing-harness](https://github.com/TranslatorSRI/SRI_testing) -compliant test data in some public internet location (e.g. in the API implementation source code repository).
 
 #### Examples
 

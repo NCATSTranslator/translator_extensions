@@ -10,7 +10,9 @@
         "x-trapi": {
           "type": "object",
           "required": [
-            "version"
+            "version",
+            "operations",
+            "test_data_location"
           ],
           "properties": {
             "version": {
@@ -18,11 +20,46 @@
               "type": "string",
               "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-((?:0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$"
             },
+            "asyncquery": {
+              "description": "true if this service has TRAPI-compliant asyncquery endpoints (see the [standard](https://github.com/NCATSTranslator/ReasonerAPI) for details). Otherwise, false",
+              "type": "boolean"
+            },
             "operations": {
-              "description": "List of implemented operations, drawn from http://standards.ncats.io/operation.json",
+              "description": "List of implemented operation IDs, drawn from http://standards.ncats.io/operation.json",
               "type": "array",
               "items": {
-                "type": "string"
+                "type": "string",
+                "enum": [
+                  "lookup",
+                  "lookup_and_score",
+                  "annotate",
+                  "annotate_edges",
+                  "annotate_nodes",
+                  "bind",
+                  "complete_results",
+                  "enrich_results",
+                  "fill",
+                  "filter_kgraph",
+                  "filter_kgraph_continuous_kedge_attribute",
+                  "filter_kgraph_discrete_kedge_attribute",
+                  "filter_kgraph_discrete_knode_attribute",
+                  "filter_kgraph_orphans",
+                  "filter_kgraph_percentile",
+                  "filter_kgraph_std_dev",
+                  "filter_kgraph_top_n",
+                  "filter_results",
+                  "filter_results_top_n",
+                  "overlay",
+                  "overlay_compute_jaccard",
+                  "overlay_compute_ngd",
+                  "overlay_connect_knodes",
+                  "overlay_fisher_exact_test",
+                  "restate",
+                  "sort_results",
+                  "sort_results_edge_attribute",
+                  "sort_results_node_attribute",
+                  "sort_results_score"
+                ]
               }
             },
             "rate_limit": {
