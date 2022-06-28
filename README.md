@@ -6,7 +6,7 @@ The Translator-specific metadata extensions used in the SmartAPI registry
 
 #### Status
 
-This extension's schema has been written, and registry files currently contain this extension.
+This extension's schema has been written, and registry files currently contain this extension. It is closely related to the [TRAPI standard](https://github.com/NCATSTranslator/ReasonerAPI).
 
 #### Description
 
@@ -47,7 +47,7 @@ Other examples of valid and invalid `x-translator` annotations (in JSON) are in 
 
 #### Status
 
-This extension's schema has been started, and registry files currently contain this extension.
+This extension's schema has been started, and registry files currently contain this extension. It is closely related to the [TRAPI standard](https://github.com/NCATSTranslator/ReasonerAPI).
 
 #### Description
 
