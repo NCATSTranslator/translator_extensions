@@ -146,7 +146,7 @@
     "x-translator": {
       "component": "KP",
       "team": ["Service Provider"],
-      "biolink-version": "1"
+      "biolink-version": "1",
       "infores": "infores:biolink-api"
     }
   }
@@ -162,7 +162,7 @@
     "x-translator": {
       "component": "KP",
       "team": ["Service Provider"],
-      "biolink-version": "2.2.16"
+      "biolink-version": "2.2.16",
       "infores": "biolink-api"
     }
   }
