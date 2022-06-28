@@ -5,7 +5,9 @@
     {"name": "biothings"}],
   "info": {
     "x-trapi": {  ## required x-trapi extension
-      "version": "1.0.0"
+      "version": "1.2.0",
+      "operations": ["lookup"]
+      "test_data_location": "https://github.com/biothings/biothings.api/blob/master/test_data"
     }
   }
 }

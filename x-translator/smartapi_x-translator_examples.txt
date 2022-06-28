@@ -7,7 +7,7 @@
     "x-translator": {  
       "component": "KP",  
       "team": ["Service Provider"],
-      "biolink-version": "1.4.0"
+      "biolink-version": "2.2.16",
       "infores": "infores:biolink-api"
     }
   }
@@ -135,3 +135,34 @@
     }
   }
 }
+
+## the biolink-version should be a full SemVer, with 'major.minor.patch'
+## below, the field's value is an integer
+{
+  "tags": [
+    {"name": "translator"},
+    {"name": "biothings"}],
+  "info": {
+    "x-translator": {
+      "component": "KP",
+      "team": ["Service Provider"],
+      "biolink-version": "1"
+      "infores": "infores:biolink-api"
+    }
+  }
+}
+
+## the 'infores' field's value must be a full CURIE with namespace prefix `infores:`
+## below, the field's value is missing the prefix
+{
+  "tags": [
+    {"name": "translator"},
+    {"name": "biothings"}],
+  "info": {
+    "x-translator": {
+      "component": "KP",
+      "team": ["Service Provider"],
+      "biolink-version": "2.2.16"
+      "infores": "biolink-api"
+    }
+  }
