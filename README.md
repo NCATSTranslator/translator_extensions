@@ -51,7 +51,7 @@ This extension's schema has been started, and registry files currently contain t
 
 #### Description
 
-This extension is inside the OpenAPI info object and contains basic API-level metadata. Currently, there are 3 required properties (`version`, `operations`, `test_data_location`).
+This extension is inside the OpenAPI info object and contains basic API-level metadata. Currently, there are 2 required properties (`version` and `operations`).
 
 Current properties include:
 
