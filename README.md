@@ -38,7 +38,7 @@ Associated rules:
       component: KP
       team:
       - "Service Provider"
-      biolink-version: "2.2.16"
+      biolink-version: "2.4.8"
 ```
 
 Other examples of valid and invalid `x-translator` annotations (in JSON) are in [this example file](https://github.com/NCATSTranslator/translator_extensions/blob/main/x-translator/smartapi_x-translator_examples.txt). 
@@ -72,7 +72,7 @@ An example of a valid `x-trapi` extension in YAML is:
   - name: biothings
   info:
     x-trapi:      ## required x-translator extension
-      version: "1.2.0"
+      version: "1.3.0"
       operations:
       - lookup
       test_data_location: "https://github.com/biothings/biothings.api/blob/master/test_data"  # just a fictional example link
