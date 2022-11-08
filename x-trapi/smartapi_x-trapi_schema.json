@@ -76,8 +76,32 @@
             },
             "test_data_location": {
               "description": "URL that resolves to test data in the API's source code repository.",
-              "type": "string",
-              "format": "uri"
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/test_url"
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "default": {
+                      "$ref": "#/definitions/test_url_object"
+                    },
+                    "production": {
+                      "$ref": "#/definitions/test_url_object"
+                    },
+                    "staging": {
+                      "$ref": "#/definitions/test_url_object"
+                    },
+                    "development": {
+                      "$ref": "#/definitions/test_url_object"
+                    },
+                    "testing": {
+                      "$ref": "#/definitions/test_url_object"
+                    }
+                  }
+                }
+              ]
             }
           }
         }
@@ -153,5 +177,32 @@
         }
       }
     }
-  ]
+  ],
+  "definitions": {
+    "test_url": {
+      "description": "URL that resolves to test data in the API's source code repository.",
+      "oneOf": [
+        {
+          "type": "string",
+          "format": "uri"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      ]
+    },
+    "test_url_object": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "url": {
+          "$ref": "#/definitions/test_url"
+        }
+      }
+    }
+  }
 }
