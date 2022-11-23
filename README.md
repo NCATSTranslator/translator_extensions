@@ -60,7 +60,7 @@ Current properties include:
 - **operations:** List of implemented operations. Use the IDs of the operations in this [standard](http://standards.ncats.io/operation.json).
 - **batch_size_limit:** Maximum number of CURIEs allowed in _any_ 'ids', 'categories', or 'predicates' list. -1 indicates no limit. See ImplementationRules.md in the TRAPI standard github repo for details. 
 - **rate_limit**: Maximum number of requests allowed per _minute_ from each client. -1 indicates no limit.
-- **test_data_location:** URL that resolves to [SRI-Testing-harness](https://github.com/TranslatorSRI/SRI_testing) -compliant test data in some public internet location (e.g. in the API implementation source code repository).
+- **test_data_location:** URL that resolves to [SRI-Testing-harness](https://github.com/TranslatorSRI/SRI_testing) -compliant test data, in a public internet location (e.g. in the API implementation source code repository). Note that the several alternate formats of **test_data_location** property value specification is now support: (legacy) simply single REST URL string; a JSON array of such URL's; a JSON object with one or more JSON dictionary tags chosen from "default" and/or a valid x-maturity drawn from "production", "staging", "testing" or "development" where the dictionary values may be simple URL strings or JSON array (as above). Note: the use of "default" indicates that the given test data may be used for any and all endpoints of `x-maturity` environments, specified in the Translator SmartAPI Registry entry's "servers" block, which are not otherwise explicitly specified here in the **test_data_location** JSON object.
 
 #### Examples
 
@@ -75,7 +75,18 @@ An example of a valid `x-trapi` extension in YAML is:
       version: "1.3.0"
       operations:
       - lookup
-      test_data_location: "https://github.com/biothings/biothings.api/blob/master/test_data"  # just a fictional example link
+      test_data_location: { ## complex test_data_location example, but could still be one single URL string as well
+        "default": { ## the "default" test data set applied against all other defined "x-maturity" environments in the entry's "servers" block Registry, other than "development", which is explicitly specified here below.
+          "url": [
+            "https://raw.githubusercontent.com/NCATS-Tangerine/translator-api-registry/master/biothings_explorer/sri-test-service-provider.json",
+            "https://raw.githubusercontent.com/NCATS-Tangerine/translator-api-registry/master/biothings_explorer/sri-test-multiomics.json",
+            "https://raw.githubusercontent.com/NCATS-Tangerine/translator-api-registry/master/biothings_explorer/sri-test-text-mining.json"
+          ]
+        },
+        "development": {
+          "url": "https://raw.githubusercontent.com/NCATS-Tangerine/translator-api-registry/biolink3/biothings_explorer/qualifier-sri-test-service.json"
+        }
+      }
 ```
 
 Other examples of valid and invalid instances (in JSON) are in [this example file](https://github.com/NCATSTranslator/translator_extensions/blob/main/x-trapi/smartapi_x-trapi_examples.txt).

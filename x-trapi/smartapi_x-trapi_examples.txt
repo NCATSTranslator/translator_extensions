@@ -21,6 +21,74 @@
   }
 }
 
+## Complex variant of the "test_data_location" that should also work
+
+## "test_data_location" can have a lists of URL's
+{
+  "tags": [
+    {"name": "trapi"},  ## required trapi tag
+    {"name": "biothings"}],
+  "info": {
+    "x-trapi": {  ## required x-trapi extension
+      "version": "1.2.0",
+      "operations": ["lookup"],
+      "test_data_location": [
+            "https://raw.githubusercontent.com/NCATS-Tangerine/translator-api-registry/master/biothings_explorer/sri-test-service-provider.json",
+            "https://raw.githubusercontent.com/NCATS-Tangerine/translator-api-registry/master/biothings_explorer/sri-test-multiomics.json",
+            "https://raw.githubusercontent.com/NCATS-Tangerine/translator-api-registry/master/biothings_explorer/sri-test-text-mining.json"
+      ]
+    }
+  }
+}
+
+## Has x-maturity environment-specific test data objects with one or more JSON dictionary tags chosen from
+## "default" and/or a valid x-maturity drawn from "production", "staging", "testing" or "development"
+## JSON values of the dictionary can be single URL or lists of URL's
+
+{
+  "info": {
+    "contact": {
+      "email": "cwu@scripps.edu",
+      "name": "Chunlei Wu",
+      "x-id": "https://github.com/newgene",
+      "x-role": "responsible developer"
+    },
+    "description": "Separate registration for the BTE's Service-Provider-specific endpoints.",
+    "termsOfService": "https://biothings.io/about",
+    "title": "Service Provider TRAPI",
+    "version": "2.8.1",
+    "x-translator": {
+      "biolink-version": "2.4.8",
+      "component": "KP",
+      "infores": "infores:service-provider-trapi",
+      "team": [
+        "Service Provider"
+      ]
+    },
+    "x-trapi": {
+      "asyncquery": "True",
+      "operations": [
+        "lookup"
+      ],
+      "test_data_location": {
+        "default": {
+          "url": [
+            "https://raw.githubusercontent.com/NCATS-Tangerine/translator-api-registry/master/biothings_explorer/sri-test-service-provider.json",
+            "https://raw.githubusercontent.com/NCATS-Tangerine/translator-api-registry/master/biothings_explorer/sri-test-multiomics.json",
+            "https://raw.githubusercontent.com/NCATS-Tangerine/translator-api-registry/master/biothings_explorer/sri-test-text-mining.json"
+          ]
+        },
+        "development": {
+          "url": "https://raw.githubusercontent.com/NCATS-Tangerine/translator-api-registry/biolink3/biothings_explorer/qualifier-sri-test-service.json"
+        }
+      },
+      "version": "1.3.0"
+    }
+  }
+}
+
+
+
 ## COMMON ERRORS: these should fail validation
 
 ### If "x-trapi" is given, then "version" and "operations" are mandatory.
@@ -87,6 +155,34 @@
       "version": "1.2.0",
       "operations": ["lookup"],
       "test_data_location": "test_data"
+    }
+  }
+}
+
+## Several things wrong here...
+## "test_data_location" object specification should have valid keys which are "default" and/or a valid x-maturity,
+ one of "production", "staging", "testing" or "development" ("main_server" is invalid)
+## Test url objects also need to specifically  have a 'url' tag ("my_urls" is invalid)
+{
+  "tags": [
+    {"name": "trapi"},  ## required trapi tag
+    {"name": "biothings"}],
+  "info": {
+    "x-trapi": {  ## required x-trapi extension
+      "version": "1.2.0",
+      "operations": ["lookup"],
+      "test_data_location": {
+        "default": {
+          "my_urls": [
+            "https://raw.githubusercontent.com/NCATS-Tangerine/translator-api-registry/master/biothings_explorer/sri-test-service-provider.json",
+            "https://raw.githubusercontent.com/NCATS-Tangerine/translator-api-registry/master/biothings_explorer/sri-test-multiomics.json",
+            "https://raw.githubusercontent.com/NCATS-Tangerine/translator-api-registry/master/biothings_explorer/sri-test-text-mining.json"
+          ]
+        },
+        "main_server": {
+          "url": "https://raw.githubusercontent.com/NCATS-Tangerine/translator-api-registry/biolink3/biothings_explorer/qualifier-sri-test-service.json"
+        }
+      }
     }
   }
 }
