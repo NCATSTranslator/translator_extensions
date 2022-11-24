@@ -12,8 +12,8 @@
   }
 }
 
-## this also should work: 
-## both the x-trapi extension and the trapi tag aren't present
+## this also should work, since both the
+## x-trapi extension and the trapi tag aren't present
 {
   "tags": [
     {"name": "biothings"}],
@@ -21,9 +21,22 @@
   }
 }
 
-## Complex variant of the "test_data_location" that should also work
+##
+##
+## Note that several formats are now supported:
+##
+## * a single string (a single url; original format)
+## * an array of such strings
+## * an object with one or more key-value pairs.
+##     * Key options are "default", "production", "staging", "testing", "development"
+##       (the last 4 correspond to the x-maturity level of different servers, defined by
+##       Architecture/ITRB environments. The "default" test data may be used to
+##       test servers of any x-maturity level.
+##     * Tje value is either a string or array (as defined above).
+##
+## Thus, the following complex variants of the "test_data_location" should also work:
 
-## "test_data_location" can have a lists of URL's
+## Variant A - "test_data_location" property value that is a list of URLs
 {
   "tags": [
     {"name": "trapi"},  ## required trapi tag
@@ -41,11 +54,11 @@
   }
 }
 
-## Has x-maturity environment-specific test data objects with one or more JSON dictionary tags chosen from
-## "default" and/or a valid x-maturity drawn from "production", "staging", "testing" or "development"
-## JSON values of the dictionary can be single URL or lists of URL's
-
+## Variant B - "test_data_location" property value in 'object' form
 {
+  "tags": [
+    {"name": "trapi"},  ## required trapi tag
+    {"name": "biothings"}],
   "info": {
     "contact": {
       "email": "cwu@scripps.edu",
@@ -66,7 +79,7 @@
       ]
     },
     "x-trapi": {
-      "asyncquery": "True",
+      "asyncquery": true,
       "operations": [
         "lookup"
       ],
@@ -86,8 +99,6 @@
     }
   }
 }
-
-
 
 ## COMMON ERRORS: these should fail validation
 
@@ -159,10 +170,14 @@
   }
 }
 
-## Several things wrong here...
-## "test_data_location" object specification should have valid keys which are "default" and/or a valid x-maturity,
- one of "production", "staging", "testing" or "development" ("main_server" is invalid)
-## Test url objects also need to specifically  have a 'url' tag ("my_urls" is invalid)
+##
+## A couple of things going wrong here...
+##
+## "test_data_location" object specification should have valid keys which are "default" and/or a valid
+## x-maturity: one of "production", "staging", "testing" or "development" (i.e. "main_server" is invalid)
+##
+## Test url objects also need to specifically have a 'url' tag ("my_urls" is an invalid key)
+##
 {
   "tags": [
     {"name": "trapi"},  ## required trapi tag
