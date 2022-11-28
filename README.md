@@ -58,9 +58,17 @@ Current properties include:
 - **version:** States the TRAPI standard version, as a SemVer formatted number (e.g. '1.1', '1.2', '1.3'), indicating that the Translator Resource is compliant with / built to this version.
 - **asyncquery:** Boolean. true if this service has TRAPI-compliant asyncquery endpoints. Otherwise, false. 
 - **operations:** List of implemented operations. Use the IDs of the operations in this [standard](http://standards.ncats.io/operation.json).
-- **batch_size_limit:** Maximum number of CURIEs allowed in _any_ 'ids', 'categories', or 'predicates' list. -1 indicates no limit. See ImplementationRules.md in the TRAPI standard github repo for details. 
+- **batch_size_limit:** Maximum number of CURIEs allowed in _any_ 'ids', 'categories', or 'predicates' list. -1 indicates no limit. See ImplementationRules.md in the TRAPI standard Github repository for details. 
 - **rate_limit**: Maximum number of requests allowed per _minute_ from each client. -1 indicates no limit.
-- **test_data_location:** URL that resolves to [SRI-Testing-harness](https://github.com/TranslatorSRI/SRI_testing) -compliant test data in some public internet location (e.g. in the API implementation source code repository).
+- **test_data_location:** URL that resolves to [SRI-Testing-harness](https://github.com/TranslatorSRI/SRI_testing)-compliant test data, in a public internet location (e.g. in the API implementation source code repository). 
+
+Note that for **test_data_location**, several formats are now supported:
+
+- string (a single URL; original format)
+- array of such URL strings
+- object with one or more key-value pairs. Key options are "default", "production", "staging", "testing", "development" (the last 4 correspond to the x-maturity level of different servers, defined by [Architecture/ITRB](https://github.com/NCATSTranslator/TranslatorArchitecture/blob/master/SmartAPIRegistration.md#environments)). The "default" test data may be used to test servers of any `x-maturity` level not explicitly specified elsewhere. The value of such key-value pairs may also be either a string or array (defined above).
+
+Specified URL strings must point to publicly visible REST internet files containing the expected KP test data or ARA test configuration (as described in the [SRI Testing harness documentation](https://github.com/TranslatorSRI/SRI_testing/blob/main/tests/onehop/README.md)).
 
 #### Examples
 
@@ -68,6 +76,7 @@ An example of a valid `x-trapi` extension in YAML is:
 
 ```
   tags:
+  - trapi
   - name: translator    ## required translator tag
   - name: biothings
   info:
@@ -75,7 +84,17 @@ An example of a valid `x-trapi` extension in YAML is:
       version: "1.3.0"
       operations:
       - lookup
-      test_data_location: "https://github.com/biothings/biothings.api/blob/master/test_data"  # just a fictional example link
+      test_data_location:  ## complex test_data_location example, but could still be one single URL string as well
+        development:
+            url: "https://raw.githubusercontent.com/NCATS-Tangerine/translator-api-registry/biolink3/biothings_explorer/qualifier-sri-test-service.json"
+        ## The "default" test data set is applied against all other "x-maturity" environments specified in the entry's
+        ## "servers" block Registry, but not explicitly specified here (i.e. the default test data here can be applied
+        ## to the production environment, but not to development because development-specific test data was already provided).
+        default:  
+            url:
+            - "https://raw.githubusercontent.com/NCATS-Tangerine/translator-api-registry/master/biothings_explorer/sri-test-service-provider.json"
+            - "https://raw.githubusercontent.com/NCATS-Tangerine/translator-api-registry/master/biothings_explorer/sri-test-multiomics.json"
+            - "https://raw.githubusercontent.com/NCATS-Tangerine/translator-api-registry/master/biothings_explorer/sri-test-text-mining.json"
 ```
 
 Other examples of valid and invalid instances (in JSON) are in [this example file](https://github.com/NCATSTranslator/translator_extensions/blob/main/x-trapi/smartapi_x-trapi_examples.txt).
