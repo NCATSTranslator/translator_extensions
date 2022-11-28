@@ -12,12 +12,91 @@
   }
 }
 
-## this also should work: 
-## both the x-trapi extension and the trapi tag aren't present
+## this also should work, since both the
+## x-trapi extension and the trapi tag aren't present
 {
   "tags": [
     {"name": "biothings"}],
   "info": {
+  }
+}
+
+##
+##
+## Note that several formats are now supported:
+##
+## * a single string (a single url; original format)
+## * an array of such strings
+## * an object with one or more key-value pairs.
+##     * Key options are "default", "production", "staging", "testing", "development"
+##       (the last 4 correspond to the x-maturity level of different servers, defined by
+##       Architecture/ITRB environments. The "default" test data may be used to
+##       test servers of any x-maturity level.
+##     * The value is either a string or array (as defined above).
+##
+## Thus, the following complex variants of the "test_data_location" should also work:
+
+## Variant A - "test_data_location" property value that is a list of URLs
+{
+  "tags": [
+    {"name": "trapi"},  ## required trapi tag
+    {"name": "biothings"}],
+  "info": {
+    "x-trapi": {  ## required x-trapi extension
+      "version": "1.2.0",
+      "operations": ["lookup"],
+      "test_data_location": [
+            "https://raw.githubusercontent.com/NCATS-Tangerine/translator-api-registry/master/biothings_explorer/sri-test-service-provider.json",
+            "https://raw.githubusercontent.com/NCATS-Tangerine/translator-api-registry/master/biothings_explorer/sri-test-multiomics.json",
+            "https://raw.githubusercontent.com/NCATS-Tangerine/translator-api-registry/master/biothings_explorer/sri-test-text-mining.json"
+      ]
+    }
+  }
+}
+
+## Variant B - "test_data_location" property value in 'object' form
+{
+  "tags": [
+    {"name": "trapi"},  ## required trapi tag
+    {"name": "biothings"}],
+  "info": {
+    "contact": {
+      "email": "cwu@scripps.edu",
+      "name": "Chunlei Wu",
+      "x-id": "https://github.com/newgene",
+      "x-role": "responsible developer"
+    },
+    "description": "Separate registration for the BTE's Service-Provider-specific endpoints.",
+    "termsOfService": "https://biothings.io/about",
+    "title": "Service Provider TRAPI",
+    "version": "2.8.1",
+    "x-translator": {
+      "biolink-version": "2.4.8",
+      "component": "KP",
+      "infores": "infores:service-provider-trapi",
+      "team": [
+        "Service Provider"
+      ]
+    },
+    "x-trapi": {
+      "asyncquery": true,
+      "operations": [
+        "lookup"
+      ],
+      "test_data_location": {
+        "default": {
+          "url": [
+            "https://raw.githubusercontent.com/NCATS-Tangerine/translator-api-registry/master/biothings_explorer/sri-test-service-provider.json",
+            "https://raw.githubusercontent.com/NCATS-Tangerine/translator-api-registry/master/biothings_explorer/sri-test-multiomics.json",
+            "https://raw.githubusercontent.com/NCATS-Tangerine/translator-api-registry/master/biothings_explorer/sri-test-text-mining.json"
+          ]
+        },
+        "development": {
+          "url": "https://raw.githubusercontent.com/NCATS-Tangerine/translator-api-registry/biolink3/biothings_explorer/qualifier-sri-test-service.json"
+        }
+      },
+      "version": "1.3.0"
+    }
   }
 }
 
@@ -87,6 +166,38 @@
       "version": "1.2.0",
       "operations": ["lookup"],
       "test_data_location": "test_data"
+    }
+  }
+}
+
+##
+## A couple of things going wrong here...
+##
+## "test_data_location" object specification should have valid keys which are "default" and/or a valid
+## x-maturity: one of "production", "staging", "testing" or "development" (i.e. "main_server" is invalid)
+##
+## Test url objects also need to specifically have a 'url' tag ("my_urls" is an invalid key)
+##
+{
+  "tags": [
+    {"name": "trapi"},  ## required trapi tag
+    {"name": "biothings"}],
+  "info": {
+    "x-trapi": {  ## required x-trapi extension
+      "version": "1.2.0",
+      "operations": ["lookup"],
+      "test_data_location": {
+        "default": {
+          "my_urls": [
+            "https://raw.githubusercontent.com/NCATS-Tangerine/translator-api-registry/master/biothings_explorer/sri-test-service-provider.json",
+            "https://raw.githubusercontent.com/NCATS-Tangerine/translator-api-registry/master/biothings_explorer/sri-test-multiomics.json",
+            "https://raw.githubusercontent.com/NCATS-Tangerine/translator-api-registry/master/biothings_explorer/sri-test-text-mining.json"
+          ]
+        },
+        "main_server": {
+          "url": "https://raw.githubusercontent.com/NCATS-Tangerine/translator-api-registry/biolink3/biothings_explorer/qualifier-sri-test-service.json"
+        }
+      }
     }
   }
 }
