@@ -84,11 +84,12 @@ An example of a valid `x-trapi` extension in YAML is:
       version: "1.3.0"
       operations:
       - lookup
-      test_data_location: { ## complex test_data_location example, but could still be one single URL string as well
+      test_data_location:  ## complex test_data_location example, but could still be one single URL string as well
         development:
             url: "https://raw.githubusercontent.com/NCATS-Tangerine/translator-api-registry/biolink3/biothings_explorer/qualifier-sri-test-service.json"
-        ## The "default" test data set is applied against all other "x-maturity" environments specified
-        ## in the entry's "servers" block Registry, but not explicitly specified here (i.e. like "development").
+        ## The "default" test data set is applied against all other "x-maturity" environments specified in the entry's
+        ## "servers" block Registry, but not explicitly specified here (i.e. the default test data here can be applied
+        ## to the production environment, but not to development because development-specific test data was already provided).
         default:  
             url:
             - "https://raw.githubusercontent.com/NCATS-Tangerine/translator-api-registry/master/biothings_explorer/sri-test-service-provider.json"

@@ -32,7 +32,7 @@
 ##       (the last 4 correspond to the x-maturity level of different servers, defined by
 ##       Architecture/ITRB environments. The "default" test data may be used to
 ##       test servers of any x-maturity level.
-##     * Tje value is either a string or array (as defined above).
+##     * The value is either a string or array (as defined above).
 ##
 ## Thus, the following complex variants of the "test_data_location" should also work:
 
