@@ -41,7 +41,7 @@ Associated rules:
       biolink-version: "2.4.8"
 ```
 
-Other examples of valid and invalid `x-translator` annotations (in JSON) are in [this example file](https://github.com/NCATSTranslator/translator_extensions/blob/main/x-translator/smartapi_x-translator_examples.txt). 
+Other examples of valid and invalid `x-translator` annotations (in YAML) are in [this example file](https://github.com/NCATSTranslator/translator_extensions/blob/main/x-translator/smartapi_x-translator_examples.md). 
 
 ## x-trapi
 
@@ -97,4 +97,4 @@ An example of a valid `x-trapi` extension in YAML is:
             - "https://raw.githubusercontent.com/NCATS-Tangerine/translator-api-registry/master/biothings_explorer/sri-test-text-mining.json"
 ```
 
-Other examples of valid and invalid instances (in JSON) are in [this example file](https://github.com/NCATSTranslator/translator_extensions/blob/main/x-trapi/smartapi_x-trapi_examples.txt).
+Other examples of valid and invalid instances (in YAML) are in [this example file](https://github.com/NCATSTranslator/translator_extensions/blob/main/x-trapi/smartapi_x-trapi_examples.md).
