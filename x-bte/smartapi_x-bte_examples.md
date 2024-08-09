@@ -6,30 +6,29 @@ This example correctly defines both `x-bte-kgs-operations` and `x-bte-response-m
 ```yaml
 components:
   x-bte-kgs-operations:
-    myOperation:
-      - supportBatch: true
+    ma_has_subclass_ma:
+      - supportBatch: false
         useTemplating: true
         inputs:
-          - id: CHEBI
-            semantic: SmallMolecule
-        requestBody:
-          body: "example request body"
-        outputs:
-          - id: RHEA
+          - id: GO
             semantic: MolecularActivity
         parameters:
-          fields: "exampleField"
-          size: 1000
-        predicate: "participates_in"
-        source: "infores:rhea"
+          goid: "{{ queryInputs | replPrefix('GO') }}"
+        outputs:
+          - id: GO
+            semantic: MolecularActivity
+        predicate: "superclass_of"
+        source: "infores:go"
+        knowledge_level: "knowledge_assertion"
+        agent_type: "manual_agent"
         response_mapping:
-          source_url: "http://example.com/response"
+          "$ref": "#/components/x-bte-response-mapping/ma_has_subclass_ma"
+        testExamples:
+          - qInput: "GO:0000082"
+            oneOutput: "GO:2000045"
   x-bte-response-mapping:
-    exampleMapping:
-      source_url: "http://example.com"
-      edge-attributes: "example attributes"
-      ref_input: "example input"
-      ref_output: "example output"
+    ma_has_subclass_ma:
+      GO: "results.children.id"
 ```
 
 ### Examples with ERRORS that should fail validation
@@ -40,53 +39,57 @@ The `supportBatch` property is required when defining operations within `x-bte-k
 ```yaml
 components:
   x-bte-kgs-operations:
-    myOperation:
+    ma_has_subclass_ma:
       - useTemplating: true
         inputs:
-          - id: CHEBI
-            semantic: SmallMolecule
-        requestBody:
-          body: "example request body"
-        outputs:
-          - id: RHEA
+          - id: GO
             semantic: MolecularActivity
         parameters:
-          fields: "exampleField"
-          size: 1000
-        predicate: "participates_in"
-        source: "infores:rhea"
+          goid: "{{ queryInputs | replPrefix('GO') }}"
+        outputs:
+          - id: GO
+            semantic: MolecularActivity
+        predicate: "superclass_of"
+        source: "infores:go"
+        knowledge_level: "knowledge_assertion"
+        agent_type: "manual_agent"
         response_mapping:
-          source_url: "http://example.com/response"
+          "$ref": "#/components/x-bte-response-mapping/ma_has_subclass_ma"
+        testExamples:
+          - qInput: "GO:0000082"
+            oneOutput: "GO:2000045"
 ```
 
 #### Example 2: `team` Field is Not an Array
 The `team` field should be an array, even if it contains only one element. This example will fail because `team` is provided as a string:
 
 ```yaml
-components:
-  x-bte-kgs-operations:
-    myOperation:
-      - supportBatch: true
-        useTemplating: true
-        inputs:
-          - id: CHEBI
-            semantic: SmallMolecule
-        requestBody:
-          body: "example request body"
-        outputs:
-          - id: RHEA
-            semantic: MolecularActivity
-        parameters:
-          fields: "exampleField"
-          size: 1000
-        predicate: "participates_in"
-        source: "infores:rhea"
-        response_mapping:
-          source_url: "http://example.com/response"
 info:
   x-translator:
     component: KP
-    team: Service Provider
+    team: Service Provider  # This should be an array
+components:
+  x-bte-kgs-operations:
+    ma_has_subclass_ma:
+      - supportBatch: false
+        useTemplating: true
+        inputs:
+          - id: GO
+            semantic: MolecularActivity
+        parameters:
+          goid: "{{ queryInputs | replPrefix('GO') }}"
+        outputs:
+          - id: GO
+            semantic: MolecularActivity
+        predicate: "superclass_of"
+        source: "infores:go"
+        knowledge_level: "knowledge_assertion"
+        agent_type: "manual_agent"
+        response_mapping:
+          "$ref": "#/components/x-bte-response-mapping/ma_has_subclass_ma"
+        testExamples:
+          - qInput: "GO:0000082"
+            oneOutput: "GO:2000045"
 ```
 
 #### Example 3: Incorrect CURIE Format in `source`
@@ -95,22 +98,26 @@ The `source` field must follow the `infores:` CURIE format. The following exampl
 ```yaml
 components:
   x-bte-kgs-operations:
-    myOperation:
-      - supportBatch: true
+    ma_has_subclass_ma:
+      - supportBatch: false
         useTemplating: true
         inputs:
-          - id: CHEBI
-            semantic: SmallMolecule
-        requestBody:
-          body: "example request body"
-        outputs:
-          - id: RHEA
+          - id: GO
             semantic: MolecularActivity
         parameters:
-          fields: "exampleField"
-          size: 1000
-        predicate: "participates_in"
-        source: "rhea"  # This should be prefixed with "infores:"
+          goid: "{{ queryInputs | replPrefix('GO') }}"
+        outputs:
+          - id: GO
+            semantic: MolecularActivity
+        predicate: "superclass_of"
+        source: "go"  # This should be prefixed with "infores:"
+        knowledge_level: "knowledge_assertion"
+        agent_type: "manual_agent"
         response_mapping:
-          source_url: "http://example.com/response"
+          "$ref": "#/components/x-bte-response-mapping/ma_has_subclass_ma"
+        testExamples:
+          - qInput: "GO:0000082"
+            oneOutput: "GO:2000045"
 ```
+
+---
