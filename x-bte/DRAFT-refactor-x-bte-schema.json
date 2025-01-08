@@ -1,0 +1,187 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Draft schema for refactored x-bte annotation",
+  "description": "manually-written schema for x-bte annotation refactor. Work-in-progress.",
+  "type": "object",
+  "properties": {
+    "info": {
+      "type": "object",
+      "properties": {
+        "x-bte-info": {}
+      }
+    },
+    "components": {
+      "description": "part of SmartAPI spec used to store stuff",
+      "type": "object",
+      "properties": {
+        "x-bte-operations": {
+          "description": "[Add definition of operation here.] Keys are user-defined operation-names (so patternProperties is used).",
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": false,
+          "patternProperties": {
+            "^[A-Za-z0-9_-]+$": {
+              "description": "This section defines a singular operation. Properties are snake_case.",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "support_batch",
+                "inputs",
+                "outputs",
+                "request_info",
+                "predicate",
+                "provenance"
+              ],
+              "properties": {
+                "support_batch": {
+                  "description": "can multiple input IDs be sent in 1 request (true) or not (false)",
+                  "type": "boolean"
+                },
+                "response_field_root": {
+                  "_comment": "see 12/19 notes! Using this for Biothings is complicated - depends on pagination or not."
+                },
+                "inputs": {
+                  "description": "input ID info",
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["category", "namespaces"],
+                  "properties": {
+                    "category": {
+                      "_comment": "Turn into $ref to $def section: usable by outputs.category too. make regex so no prefix. While enum of all biolink-model node categories is possible, annoying and would need maintaining.",
+                      "description": "must be biolink-model node category in PascalCase, no prefix",
+                      "type": "string"
+                    },
+                    "use_all_namespaces": {
+                      "_comment": "also exists for output but it's kinda diff meaning for them so maybe keep separate (not $ref)"
+                    },
+                    "namespaces": {
+                      "description": "",
+                      "type": "array",
+                      "minItems": 1,
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": ["prefix"],
+                        "_comment": "maybe add id_field and capture regex? Confused...See 12/20 notes",
+                        "properties": {
+                          "prefix": {
+                            "_comment": "reused in outputs, turn into $ref to $def"
+                          },
+                          "name_field": {
+                            "_comment": "reused in outputs, turn into $ref to $def"
+                          },
+                          "replace_prefix": {
+                            "_comment": "reused in outputs, turn into $ref to $def"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "outputs": {
+                  "description": "output ID info in API response",
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["category", "namespaces"],
+                  "properties": {
+                    "category": {},
+                    "use_all_namespaces": {},
+                    "namespaces": {
+                      "description": "not same as inputs.namespace! diff required fields",
+                      "type": "array",
+                      "minItems": 1,
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": ["prefix", "id_field"],
+                        "properties": {
+                          "prefix": {},
+                          "id_field": {},
+                          "name_field": {},
+                          "replace_prefix": {},
+                          "capture_regex": {}
+                        }
+                      }
+                    }
+                  }
+                },
+                "exclude_namespace_combos": {},
+                "request_info": {
+                  "description": "all info needed to generate query to API goes here",
+                  "_comment": "complex logic: 'at least 1 of several fields` should exist, but if some of those fields exist, then others shouldn't",
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "path", 
+                    "method"
+                  ],
+                  "properties": {
+                    "path": {},
+                    "method": {},
+                    "use_pagination": {
+                      "_comment": "placeholder for now. Note info needed for pagination in google doc, including response field root - wouldn't set top-level property"
+                    },
+                    "request_body": {
+                      "_comment": "reused within by_ fields, so $ref?"
+                    },
+                    "parameters": {},
+                    "pagination": {
+                      "_comment": "placeholder reminder. Won't know format until implementation? See 12/19 notes"
+                    },
+                    "by_input_namespace": {}
+                  }
+                },
+                "predicate": {
+                  "description": "",
+                  "_comment": "While enum of all biolink-model predicates is possible, annoying and would DEF need maintaining.",
+                  "type": "string"
+                },
+                "qualifiers": {
+                  "_comment": "from Nicholette's schema",
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "minProperties": 1
+                },
+                "provenance": {
+                  "_comment": "complex!!! one of 3 schemas (two object, 1 array). Have some nested parts that are kinda repetitive, can make $ref to $def."
+                },
+                "response_mapping": {},
+                "test_examples": {
+                  "_comment": "slightly modified from Nicholette's schema",
+                  "type": "array",
+                  "minItems": 1,
+                  "required": ["input_id", "output_id"],
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "input_id": {
+                        "type": "string"
+                      },
+                      "output_id": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "_comment": "If Document has one of {x-bte tag, info.x-bte-info, components.x-bte-operations}, it should have the others. This logic is kinda tricky to write because it's 3 diff sections of schema and there's a few diff ways to write this."
+      },
+      "then": {
+      }
+    }
+  ],
+  "$defs": {
+    "_comment": "placeholder. Use for reused bits"
+  }
+}
