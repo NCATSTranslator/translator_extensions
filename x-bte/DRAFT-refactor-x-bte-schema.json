@@ -1,27 +1,28 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Draft schema for refactored x-bte annotation",
-  "description": "manually-written schema for x-bte annotation refactor. Work-in-progress.",
+  "title": "Draft schema for x-bte annotation refactor",
+  "description": "Manually-written schema for x-bte annotation refactor. Work-in-progress.",
   "type": "object",
   "properties": {
     "info": {
+      "description": "Required, fixed field in OpenAPI schema. Provides metadata about the API.",
       "type": "object",
       "properties": {
         "x-bte-info": {}
       }
     },
     "components": {
-      "description": "part of SmartAPI spec used to store stuff",
+      "description": "Fixed field in OpenAPI schema.",
       "type": "object",
       "properties": {
         "x-bte-operations": {
-          "description": "[Add definition of operation here.] Keys are user-defined operation-names (so patternProperties is used).",
+          "description": "[Add definition of operation here.] Keys are user-defined operation names (constrainted by patternProperties).",
           "type": "object",
           "minProperties": 1,
           "additionalProperties": false,
           "patternProperties": {
             "^[A-Za-z0-9_-]+$": {
-              "description": "This section defines a singular operation. Properties are snake_case.",
+              "description": "This section defines a single operation. Properties are snake_case.",
               "type": "object",
               "additionalProperties": false,
               "required": [
@@ -34,25 +35,25 @@
               ],
               "properties": {
                 "support_batch": {
-                  "description": "can multiple input IDs be sent in 1 request (true) or not (false)",
+                  "description": "Can multiple input IDs be sent in 1 request (true) or not (false)",
                   "type": "boolean"
                 },
                 "response_field_root": {
-                  "_comment": "see 12/19 notes! Using this for Biothings is complicated - depends on pagination or not."
+                  "$comment": "see 12/19 notes! Using this for Biothings is complicated - depends on pagination or not."
                 },
                 "inputs": {
-                  "description": "input ID info",
+                  "description": "Describes the input IDs that the API accepts.",
                   "type": "object",
                   "additionalProperties": false,
                   "required": ["category", "namespaces"],
                   "properties": {
                     "category": {
-                      "_comment": "Turn into $ref to $def section: usable by outputs.category too. make regex so no prefix. While enum of all biolink-model node categories is possible, annoying and would need maintaining.",
-                      "description": "must be biolink-model node category in PascalCase, no prefix",
-                      "type": "string"
+                       "$ref": "#/$defs/category"
                     },
                     "use_all_namespaces": {
-                      "_comment": "also exists for output but it's kinda diff meaning for them so maybe keep separate (not $ref)"
+                      "description": "If an input entity has IDs for >1 namespace listed in the 'namespaces' section, should the tool generate queries using all of those IDs (true)? Or should the tool only use the IDs for 1 namespace - the first in the 'namespaces' section that it has IDs for (false)? If this field isn't specified, the tool defaults to 'false' behavior.",
+                      "type": "boolean",
+                      "$comment": "While `outputs` also has this field, the description is slightly different."
                     },
                     "namespaces": {
                       "description": "",
@@ -62,16 +63,16 @@
                         "type": "object",
                         "additionalProperties": false,
                         "required": ["prefix"],
-                        "_comment": "maybe add id_field and capture regex? Confused...See 12/20 notes",
+                        "$comment": "maybe add id_field and capture regex? Confused...See 12/20 notes",
                         "properties": {
                           "prefix": {
-                            "_comment": "reused in outputs, turn into $ref to $def"
+                            "$comment": "reused in outputs, turn into $ref to $def"
                           },
                           "name_field": {
-                            "_comment": "reused in outputs, turn into $ref to $def"
+                            "$comment": "reused in outputs, turn into $ref to $def"
                           },
                           "replace_prefix": {
-                            "_comment": "reused in outputs, turn into $ref to $def"
+                            "$comment": "reused in outputs, turn into $ref to $def"
                           }
                         }
                       }
@@ -84,7 +85,9 @@
                   "additionalProperties": false,
                   "required": ["category", "namespaces"],
                   "properties": {
-                    "category": {},
+                    "category": {
+                      "$ref": "#/$defs/category"
+                   },
                     "use_all_namespaces": {},
                     "namespaces": {
                       "description": "not same as inputs.namespace! diff required fields",
@@ -108,7 +111,7 @@
                 "exclude_namespace_combos": {},
                 "request_info": {
                   "description": "all info needed to generate query to API goes here",
-                  "_comment": "complex logic: 'at least 1 of several fields` should exist, but if some of those fields exist, then others shouldn't",
+                  "$comment": "complex logic: 'at least 1 of several fields` should exist, but if some of those fields exist, then others shouldn't",
                   "type": "object",
                   "additionalProperties": false,
                   "required": [
@@ -119,25 +122,26 @@
                     "path": {},
                     "method": {},
                     "use_pagination": {
-                      "_comment": "placeholder for now. Note info needed for pagination in google doc, including response field root - wouldn't set top-level property"
+                      "$comment": "placeholder for now. Note info needed for pagination in google doc, including response field root - wouldn't set top-level property"
                     },
                     "request_body": {
-                      "_comment": "reused within by_ fields, so $ref?"
+                      "$comment": "reused within by_ fields, so $ref?"
                     },
                     "parameters": {},
                     "pagination": {
-                      "_comment": "placeholder reminder. Won't know format until implementation? See 12/19 notes"
+                      "$comment": "placeholder reminder. Won't know format until implementation? See 12/19 notes"
                     },
                     "by_input_namespace": {}
                   }
                 },
                 "predicate": {
-                  "description": "",
-                  "_comment": "While enum of all biolink-model predicates is possible, annoying and would DEF need maintaining.",
-                  "type": "string"
+                  "description": "This is the biomedical-science semantic type of the relationship between the input and output entities. The value must be a predicate in the biolink-model: it should be the most specific predicate that matches the relationship. Predicates labeled 'mixin' should be used carefully (read yaml spec before using). The format is snake_case, no prefix. Validation is currently just on format, so it doesn't check whether the value actually exists in the biolink-model version our tool is using.",
+                  "type": "string",
+                  "pattern": "[a-z]+(_[a-z]+)*",
+                  "$comment": "For full validation, this would need enum of biolink-model predicates. And would need to be maintained, up-to-date with biolink-model version our tool is using."
                 },
                 "qualifiers": {
-                  "_comment": "from Nicholette's schema",
+                  "$comment": "from Nicholette's schema",
                   "type": "object",
                   "additionalProperties": {
                     "type": "string"
@@ -145,11 +149,11 @@
                   "minProperties": 1
                 },
                 "provenance": {
-                  "_comment": "complex!!! one of 3 schemas (two object, 1 array). Have some nested parts that are kinda repetitive, can make $ref to $def."
+                  "$comment": "complex!!! one of 3 schemas (two object, 1 array). Have some nested parts that are kinda repetitive, can make $ref to $def."
                 },
                 "response_mapping": {},
                 "test_examples": {
-                  "_comment": "slightly modified from Nicholette's schema",
+                  "$comment": "slightly modified from Nicholette's schema",
                   "type": "array",
                   "minItems": 1,
                   "required": ["input_id", "output_id"],
@@ -175,13 +179,18 @@
   "allOf": [
     {
       "if": {
-        "_comment": "If Document has one of {x-bte tag, info.x-bte-info, components.x-bte-operations}, it should have the others. This logic is kinda tricky to write because it's 3 diff sections of schema and there's a few diff ways to write this."
+        "$comment": "If document has one of {x-bte tag, info.x-bte-info, components.x-bte-operations}, then the others should also be present. See original and other schemas for examples of how to write this. Don't need to write out the tags section elsewhere in schema."
       },
       "then": {
       }
     }
   ],
   "$defs": {
-    "_comment": "placeholder. Use for reused bits"
+    "category": {
+      "description": "This is the biomedical-science semantic type of the entities represented by these IDs. The value must be a class (aka node category) in the biolink-model: it should be the most specific class that fits most of the entities. Avoid using classes labeled 'mixin' when possible. The format is PascalCase, no prefix. Validation is currently just on format, so it doesn't check whether the value actually exists in the biolink-model version our tool is using.",
+      "type": "string",
+      "pattern": "([A-Z][a-z]+)+",
+      "$comment": "For full validation, this would need enum of acceptaable biolink-model node categories (not mixins and must be bioentities?). And would need to be maintained, up-to-date with biolink-model version our tool is using."
+    }
   }
 }
