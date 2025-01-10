@@ -16,7 +16,7 @@
       "type": "object",
       "properties": {
         "x-bte-operations": {
-          "description": "[Add definition of operation here.] Keys are user-defined operation names (constrainted by patternProperties).",
+          "description": "[Add definition of operation here.] Keys are user-defined names (allowed characters set using patternProperties).",
           "type": "object",
           "minProperties": 1,
           "additionalProperties": false,
@@ -66,7 +66,7 @@
                         "$comment": "maybe add id_field and capture regex? Confused...See 12/20 notes",
                         "properties": {
                           "prefix": {
-                            "$comment": "reused in outputs, turn into $ref to $def"
+                            "$comment": "reused in outputs, turn into $ref to $def. Remember, should be biolink-model format. If not specified in biolink-model, use bioregistry format."
                           },
                           "name_field": {
                             "$comment": "reused in outputs, turn into $ref to $def"
@@ -119,15 +119,24 @@
                     "method"
                   ],
                   "properties": {
-                    "path": {},
-                    "method": {},
+                    "path": {
+                      "$comment": "same as in paths part of openapi spec"
+                    },
+                    "method": {
+                      "$comment": "leave same as openapi spec"
+                    },
+                    "content_type": {
+                      "$comment": "Value is http standard content type. Default (not specified) is application/json. User is then responsible for making request_body's contents match this type"
+                    },
                     "use_pagination": {
                       "$comment": "placeholder for now. Note info needed for pagination in google doc, including response field root - wouldn't set top-level property"
                     },
                     "request_body": {
                       "$comment": "reused within by_ fields, so $ref?"
                     },
-                    "parameters": {},
+                    "parameters": {
+                      "$comment": "reused within by_ fields, so $ref?"
+                    },
                     "pagination": {
                       "$comment": "placeholder reminder. Won't know format until implementation? See 12/19 notes"
                     },
