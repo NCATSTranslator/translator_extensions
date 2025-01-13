@@ -51,9 +51,9 @@
                        "$ref": "#/$defs/category"
                     },
                     "use_all_namespaces": {
-                      "description": "If an input entity has IDs for >1 namespace listed in the 'namespaces' section, should the tool generate queries using all of those IDs (true)? Or should the tool only use the IDs for 1 namespace - the first in the 'namespaces' section that it has IDs for (false)? If this field isn't specified, the tool defaults to 'false' behavior.",
+                      "description": "Only use when the namespaces array has >1 element. If an input entity has synonymous IDs from >1 namespace listed in the 'namespaces' section, should the tool generate queries using all of those IDs (true)? True implies that the API may have different data for the same thing but under different ID namespaces, and you want to retrieve all of that data. Or should the tool only use the IDs for 1 namespace - the first in the 'namespaces' section that it has IDs for (false)? False implies that the API has already done an 'entity-resolution' step and an ID from any namespace would retrieve the same data. If this field isn't specified, the tool defaults to 'false' behavior.",
                       "type": "boolean",
-                      "$comment": "While `outputs` also has this field, the description is slightly different."
+                      "$comment": "While `outputs` also has this field, the description is different."
                     },
                     "namespaces": {
                       "description": "",
@@ -72,7 +72,10 @@
                             "$comment": "reused in outputs, turn into $ref to $def"
                           },
                           "replace_prefix": {
-                            "$comment": "reused in outputs, turn into $ref to $def"
+                            "$comment": "reused in outputs, turn into $ref to $def. Prefix that the API actually uses when it differs from the biolink-model/CURIE format (':' delimiter). must include both the prefix and the delimiter"
+                          },
+                          "id_field": {
+                            "$comment": "see 12/20 notes. for batch-queries. Field in response that contains input ID that matches the response hit"
                           }
                         }
                       }
@@ -88,7 +91,10 @@
                     "category": {
                       "$ref": "#/$defs/category"
                    },
-                    "use_all_namespaces": {},
+                    "use_all_namespaces": {
+                      "description": "Only use when the namespaces array has >1 element. If 1 hit in the response has output IDs from >1 namespace listed in the 'namespaces' section, should the tool ingest all those IDs (true)? True implies that the API may return multiple entities/answers in 1 hit. Or should the tool only ingest the ID(s) from 1 namespace - the first in the 'namespaces' section that it finds IDs for (false)? False implies that either (1) 1 hit only has 1 output ID, or (2) the multiple output IDs in 1 hit represent the same entity so only 1 of the IDs is needed. If this field isn't specified, the tool defaults to 'false' behavior. We think setting this field to true will be rare (edge case).",
+                      "type": "boolean"
+                    },
                     "namespaces": {
                       "description": "not same as inputs.namespace! diff required fields",
                       "type": "array",
@@ -102,13 +108,28 @@
                           "id_field": {},
                           "name_field": {},
                           "replace_prefix": {},
-                          "capture_regex": {}
+                          "capture_regex": {
+                            "$comment": "see 12/20 notes. Not sure if this is just for outputs or not."
+                          }
                         }
                       }
                     }
                   }
                 },
-                "exclude_namespace_combos": {},
+                "exclude_namespace_combos": {
+                  "description": "This field is used only when inputs.namespaces and outputs.namespaces both have >1 element. If the certain input/output namespaces combos don't exist in the API's data, these combos can be listed here. When this field is not present, the tool will assume that all combos of input and output namespace are theoretically possible.",
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "description": "2-element array: the first element is the input namespace's prefix, the second is output namespace's prefix.",
+                    "type": "array",
+                    "minItems": 2,
+                    "maxItems": 2,
+                    "items": {
+                      "$comment": "$ref to prefix. Since these will be prefixes."
+                    }
+                  }
+                },
                 "request_info": {
                   "description": "all info needed to generate query to API goes here",
                   "$comment": "complex logic: 'at least 1 of several fields` should exist, but if some of those fields exist, then others shouldn't",
@@ -129,7 +150,9 @@
                       "$comment": "Value is http standard content type. Default (not specified) is application/json. User is then responsible for making request_body's contents match this type"
                     },
                     "use_pagination": {
-                      "$comment": "placeholder for now. Note info needed for pagination in google doc, including response field root - wouldn't set top-level property"
+                      "description": "Is this operation using API pagination (true), or not (false)?",
+                      "type": "boolean",
+                      "$comment": "For now, note info needed for/related to pagination in notes doc. Deciding where this info goes and its format later."
                     },
                     "request_body": {
                       "$comment": "reused within by_ fields, so $ref?"
