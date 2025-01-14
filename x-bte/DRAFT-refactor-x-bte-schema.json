@@ -39,13 +39,13 @@
       "type": "object",
       "properties": {
         "x-bte-operations": {
-          "description": "[Add definition of operation here.] Keys are user-defined names (allowed characters set using patternProperties).",
+          "description": "This is where x-bte units of annotation (operations) are defined. One x-bte operation describes a subset of data available using the API (semantics), how to query for this data, and how to process the response. The main fields that define a unique x-bte operation are: path (endpoint), request method, and core 'metaedge' info - input category, predicate, qualifier-set, and output category. Keys are user-defined names (allowed characters set using patternProperties) that generally note the dataset and semantic relationship.",
           "type": "object",
           "minProperties": 1,
           "additionalProperties": false,
           "patternProperties": {
             "^[A-Za-z0-9_-]+$": {
-              "description": "This section defines a single operation. Properties are snake_case.",
+              "description": "This is the subschema for a single operation. Properties are snake_case.",
               "type": "object",
               "additionalProperties": false,
               "required": [
@@ -62,10 +62,12 @@
                   "type": "boolean"
                 },
                 "response_field_root": {
-                  "$comment": "see 12/19 notes! Using this for Biothings is complicated - depends on pagination or not."
+                  "description": "If every response-field's path (JSON dot-notation) has the same root, that root can be specified in this optional property. If specified, then every response-field should only specify the path from this root. Don't include a trailing '.', and don't need to specify the arrays traversed.",
+                  "type": "string",
+                  "pattern": "^[A-Za-z_-]+(.[A-Za-z_-]+)*$"
                 },
                 "inputs": {
-                  "description": "Describes the input IDs that the API accepts.",
+                  "description": "Describes the input bioentities (and their IDs). These are put in the API request to retrieve their biological relationship data.",
                   "type": "object",
                   "additionalProperties": false,
                   "required": ["category", "namespaces"],
@@ -74,31 +76,34 @@
                        "$ref": "#/$defs/category"
                     },
                     "use_all_namespaces": {
-                      "description": "Only use when the namespaces array has >1 element. If an input entity has synonymous IDs from >1 namespace listed in the 'namespaces' section, should the tool generate queries using all of those IDs (true)? True implies that the API may have different data for the same thing but under different ID namespaces, and you want to retrieve all of that data. Or should the tool only use the IDs for 1 namespace - the first in the 'namespaces' section that it has IDs for (false)? False implies that the API has already done an 'entity-resolution' step and an ID from any namespace would retrieve the same data. If this field isn't specified, the tool defaults to 'false' behavior.",
+                      "description": "Only use when the namespaces array has >1 element. If an input entity has synonymous IDs from >1 namespace listed in the 'namespaces' section, should the tool generate queries using all of those IDs (true)? True implies that the API may have different data for the same biological thing but under IDs in different namespaces, and you want to retrieve all of that data. Or should the tool only use the IDs for 1 namespace - the first in the 'namespaces' section that it has IDs for (false)? False implies that the API has already done an 'entity-resolution' step and an ID from any namespace would retrieve the same data. If this field isn't specified, the tool defaults to 'false' behavior.",
                       "type": "boolean",
                       "$comment": "While `outputs` also has this field, the description is different."
                     },
                     "namespaces": {
-                      "description": "",
+                      "description": "List of possible ID namespaces for input bioentities. They should be in order of preference (see 'use_all_namespaces' property's description).",
+                      "$comment": "outputs also has this property. Right now, I'm defining the two separately because the required properties are different.",
                       "type": "array",
                       "minItems": 1,
                       "items": {
                         "type": "object",
                         "additionalProperties": false,
                         "required": ["prefix"],
-                        "$comment": "maybe add id_field and capture regex? Confused...See 12/20 notes",
                         "properties": {
                           "prefix": {
-                            "$comment": "reused in outputs, turn into $ref to $def. Remember, should be biolink-model format. If not specified in biolink-model, use bioregistry format."
+                            "$ref": "#/$defs/prefix"
                           },
                           "name_field": {
-                            "$comment": "reused in outputs, turn into $ref to $def"
+                            "$ref": "#/$defs/name_field"
                           },
                           "replace_prefix": {
-                            "$comment": "reused in outputs, turn into $ref to $def. Prefix that the API actually uses when it differs from the biolink-model/CURIE format (':' delimiter). must include both the prefix and the delimiter"
+                            "$ref": "#/$defs/replace_prefix"
                           },
                           "id_field": {
-                            "$comment": "see 12/20 notes. for batch-queries. Field in response that contains input ID that matches the response hit"
+                            "description": "If support_batch is true, there should be a response-field in each hit that specifies the matched input ID. The path to this field should be specified here in JSON dot-notation (don't need to specify the arrays traversed).",
+                            "$comment": "outputs also has this property. Right now, I'm defining them separately because the description is different.",
+                            "type": "string",
+                            "pattern": "^[A-Za-z_-]+(.[A-Za-z_-]+)*$"
                           }
                         }
                       }
@@ -106,7 +111,7 @@
                   }
                 },
                 "outputs": {
-                  "description": "output ID info in API response",
+                  "description": "Describes the output bioentities (and their IDs). These should be in the API's response along with any data on the biological relationship between the input and output bioentities.",
                   "type": "object",
                   "additionalProperties": false,
                   "required": ["category", "namespaces"],
@@ -115,11 +120,11 @@
                       "$ref": "#/$defs/category"
                    },
                     "use_all_namespaces": {
-                      "description": "Only use when the namespaces array has >1 element. If 1 hit in the response has output IDs from >1 namespace listed in the 'namespaces' section, should the tool ingest all those IDs (true)? True implies that the API may return multiple entities/answers in 1 hit. Or should the tool only ingest the ID(s) from 1 namespace - the first in the 'namespaces' section that it finds IDs for (false)? False implies that either (1) 1 hit only has 1 output ID, or (2) the multiple output IDs in 1 hit represent the same entity so only 1 of the IDs is needed. If this field isn't specified, the tool defaults to 'false' behavior. We think setting this field to true will be rare (edge case).",
+                      "description": "Only use when the namespaces array has >1 element. If 1 hit in the response has output IDs from >1 namespace listed in the 'namespaces' section, should the tool ingest all those IDs (true)? True implies that the API may return multiple entities in 1 hit. Or should the tool only ingest the ID(s) from 1 namespace - the first in the 'namespaces' section that it finds IDs for (false)? False implies that either (1) 1 hit only has 1 output ID, or (2) the multiple output IDs in 1 hit represent the same entity so only 1 of the IDs is needed. If this field isn't specified, the tool defaults to 'false' behavior. We think setting this field to true will be rare (edge case).",
                       "type": "boolean"
                     },
                     "namespaces": {
-                      "description": "not same as inputs.namespace! diff required fields",
+                      "description": "List of possible ID namespaces for output bioentities. They should be in order of preference (see 'use_all_namespaces' property's description).",
                       "type": "array",
                       "minItems": 1,
                       "items": {
@@ -127,10 +132,16 @@
                         "additionalProperties": false,
                         "required": ["prefix", "id_field"],
                         "properties": {
-                          "prefix": {},
+                          "prefix": {
+                            "$ref": "#/$defs/prefix"
+                          },
                           "id_field": {},
-                          "name_field": {},
-                          "replace_prefix": {},
+                          "name_field": {
+                            "$ref": "#/$defs/name_field"
+                          },
+                          "replace_prefix": {
+                            "$ref": "#/$defs/replace_prefix"
+                          },
                           "capture_regex": {
                             "$comment": "see 12/20 notes. Not sure if this is just for outputs or not."
                           }
@@ -149,7 +160,7 @@
                     "minItems": 2,
                     "maxItems": 2,
                     "items": {
-                      "$comment": "$ref to prefix. Since these will be prefixes."
+                      "$ref": "#/$defs/prefix"
                     }
                   }
                 },
@@ -192,7 +203,7 @@
                 "predicate": {
                   "description": "This is the biomedical-science semantic type of the relationship between the input and output entities. The value must be a predicate in the biolink-model: it should be the most specific predicate that matches the relationship. Predicates labeled 'mixin' should be used carefully (read yaml spec before using). The format is snake_case, no prefix. Validation is currently just on format, so it doesn't check whether the value actually exists in the biolink-model version our tool is using.",
                   "type": "string",
-                  "pattern": "[a-z]+(_[a-z]+)*",
+                  "pattern": "^[a-z]+(_[a-z]+)*$",
                   "$comment": "For full validation, this would need enum of biolink-model predicates. And would need to be maintained, up-to-date with biolink-model version our tool is using."
                 },
                 "qualifiers": {
@@ -234,7 +245,7 @@
   "allOf": [
     {
       "if": {
-        "$comment": "If document has x-bte tag or components.x-bte-operations, then the other should also be present. See x-translator, x-trapi for examples of how to write this. Don't need to write out the tags section elsewhere in schema."
+        "$comment": "If document has x-bte tag or components.x-bte-operations, then the other should also be present. See x-translator, x-trapi for examples of how to write this. Don't need to write out the tags section elsewhere in schema. There's also other possible if-then statements (look up 'if' in schema)."
       },
       "then": {
       }
@@ -244,8 +255,21 @@
     "category": {
       "description": "This is the biomedical-science semantic type of the entities represented by these IDs. The value must be a class (aka node category) in the biolink-model: it should be the most specific class that fits most of the entities. Avoid using classes labeled 'mixin' when possible. The format is PascalCase, no prefix. Validation is currently just on format, so it doesn't check whether the value actually exists in the biolink-model version our tool is using.",
       "type": "string",
-      "pattern": "([A-Z][a-z]+)+",
+      "pattern": "(^[A-Z][a-z]+)+$",
       "$comment": "For full validation, this would need enum of acceptaable biolink-model node categories (not mixins and must be bioentities?). And would need to be maintained, up-to-date with biolink-model version our tool is using."
+    },
+    "name_field": {
+      "description": "Optional field to specify response-field for the human-readable name/label of the ID. The tool will use this name for the entity if the ID-resolving service doesn't find a human-readable name for the entity's ID. Use JSON dot-notation to specify the path to this field (don't need to specify the arrays traversed).",
+      "type": "string",
+      "pattern": "^[A-Za-z_-]+(.[A-Za-z_-]+)*$"
+    },
+    "prefix": {
+      "description": "This is the standard prefix for the ID namespace. Its format should be (in order of preference): what the biolink-model uses, what [bioregistry](https://bioregistry.io/) specifies, or the prefix used by the resource that created the ID namespace. The delimiter is assumed to be ':' and should not be included.",
+      "type": "string"
+    },
+    "replace_prefix": {
+      "description": "Sometimes, an API will use a non-standard ID prefix or delimiter for entities (differs from the standard specified in 'prefix' and a colon-delimiter). This non-standard ID prefix AND its delimiter should be specified here. It is important to include this when the non-standard prefix must be added to input IDs for queries or will be in the output id_field's value.",
+      "type": "string"
     }
   }
 }
