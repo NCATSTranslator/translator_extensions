@@ -110,6 +110,20 @@
                     }
                   }
                 },
+                "predicate": {
+                  "description": "This is the biomedical-science semantic type of the relationship between the input and output entities. The value must be a predicate in the biolink-model: it should be the most specific predicate that matches the relationship. Predicates labeled 'mixin' should be used carefully (read yaml spec before using). The format is snake_case, no prefix. Validation is currently just on format, so it doesn't check whether the value actually exists in the biolink-model version our tool is using.",
+                  "type": "string",
+                  "pattern": "^[a-z]+(_[a-z]+)*$",
+                  "$comment": "For full validation, this would need enum of biolink-model predicates. And would need to be maintained, up-to-date with biolink-model version our tool is using."
+                },
+                "qualifiers": {
+                  "$comment": "from Nicholette's schema",
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "minProperties": 1
+                },
                 "outputs": {
                   "description": "Describes the output bioentities (and their IDs). These should be in the API's response along with any data on the biological relationship between the input and output bioentities.",
                   "type": "object",
@@ -194,25 +208,8 @@
                     "parameters": {
                       "$comment": "reused within by_ fields, so $ref?"
                     },
-                    "pagination": {
-                      "$comment": "placeholder reminder. Won't know format until implementation? See 12/19 notes"
-                    },
                     "by_input_namespace": {}
                   }
-                },
-                "predicate": {
-                  "description": "This is the biomedical-science semantic type of the relationship between the input and output entities. The value must be a predicate in the biolink-model: it should be the most specific predicate that matches the relationship. Predicates labeled 'mixin' should be used carefully (read yaml spec before using). The format is snake_case, no prefix. Validation is currently just on format, so it doesn't check whether the value actually exists in the biolink-model version our tool is using.",
-                  "type": "string",
-                  "pattern": "^[a-z]+(_[a-z]+)*$",
-                  "$comment": "For full validation, this would need enum of biolink-model predicates. And would need to be maintained, up-to-date with biolink-model version our tool is using."
-                },
-                "qualifiers": {
-                  "$comment": "from Nicholette's schema",
-                  "type": "object",
-                  "additionalProperties": {
-                    "type": "string"
-                  },
-                  "minProperties": 1
                 },
                 "provenance": {
                   "$comment": "complex!!! one of 3 schemas (two object, 1 array). Have some nested parts that are kinda repetitive, can make $ref to $def."
