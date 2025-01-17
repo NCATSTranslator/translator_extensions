@@ -39,7 +39,7 @@
       "type": "object",
       "properties": {
         "x-bte-annotations": {
-          "description": "One or more x-bte annotations go here. One x-bte annotation describes a subset of data available using the API (semantics), how to query for this data, and how to process the response. The main fields that define a unique x-bte annotation are: path (endpoint), request method, and core 'metaedge' info - input category, predicate, qualifier-set, and output category. Keys are user-defined names (allowed characters set using patternProperties) that generally note the dataset and semantic relationship.",
+          "description": "One or more x-bte annotations go here. One x-bte annotation describes a subset of data available using the API (semantics), how to query for this data, and how to process the response (assumed to be JSON). The main fields that define a unique x-bte annotation are: path (endpoint), request method, and core 'metaedge' info - input category, predicate, qualifier-set, and output category. Keys are user-defined names (allowed characters set using patternProperties) that generally note the dataset and semantic relationship.",
           "type": "object",
           "minProperties": 1,
           "additionalProperties": false,
