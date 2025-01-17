@@ -112,12 +112,17 @@
                   "$comment": "For full validation, this would need enum of biolink-model predicates. And would need to be maintained, up-to-date with biolink-model version the tool is using."
                 },
                 "qualifiers": {
-                  "$comment": "from Nicholette's schema",
+                  "description": "This is 1 static set of biolink-model qualifiers that add nuance and detail to the relationship between the input and output entities. The keys should be specific qualifiers from the biolink-model, and the values should be from the biolink-model enums for those qualifiers. No prefixes are needed for keys or values.",
                   "type": "object",
-                  "additionalProperties": {
-                    "type": "string"
-                  },
-                  "minProperties": 1
+                  "$comment": "Not specifying every recommended qualifier_type_id right now. TBH I'm not sure what a complete set would be. So giving the basic format. qualifier_type_id are snake_case and generally end in '_qualifier'. values are snake-case.",
+                  "minProperties": 1,
+                  "patternProperties": {
+                    "^[a-z]+(_[a-z]+)*(_qualifier){1}$":
+                    {
+                      "type": "string",
+                      "pattern": "^[a-z]+(_[a-z]+)*$"
+                    }
+                  }
                 },
                 "outputs": {
                   "description": "Describes the output bioentities (and their IDs). These should be in the API's response along with any data on the biological relationship between the input and output bioentities.",
@@ -144,7 +149,11 @@
                           "prefix": {
                             "$ref": "#/$defs/prefix"
                           },
-                          "id_field": {},
+                          "id_field": {
+                            "description": "Specifies the path to the response-field that contains the output ID (assuming field's value is a single ID, using 'capture_regex' if needed). This path should be JSON dot-notation (don't need to specify the arrays traversed).",
+                            "type": "string",
+                            "pattern": "^[A-Za-z_-]+(.[A-Za-z_-]+)*$"
+                          },
                           "name_field": {
                             "$ref": "#/$defs/name_field"
                           },
@@ -152,7 +161,8 @@
                             "$ref": "#/$defs/replace_prefix"
                           },
                           "capture_regex": {
-                            "$comment": "see 12/20 notes. Not sure if this is just for outputs or not."
+                            "description": "Sometimes, the response-field's string value is not the expected format and cannot be handled with replace_prefix (suffixes, ID format isn't biolink-model or bioregistry standard, delimited string, etc). This field can be used to provide a capturing group (regex) to retrieve the ID in the expected format. Exact flavor of regex TBD, assume PCRE2 for now.",
+                            "type": "string"
                           }
                         }
                       }
