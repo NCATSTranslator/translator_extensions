@@ -15,7 +15,7 @@
           "additionalProperties": false,
           "properties": {
             "batch_size_limit": {
-              "description": "Maximum number of input IDs per request (if an annotation's support_batch: true.",
+              "description": "Maximum number of input IDs per request (if an annotation's request_info.support_batch: true.",
               "type": "integer"
             },
             "request_rate_limit": {
@@ -49,7 +49,6 @@
               "type": "object",
               "additionalProperties": false,
               "required": [
-                "support_batch",
                 "inputs",
                 "outputs",
                 "request_info",
@@ -57,10 +56,6 @@
                 "provenance"
               ],
               "properties": {
-                "support_batch": {
-                  "description": "Can multiple input IDs be sent in 1 request (true) or not (false)",
-                  "type": "boolean"
-                },
                 "response_field_root": {
                   "description": "If every response-field's path (JSON dot-notation) has the same root, that root can be specified in this optional property. If specified, then every response-field should only specify the path from this root. Don't include a trailing '.', and don't need to specify the arrays traversed.",
                   "type": "string",
@@ -100,7 +95,7 @@
                             "$ref": "#/$defs/replace_prefix"
                           },
                           "id_field": {
-                            "description": "If support_batch is true, there should be a response-field in each hit that specifies the matched input ID. The path to this field should be specified here in JSON dot-notation (don't need to specify the arrays traversed).",
+                            "description": "If request_info.support_batch is true, there should be a response-field in each hit that specifies the matched input ID. The path to this field should be specified here in JSON dot-notation (don't need to specify the arrays traversed).",
                             "$comment": "outputs also has this property. Right now, I'm defining them separately because the description is different.",
                             "type": "string",
                             "pattern": "^[A-Za-z_-]+(.[A-Za-z_-]+)*$"
@@ -185,7 +180,8 @@
                   "additionalProperties": false,
                   "required": [
                     "path", 
-                    "method"
+                    "method",
+                    "support_batch"
                   ],
                   "properties": {
                     "path": {
@@ -193,6 +189,10 @@
                     },
                     "method": {
                       "$comment": "leave same as openapi spec"
+                    },
+                    "support_batch": {
+                      "description": "Can multiple input IDs be sent in 1 request (true) or not (false)",
+                      "type": "boolean"
                     },
                     "content_type": {
                       "description": "Use this field to specify the content type (aka media type) of the request body. If not specified, the default is 'application/json'. The annotation writer is responsible for specifying a request body that matches this content type.",
