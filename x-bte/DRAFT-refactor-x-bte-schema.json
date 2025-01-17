@@ -180,7 +180,7 @@
                 },
                 "request_info": {
                   "description": "all info needed to generate query to API goes here",
-                  "$comment": "complex logic: 'at least 1 of several fields` should exist, but if some of those fields exist, then others shouldn't",
+                  "$comment": "complex logic: 'at least 1 of several fields' should exist, but if some of those fields exist, then others shouldn't",
                   "type": "object",
                   "additionalProperties": false,
                   "required": [
@@ -252,7 +252,7 @@
     "category": {
       "description": "This is the biomedical-science semantic type of the entities represented by these IDs. The value must be a class (aka node category) in the biolink-model: it should be the most specific class that fits most of the entities. Avoid using classes labeled 'mixin' when possible. The format is PascalCase, no prefix. Validation is currently just on format, so it doesn't check whether the value actually exists in the biolink-model version our tool is using.",
       "type": "string",
-      "pattern": "(^[A-Z][a-z]+)+$",
+      "pattern": "^([A-Z][a-z]+)+$",
       "$comment": "For full validation, this would need enum of acceptaable biolink-model node categories (not mixins and must be bioentities?). And would need to be maintained, up-to-date with biolink-model version our tool is using."
     },
     "name_field": {
