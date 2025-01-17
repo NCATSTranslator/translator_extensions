@@ -8,7 +8,7 @@
       "description": "Required, fixed field in OpenAPI schema. Provides metadata about the API.",
       "type": "object",
       "properties": {
-        "x-bte-info": {
+        "x-bte": {
           "description": "Optional field to provide API info that our tool could use for querying or post-processing.",
           "type": "object",
           "minProperties": 1,
@@ -209,7 +209,8 @@
                     "parameters": {
                       "$comment": "reused within by_ fields, so $ref?"
                     },
-                    "by_input_namespace": {}
+                    "by_input_namespace": {},
+                    "by_output_namespace": {}
                   }
                 },
                 "provenance": {
