@@ -195,7 +195,8 @@
                       "$comment": "leave same as openapi spec"
                     },
                     "content_type": {
-                      "$comment": "Value is http standard content type. Default (not specified) is application/json. User is then responsible for making request_body's contents match this type"
+                      "description": "Use this field to specify the content type (aka media type) of the request body. If not specified, the default is 'application/json'. The annotation writer is responsible for specifying a request body that matches this content type.",
+                      "type": "string"
                     },
                     "use_pagination": {
                       "description": "Is this request using API pagination (true), or not (false)?",
