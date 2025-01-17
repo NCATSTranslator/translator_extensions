@@ -22,7 +22,7 @@
               "description": "Maximum number of requests allowed per minute from each client.",
               "type": "integer"
             },
-            "edge_attributes_for_hash": {
+            "primary_key_edge_attributes": {
               "description": "List of TRAPI edge-attribute keys (attribute_type_id) that distinguish unique edges. If attribute X is listed here and two constructed TRAPI edges only differ by attribute X's value, the tool should be keep both of them as separate edges.",
               "type": "array",
               "minItems": 1,
@@ -173,6 +173,7 @@
                     }
                   }
                 },
+                "include_namespace_combos": {},
                 "request_info": {
                   "description": "all info needed to generate query to API goes here",
                   "$comment": "complex logic: 'at least 1 of several fields' should exist, but if some of those fields exist, then others shouldn't",
