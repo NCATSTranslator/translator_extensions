@@ -50,9 +50,9 @@
               "additionalProperties": false,
               "required": [
                 "inputs",
+                "predicate",
                 "outputs",
                 "request_info",
-                "predicate",
                 "provenance"
               ],
               "properties": {
