@@ -15,7 +15,7 @@
           "additionalProperties": false,
           "properties": {
             "batch_size_limit": {
-              "description": "Maximum number of input IDs per request (if support_batch: true for the operation.",
+              "description": "Maximum number of input IDs per request (if an annotation's support_batch: true.",
               "type": "integer"
             },
             "request_rate_limit": {
@@ -38,14 +38,14 @@
       "description": "Fixed field in OpenAPI schema.",
       "type": "object",
       "properties": {
-        "x-bte-operations": {
-          "description": "This is where x-bte units of annotation (operations) are defined. One x-bte operation describes a subset of data available using the API (semantics), how to query for this data, and how to process the response. The main fields that define a unique x-bte operation are: path (endpoint), request method, and core 'metaedge' info - input category, predicate, qualifier-set, and output category. Keys are user-defined names (allowed characters set using patternProperties) that generally note the dataset and semantic relationship.",
+        "x-bte-annotations": {
+          "description": "One or more x-bte annotations go here. One x-bte annotation describes a subset of data available using the API (semantics), how to query for this data, and how to process the response. The main fields that define a unique x-bte annotation are: path (endpoint), request method, and core 'metaedge' info - input category, predicate, qualifier-set, and output category. Keys are user-defined names (allowed characters set using patternProperties) that generally note the dataset and semantic relationship.",
           "type": "object",
           "minProperties": 1,
           "additionalProperties": false,
           "patternProperties": {
             "^[A-Za-z0-9_-]+$": {
-              "description": "This is the subschema for a single operation. Properties are snake_case.",
+              "description": "This is the subschema for a single annotation. Properties are snake_case.",
               "type": "object",
               "additionalProperties": false,
               "required": [
@@ -198,7 +198,7 @@
                       "$comment": "Value is http standard content type. Default (not specified) is application/json. User is then responsible for making request_body's contents match this type"
                     },
                     "use_pagination": {
-                      "description": "Is this operation using API pagination (true), or not (false)?",
+                      "description": "Is this request using API pagination (true), or not (false)?",
                       "type": "boolean",
                       "$comment": "For now, note info needed for/related to pagination in notes doc. Deciding where this info goes and its format later."
                     },
@@ -242,7 +242,7 @@
   "allOf": [
     {
       "if": {
-        "$comment": "If document has x-bte tag or components.x-bte-operations, then the other should also be present. See x-translator, x-trapi for examples of how to write this. Don't need to write out the tags section elsewhere in schema. There's also other possible if-then statements (look up 'if' in schema)."
+        "$comment": "If document has x-bte tag or components.x-bte-annotations, then the other should also be present. See x-translator, x-trapi for examples of how to write this. Don't need to write out the tags section elsewhere in schema. There's also other possible if-then statements (look up 'if' in schema)."
       },
       "then": {
       }
