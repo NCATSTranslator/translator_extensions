@@ -9,7 +9,7 @@
       "type": "object",
       "properties": {
         "x-bte": {
-          "description": "Optional field to provide API info that our tool could use for querying or post-processing.",
+          "description": "Optional field to provide API info that the tool needs for querying or post-processing.",
           "type": "object",
           "minProperties": 1,
           "additionalProperties": false,
@@ -23,7 +23,7 @@
               "type": "integer"
             },
             "edge_attributes_for_hash": {
-              "description": "List of TRAPI edge-attribute keys (attribute_type_id) that distinguish unique edges. If attribute X is listed here and two constructed TRAPI edges only differ by attribute X's value, our tool should be keep both of them as separate edges.",
+              "description": "List of TRAPI edge-attribute keys (attribute_type_id) that distinguish unique edges. If attribute X is listed here and two constructed TRAPI edges only differ by attribute X's value, the tool should be keep both of them as separate edges.",
               "type": "array",
               "minItems": 1,
               "items": {
@@ -106,10 +106,10 @@
                   }
                 },
                 "predicate": {
-                  "description": "This is the biomedical-science semantic type of the relationship between the input and output entities. The value must be a predicate in the biolink-model: it should be the most specific predicate that matches the relationship. Predicates labeled 'mixin' should be used carefully (read yaml spec before using). The format is snake_case, no prefix. Validation is currently just on format, so it doesn't check whether the value actually exists in the biolink-model version our tool is using.",
+                  "description": "This is the biomedical-science semantic type of the relationship between the input and output entities. The value must be a predicate in the biolink-model: it should be the most specific predicate that matches the relationship. Predicates labeled 'mixin' should be used carefully (read yaml spec before using). The format is snake_case, no prefix. Validation is currently just on format, so it doesn't check whether the value actually exists in the biolink-model version the tool is using.",
                   "type": "string",
                   "pattern": "^[a-z]+(_[a-z]+)*$",
-                  "$comment": "For full validation, this would need enum of biolink-model predicates. And would need to be maintained, up-to-date with biolink-model version our tool is using."
+                  "$comment": "For full validation, this would need enum of biolink-model predicates. And would need to be maintained, up-to-date with biolink-model version the tool is using."
                 },
                 "qualifiers": {
                   "$comment": "from Nicholette's schema",
@@ -252,10 +252,10 @@
   ],
   "$defs": {
     "category": {
-      "description": "This is the biomedical-science semantic type of the entities represented by these IDs. The value must be a class (aka node category) in the biolink-model: it should be the most specific class that fits most of the entities. Avoid using classes labeled 'mixin' when possible. The format is PascalCase, no prefix. Validation is currently just on format, so it doesn't check whether the value actually exists in the biolink-model version our tool is using.",
+      "description": "This is the biomedical-science semantic type of the entities represented by these IDs. The value must be a class (aka node category) in the biolink-model: it should be the most specific class that fits most of the entities. Avoid using classes labeled 'mixin' when possible. The format is PascalCase, no prefix. Validation is currently just on format, so it doesn't check whether the value actually exists in the biolink-model version the tool is using.",
       "type": "string",
       "pattern": "^([A-Z][a-z]+)+$",
-      "$comment": "For full validation, this would need enum of acceptaable biolink-model node categories (not mixins and must be bioentities?). And would need to be maintained, up-to-date with biolink-model version our tool is using."
+      "$comment": "For full validation, this would need enum of acceptaable biolink-model node categories (not mixins and must be bioentities?). And would need to be maintained, up-to-date with biolink-model version the tool is using."
     },
     "name_field": {
       "description": "Optional field to specify response-field for the human-readable name/label of the ID. The tool will use this name for the entity if the ID-resolving service doesn't find a human-readable name for the entity's ID. Use JSON dot-notation to specify the path to this field (don't need to specify the arrays traversed).",
