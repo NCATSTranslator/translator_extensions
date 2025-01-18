@@ -187,8 +187,8 @@
                   }
                 },
                 "request_info": {
-                  "description": "all info needed to generate query to API goes here",
-                  "$comment": "complex logic: 'at least 1 of several fields' should exist, but if some of those fields exist, then others shouldn't",
+                  "description": "Info needed to generate the API request",
+                  "$comment": "Needs complex validation logic for {request_body, parameters, by_input_namespace, by output_namespace}: at least 1 of these needs to exist. If one of the by_... exist, than no other fields can (VS request_body, parameters can be together). Within by_..., they need at least 1 of {request_body, parameters}.",
                   "type": "object",
                   "additionalProperties": false,
                   "required": [
@@ -198,10 +198,12 @@
                   ],
                   "properties": {
                     "path": {
-                      "$comment": "same as in paths part of openapi spec"
+                      "description": "Which endpoint the request should be sent to. This MUST be a relative path (from the API server url) listed in the 'paths' section of the OpenAPI/SmartAPI spec.",
+                      "type": "string"
                     },
                     "method": {
-                      "$comment": "leave same as openapi spec"
+                      "description": "Which http method (ex: get vs post) the request should use. This MUST be a method specified for the 'path' endpoint in the 'paths' section of the OpenAPI/SmartAPI spec.",
+                      "type": "string"
                     },
                     "support_batch": {
                       "description": "Can multiple input IDs be sent in 1 request (true) or not (false)",
@@ -217,10 +219,10 @@
                       "$comment": "For now, note info needed for/related to pagination in notes doc. Deciding where this info goes and its format later."
                     },
                     "request_body": {
-                      "$comment": "reused within by_ fields, so $ref?"
+                      "$ref": "#/$defs/request_body"
                     },
                     "parameters": {
-                      "$comment": "reused within by_ fields, so $ref?"
+                      "$ref": "#/$defs/parameters"
                     },
                     "by_input_namespace": {},
                     "by_output_namespace": {}
@@ -275,6 +277,11 @@
       "type": "string",
       "pattern": "^[A-Za-z_-]+(.[A-Za-z_-]+)*$"
     },
+    "parameters": {
+      "description": "Specifies the request parameters. These DO NOT NEED to be specified in endpoint/method's subsection within the 'paths' section of the OpenAPI/SmartAPI spec. The annotation writer has the variables {{input_ids}} (array of IDs w/o prefix) and {{input_curies}} (array of IDs with prefix) to denote where the input IDs go in the parameters (if needed). Jinja2 templating is available to transform those arrays into delimited strings or specify more complex transforms.",
+      "type": "object",
+      "$comment": "used within 'by_' fields."
+    },
     "prefix": {
       "description": "This is the standard prefix for the ID namespace. Its format should be (in order of preference): what the biolink-model uses, what [bioregistry](https://bioregistry.io/) specifies, or the prefix used by the resource that created the ID namespace. The delimiter is assumed to be ':' and should not be included.",
       "type": "string"
@@ -291,6 +298,11 @@
     "replace_prefix": {
       "description": "Sometimes, an API will use a non-standard ID prefix or delimiter for entities (differs from the standard specified in 'prefix' and a colon-delimiter). This non-standard ID prefix AND its delimiter should be specified here. It is important to include this when the non-standard prefix must be added to input IDs for queries or will be in the output id_field's value.",
       "type": "string"
+    },
+    "request_body": {
+      "description": "Specifies the request body. The annotation writer has the variables {{input_ids}} (array of IDs w/o prefix) and {{input_curies}} (array of IDs with prefix) to denote where the input IDs go in the request body. Jinja2 templating is available to transform those arrays into delimited strings or specify more complex transforms.",
+      "type": "object",
+      "$comment": "used within 'by_' fields."
     }
   }
 }
