@@ -270,7 +270,7 @@
       "description": "This is the biomedical-science semantic type of the entities represented by these IDs. The value must be a class (aka node category) in the biolink-model: it should be the most specific class that fits most of the entities. Avoid using classes labeled 'mixin' when possible. The format is PascalCase, no prefix. Validation is currently just on format, so it doesn't check whether the value actually exists in the biolink-model version the tool is using.",
       "type": "string",
       "pattern": "^([A-Z][a-z]+)+$",
-      "$comment": "For full validation, this would need enum of acceptaable biolink-model node categories (not mixins and must be bioentities?). And would need to be maintained, up-to-date with biolink-model version the tool is using."
+      "$comment": "For full validation, this would need enum of acceptable biolink-model node categories (not mixins and must be bioentities?). And would need to be maintained, up-to-date with biolink-model version the tool is using."
     },
     "name_field": {
       "description": "Optional field to specify response-field for the human-readable name/label of the ID. The tool will use this name for the entity if the ID-resolving service doesn't find a human-readable name for the entity's ID. Use JSON dot-notation to specify the path to this field (don't need to specify the arrays traversed).",
@@ -301,7 +301,7 @@
     },
     "request_body": {
       "description": "Specifies the request body. The annotation writer has the variables {{input_ids}} (array of IDs w/o prefix) and {{input_curies}} (array of IDs with prefix) to denote where the input IDs go in the request body. Jinja2 templating is available to transform those arrays into delimited strings or specify more complex transforms.",
-      "type": "object",
+      "type": ["object", "string"],
       "$comment": "used within 'by_' fields."
     }
   }
