@@ -214,7 +214,7 @@
                       "type": "string"
                     },
                     "use_pagination": {
-                      "description": "Is this request using API pagination (true), or not (false)?",
+                      "description": "Is this request using API pagination (true), or not (false)? Default is false.",
                       "type": "boolean",
                       "$comment": "For now, note info needed for/related to pagination in notes doc. Deciding where this info goes and its format later."
                     },
