@@ -231,7 +231,75 @@
                 "provenance": {
                   "$comment": "complex!!! one of 3 schemas (two object, 1 array). Have some nested parts that are kinda repetitive, can make $ref to $def."
                 },
-                "response_mapping": {},
+                "response_mapping": {
+                  "description": "Map response-fields to TRAPI edge properties, generally edge attributes. The keys can be chosen from a set of keywords (linked to specific ways of parsing the response-field's value and setting up the TRAPI edge property), OR the keys can be CURIEs (prefix:ID) from the biolink-model or a standard ontology that describe the edge-attribute. The values should be the JSON dot-notation path for the response field (don't need to specify the arrays traversed). Advice: users generally want references (publication IDs), publication text snippets (if text-mined), and other structured info.",
+                  "type": "object",
+                  "minProperties": 1,
+                  "additionalProperties": false,
+                  "patternProperties": {
+                    "^([A-Za-z]+):([A-Za-z]+)$": {
+                        "description": "patternProperties (keys) are CURIEs (prefix:ID) from the biolink-model or a standard ontology that describe the edge-attribute.",
+                        "type": "string",
+                        "pattern": "^[A-Za-z_-]+(.[A-Za-z_-]+)*$"
+                    }
+                  },
+                  "properties": {
+                    "edge-attributes": {
+                      "description": "The response-field's value is a complete set of TRAPI edge-attributes (already in the desired format). The tool should ingest this with no changes.",
+                      "$comment": "Info: https://github.com/biothings/biothings_explorer/issues/314",
+                      "type": "string",
+                      "pattern": "^[A-Za-z_-]+(.[A-Za-z_-]+)*$"
+                    },
+                    "trapi_sources": {
+                      "description": "The response-field's value is a set of TRAPI edge source objects (already in the desired format). The tool should ingest this with no changes.",
+                      "$comment": "Info: https://github.com/biothings/biothings_explorer/issues/617",
+                      "type": "string",
+                      "pattern": "^[A-Za-z_-]+(.[A-Za-z_-]+)*$"
+                    },
+                    "source_url": {
+                      "description": "The response-field's value is 1 or more urls to the primary source's external webpages for this specific edge/relationship. It should be added to the primary-knowledge-source object, under the 'source_record_urls' property.",
+                      "$comment": "Info: https://github.com/biothings/biothings_explorer/issues/803",
+                      "type": "string",
+                      "pattern": "^[A-Za-z_-]+(.[A-Za-z_-]+)*$"
+                    },
+                    "ref_pmid": {
+                      "description": "The response-field's value is 1 or more PMIDs of publications that support this edge. These should be put into CURIE format (prefix PMID) and added to the contents of the 'biolink:publications' edge-attribute.",
+                      "$comment": "Info: https://github.com/biothings/biothings_explorer/issues/677",
+                      "type": "string",
+                      "pattern": "^[A-Za-z_-]+(.[A-Za-z_-]+)*$"
+                    },
+                    "ref_url": {
+                      "description": "The response-field's value is 1 or more urls for webpages that support this edge. These should be kept as-is and added to the contents of the 'biolink:publications' edge-attribute.",
+                      "$comment": "Info: https://github.com/biothings/biothings_explorer/issues/677",
+                      "type": "string",
+                      "pattern": "^[A-Za-z_-]+(.[A-Za-z_-]+)*$"
+                    },
+                    "ref_pmcid": {
+                      "description": "The response-field's value is 1 or more PMCIDs of publications that support this edge. These should be put into CURIE format (prefix PMCID?) and added to the contents of the 'biolink:publications' edge-attribute.",
+                      "$comment": "Info: https://github.com/biothings/biothings_explorer/issues/677",
+                      "type": "string",
+                      "pattern": "^[A-Za-z_-]+(.[A-Za-z_-]+)*$"
+                    },
+                    "ref_clinicaltrials": {
+                      "description": "The response-field's value is 1 or more clinical trial NCT IDs that support this edge. These should be put into CURIE format (prefix clinicaltrials, ID should start with NCT) and added to the contents of the 'biolink:publications' edge-attribute.",
+                      "$comment": "Info: https://github.com/biothings/biothings_explorer/issues/677",
+                      "type": "string",
+                      "pattern": "^[A-Za-z_-]+(.[A-Za-z_-]+)*$"
+                    },
+                    "ref_doi": {
+                      "description": "The response-field's value is 1 or more DOI for publications that support this edge. These should be put into CURIE format (prefix doi) and added to the contents of the 'biolink:publications' edge-attribute.",
+                      "$comment": "Info: https://github.com/biothings/biothings_explorer/issues/677",
+                      "type": "string",
+                      "pattern": "^[A-Za-z_-]+(.[A-Za-z_-]+)*$"
+                    },
+                    "ref_isbn": {
+                      "description": "The response-field's value is 1 or more ISBN for publications that support this edge. These should be put into CURIE format (prefix isbn) and added to the contents of the 'biolink:publications' edge-attribute.",
+                      "$comment": "Info: https://github.com/biothings/biothings_explorer/issues/677",
+                      "type": "string",
+                      "pattern": "^[A-Za-z_-]+(.[A-Za-z_-]+)*$"
+                    }
+                  }
+                },
                 "test_examples": {
                   "$comment": "slightly modified from Nicholette's schema",
                   "type": "array",
