@@ -374,7 +374,8 @@
     },
     "prefix": {
       "description": "This is the standard prefix for the ID namespace. Its format should be (in order of preference): what the biolink-model uses, what [bioregistry](https://bioregistry.io/) specifies, or the prefix used by the resource that created the ID namespace. The delimiter is assumed to be ':' and should not be included.",
-      "type": "string"
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-.]+$"
     },
     "prefix_combo": {
       "description": "2-element array: the first element is the input namespace's prefix, the second is output namespace's prefix.",
