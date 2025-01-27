@@ -224,8 +224,30 @@
                     "parameters": {
                       "$ref": "#/$defs/parameters"
                     },
-                    "by_input_namespace": {},
-                    "by_output_namespace": {}
+                    "by_input_namespace": {
+                      "description": "Sometimes, different request info is needed for the different input or output namespaces. Examples: different parameter / request_body values; needing separate queries to avoid matching input IDs to the wrong namespace's data (this can happen when IDs aren't prefixed and have the same format). The keys are namespace prefixes, and the values are namespace-specific request_info. If by_input_namespace is used, then by_output_namespace SHOULD NOT be used, and vice versa.",
+                      "type": "object",
+                      "minProperties": 1,
+                      "additionalProperties": false,
+                      "patternProperties": {
+                        "^[A-Za-z0-9_-.]+$": {
+                          "type": "object",
+                          "minProperties": 1,
+                          "additionalProperties": false,
+                          "properties": {
+                            "request_body": {
+                              "$ref": "#/$defs/request_body"
+                            },
+                            "parameters": {
+                              "$ref": "#/$defs/parameters"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "by_output_namespace": {
+                      "$comment": "the same structure as by_input_namespace. May put the contents in def and ref here. But would need description that works for both."
+                    }
                   }
                 },
                 "provenance": {
