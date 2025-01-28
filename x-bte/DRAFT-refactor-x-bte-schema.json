@@ -251,8 +251,18 @@
                   }
                 },
                 "provenance": {
-
-                  "$comment": "complex!!! one of 3 schemas (two object, 1 array). Have some nested parts that are kinda repetitive, can make $ref to $def."
+                  "$comment": "complex!!! one of 3 schemas (two object, 1 array). Have some nested parts that are kinda repetitive, can make $ref to $def. BE CAREFUL OF RECURSIVE SCHEMAS, $REF TO ANOTHER $REF.",
+                  "oneOf": [
+                    {
+                      "$ref": "#/$defs/basic_provenance_info"
+                    },
+                    {
+                      "$comment": "per-namespace-pair. Use allOf to basic_provenance_info with another subschema for namespace_pair"
+                    },
+                    {
+                      "$comment": "1 response-field's mapping. Use ref to basic_provenance_info."
+                    }
+                  ]
                 },
                 "response_mapping": {
                   "description": "Map response-fields to TRAPI edge properties, generally edge attributes. The keys can be chosen from a set of keywords (linked to specific ways of parsing the response-field's value and setting up the TRAPI edge property), OR the keys can be CURIEs (prefix:ID) from the biolink-model or a standard ontology that describe the edge-attribute. The values should be the JSON dot-notation path for the response field (don't need to specify the arrays traversed). Advice: users generally want references (publication IDs), publication text snippets (if text-mined), and other structured info.",
@@ -359,6 +369,63 @@
     }
   ],
   "$defs": {
+    "basic_provenance_info": {
+      "description": "This is the simplest case: all data retrieved using this annotation has the same, single set of provenance info.",
+      "type": "object",
+      "additionalProperties": false,
+      "$comment": "add validation logic to this subschema. If api_is_aggregator is present, then sources is not and vice versa! That way source-info is always present. Also don't include any $ref in here.",
+      "required": [
+        "knowledge_level", 
+        "agent_type"
+      ],
+      "properties": {
+        "knowledge_level": {
+          "description": "Biolink-model knowledge level for the data",
+          "$comment": "Enum would need to be kept up-to-date with the tool's biolink-model version",
+          "type": "string",
+          "enum": [ "knowledge_assertion", "logical_entailment", "prediction", "statistical_association", "observation", "not_provided" ]
+        },
+        "agent_type": {
+          "description": "Biolink-model agent type for the data",
+          "$comment": "Enum would need to be kept up-to-date with the tool's biolink-model version",
+          "type": "string",
+          "enum": [ "manual_agent", "automated_agent", "data_analysis_pipeline", "computational_model", "text_mining_agent", "image_processing_agent", "manual_validation_of_automated_agent", "not_provided" ]
+        },
+        "api_is_aggregator": {
+          "description": "If this property is set to true, then the 'sources' property should not be present AND INSTEAD the tool should set the API's infores ID (provided in info.x-translator.infores) as the primary_knowledge_source. If this property is set to false, then the 'sources' property MUST be present to provide annotation-specific TRAPI source info and the tool will add the API infores ID as an aggregator_knowledge_source. If this field isn't specified, the tool defaults to 'false' behavior.",
+          "type": "boolean"
+        },
+        "sources": {
+          "description": "List of sources for the data retrieved by this annotation.",
+          "$comment": "logic needed? If primary, no upstream. If aggregator, need upstream. Don't worry about supporting.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "role"],
+            "properties": {
+              "id": {
+                "description": "Should be in infores:ID format, where the resource ID is from Translator's infores registry",
+                "type": "string",
+                "pattern": "^infores:[A-Za-z0-9_-.]+$"
+              },
+              "role": {
+                "description": "Roles are from the biolink-model",
+                "$comment": "Enum would need to be kept up-to-date with the tool's biolink-model version",
+                "type": "string",
+                "enum": [ "primary_knowledge_source", "aggregator_knowledge_source", "supporting_data_source"]
+              },
+              "upstream": {
+                "description": "Use to link a resource to the base resource that it ingested. Value should be another source object's id in this array.",
+                "type": "string",
+                "pattern": "^infores:[A-Za-z0-9_-.]+$"
+              }
+            }
+          }
+        }
+      }
+    },
     "category": {
       "description": "This is the biomedical-science semantic type of the entities represented by these IDs. The value must be a class (aka node category) in the biolink-model: it should be the most specific class that fits most of the entities. Avoid using classes labeled 'mixin' when possible. The format is PascalCase, no prefix. Validation is currently just on format, so it doesn't check whether the value actually exists in the biolink-model version the tool is using.",
       "type": "string",
