@@ -251,6 +251,7 @@
                   }
                 },
                 "provenance": {
+
                   "$comment": "complex!!! one of 3 schemas (two object, 1 array). Have some nested parts that are kinda repetitive, can make $ref to $def."
                 },
                 "response_mapping": {
@@ -385,7 +386,9 @@
       "minItems": 2,
       "maxItems": 2,
       "items": {
-        "$ref": "#/$defs/prefix"
+        "$comment": "This is the contents of the prefix sub-schema above. I can't use a $ref because json-schema does not allow $ref to refer to another $ref.",
+        "type": "string",
+        "pattern": "^[A-Za-z0-9_-.]+$"
       }
     },
     "replace_prefix": {
