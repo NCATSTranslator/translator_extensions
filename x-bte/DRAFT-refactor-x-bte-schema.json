@@ -259,7 +259,7 @@
                   "minProperties": 1,
                   "additionalProperties": false,
                   "patternProperties": {
-                    "^([A-Za-z]+):([A-Za-z]+)$": {
+                    "^([A-Za-z0-9_-.]+):([A-Za-z0-9_-]+)$": {
                         "description": "patternProperties (keys) are CURIEs (prefix:ID) from the biolink-model or a standard ontology that describe the edge-attribute.",
                         "type": "string",
                         "pattern": "^[A-Za-z_-]+(.[A-Za-z_-]+)*$"
