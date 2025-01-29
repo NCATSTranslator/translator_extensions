@@ -39,7 +39,7 @@
       "type": "object",
       "properties": {
         "x-bte-annotations": {
-          "description": "One or more x-bte annotations go here. One x-bte annotation describes a subset of data available using the API (semantics), how to query for this data, and how to process the response (assumed to be JSON). The main fields that define a unique x-bte annotation are: path (endpoint), request method, and core 'metaedge' info - input category, predicate, qualifier-set, and output category. Keys are user-defined names (allowed characters set using patternProperties) that generally note the dataset and semantic relationship.",
+          "description": "One or more x-bte annotations go here. One x-bte annotation describes a subset of data available using the API (semantics), how to query for this data, and how to process the response (assumed to be JSON). The main fields that define a unique x-bte annotation are core 'metaedge' info: input category, predicate, qualifier-set, and output category. Keys are user-defined names; usually, they note the dataset and semantic relationship.",
           "type": "object",
           "minProperties": 1,
           "additionalProperties": false,
@@ -187,7 +187,7 @@
                   }
                 },
                 "request_info": {
-                  "description": "Info needed to generate the API request",
+                  "description": "Info needed to generate the API request. If the request should include a request_body or parameters, this info MUST be specified - either directly under request_info (top-level) OR in by_input_namespace / by_output_namespace. If request_body/parameters exists in the top-level AND in an object within by_input_namespace / by_output_namespace, the version in the 'by' field will be used (overrides top-level, general version).",
                   "$comment": "Needs complex validation logic for {request_body, parameters, by_input_namespace, by output_namespace}: at least 1 of these needs to exist. If one of the by_... exist, than no other fields can (VS request_body, parameters can be together). Within by_..., they need at least 1 of {request_body, parameters}.",
                   "type": "object",
                   "additionalProperties": false,
@@ -225,28 +225,10 @@
                       "$ref": "#/$defs/parameters"
                     },
                     "by_input_namespace": {
-                      "description": "Sometimes, different request info is needed for the different input or output namespaces. Examples: different parameter / request_body values; needing separate queries to avoid matching input IDs to the wrong namespace's data (this can happen when IDs aren't prefixed and have the same format). The keys are namespace prefixes, and the values are namespace-specific request_info. If by_input_namespace is used, then by_output_namespace SHOULD NOT be used, and vice versa.",
-                      "type": "object",
-                      "minProperties": 1,
-                      "additionalProperties": false,
-                      "patternProperties": {
-                        "^[A-Za-z0-9_-.]+$": {
-                          "type": "object",
-                          "minProperties": 1,
-                          "additionalProperties": false,
-                          "properties": {
-                            "request_body": {
-                              "$ref": "#/$defs/request_body"
-                            },
-                            "parameters": {
-                              "$ref": "#/$defs/parameters"
-                            }
-                          }
-                        }
-                      }
+                      "$ref": "#/$defs/by_fields_subschema"
                     },
                     "by_output_namespace": {
-                      "$comment": "the same structure as by_input_namespace. May put the contents in def and ref here. But would need description that works for both."
+                      "$ref": "#/$defs/by_fields_subschema"
                     }
                   }
                 },
@@ -299,7 +281,7 @@
                   ]
                 },
                 "response_mapping": {
-                  "description": "Map response-fields to TRAPI edge properties, generally edge attributes. The keys can be chosen from a set of keywords (linked to specific ways of parsing the response-field's value and setting up the TRAPI edge property), OR the keys can be CURIEs (prefix:ID) from the biolink-model or a standard ontology that describe the edge-attribute. The values should be the JSON dot-notation path for the response field (don't need to specify the arrays traversed). Advice: users generally want references (publication IDs), publication text snippets (if text-mined), and other structured info.",
+                  "description": "Map response-fields to TRAPI edge properties, generally edge attributes. The keys can be chosen from a set of keywords (linked to specific ways of parsing the response-field's value and setting up the TRAPI edge property), OR the keys can be CURIEs (prefix:ID) from the biolink-model or a standard ontology that describe the edge-attribute. The values should be the JSON dot-notation path for the response-field (don't need to specify the arrays traversed). Advice: users generally want references (publication IDs), publication text snippets (if text-mined), and other structured info.",
                   "type": "object",
                   "minProperties": 1,
                   "additionalProperties": false,
@@ -417,13 +399,13 @@
           "description": "Biolink-model knowledge level for the data",
           "$comment": "Enum would need to be kept up-to-date with the tool's biolink-model version",
           "type": "string",
-          "enum": [ "knowledge_assertion", "logical_entailment", "prediction", "statistical_association", "observation", "not_provided" ]
+          "enum": ["knowledge_assertion", "logical_entailment", "prediction", "statistical_association", "observation", "not_provided"]
         },
         "agent_type": {
           "description": "Biolink-model agent type for the data",
           "$comment": "Enum would need to be kept up-to-date with the tool's biolink-model version",
           "type": "string",
-          "enum": [ "manual_agent", "automated_agent", "data_analysis_pipeline", "computational_model", "text_mining_agent", "image_processing_agent", "manual_validation_of_automated_agent", "not_provided" ]
+          "enum": ["manual_agent", "automated_agent", "data_analysis_pipeline", "computational_model", "text_mining_agent", "image_processing_agent", "manual_validation_of_automated_agent", "not_provided"]
         },
         "api_is_aggregator": {
           "description": "If this property is set to true, then the 'sources' property should not be present AND INSTEAD the tool should set the API's infores ID (provided in info.x-translator.infores) as the primary_knowledge_source. If this property is set to false, then the 'sources' property MUST be present to provide annotation-specific TRAPI source info and the tool will add the API infores ID as an aggregator_knowledge_source. If this field isn't specified, the tool defaults to 'false' behavior.",
@@ -448,13 +430,34 @@
                 "description": "Roles are from the biolink-model",
                 "$comment": "Enum would need to be kept up-to-date with the tool's biolink-model version",
                 "type": "string",
-                "enum": [ "primary_knowledge_source", "aggregator_knowledge_source", "supporting_data_source"]
+                "enum": ["primary_knowledge_source", "aggregator_knowledge_source", "supporting_data_source"]
               },
               "upstream": {
                 "description": "Use to link a resource to the base resource that it ingested. Value should be another source object's id in this array.",
                 "type": "string",
                 "pattern": "^infores:[A-Za-z0-9_-.]+$"
               }
+            }
+          }
+        }
+      }
+    },
+    "by_fields_subschema": {
+      "description": "Sometimes, parameters/request_body values vary depending on input or output namespace - use this field to provide those different values by namespace. Other request_info will be inherited from the top-level request_info properties. The keys are the standard prefixes for ALL namespaces from the corresponding section ('inputs' or 'outputs'). The values are the namespace-specific parameters and/or request_body values. If by_input_namespace is used, then by_output_namespace SHOULD NOT be used, and vice versa. Notes: (1) it'll likely be rare to use by_output_namespace. (2) The annotator may NEED to use by_input_namespace when the API uses non-prefixed IDs and the IDs from different namespaces have the same format (ex: numeric). The annotator could write diff parameters/request_body to match each namespace's IDs to different namespace-specific data fields. This avoids accidentally matching IDs to the wrong namespace's data.",
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "patternProperties": {
+        "^[A-Za-z0-9_-.]+$": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": false,
+          "properties": {
+            "request_body": {
+              "$ref": "#/$defs/request_body"
+            },
+            "parameters": {
+              "$ref": "#/$defs/parameters"
             }
           }
         }
