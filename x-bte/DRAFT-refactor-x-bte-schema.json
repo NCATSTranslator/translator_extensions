@@ -293,21 +293,9 @@
                     }
                   },
                   "properties": {
-                    "edge-attributes": {
+                    "trapi_edge_attributes": {
                       "description": "The response-field's value is a complete set of TRAPI edge-attributes (already in the desired format). The tool should ingest this with no changes.",
                       "$comment": "Info: https://github.com/biothings/biothings_explorer/issues/314",
-                      "type": "string",
-                      "pattern": "^[A-Za-z_-]+(.[A-Za-z_-]+)*$"
-                    },
-                    "trapi_sources": {
-                      "description": "The response-field's value is a set of TRAPI edge source objects (already in the desired format). The tool should ingest this with no changes.",
-                      "$comment": "Info: https://github.com/biothings/biothings_explorer/issues/617",
-                      "type": "string",
-                      "pattern": "^[A-Za-z_-]+(.[A-Za-z_-]+)*$"
-                    },
-                    "source_url": {
-                      "description": "The response-field's value is 1 or more urls to the primary source's external webpages for this specific edge/relationship. It should be added to the primary-knowledge-source object, under the 'source_record_urls' property.",
-                      "$comment": "Info: https://github.com/biothings/biothings_explorer/issues/803",
                       "type": "string",
                       "pattern": "^[A-Za-z_-]+(.[A-Za-z_-]+)*$"
                     },
@@ -433,9 +421,19 @@
                 "enum": ["primary_knowledge_source", "aggregator_knowledge_source", "supporting_data_source"]
               },
               "upstream": {
-                "description": "Use to link a resource to the base resource that it ingested. Value should be another source object's id in this array.",
+                "description": "Use to link a resource to the base resource(s) that it ingested. This field's value(s) should be (infores) ids from other source objects in the 'sources' array.",
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string",
+                  "pattern": "^infores:[A-Za-z0-9_-.]+$"
+                }
+              },
+              "record_url_field": {
+                "description": "Optional field to specify response-field that provides urls to the source's webpages for each specific edge/relationship. Format: Dot-notation path to this response-field or other valid JSONata query.",
+                "$comment": "Original dev work: https://github.com/biothings/biothings_explorer/issues/803",
                 "type": "string",
-                "pattern": "^infores:[A-Za-z0-9_-.]+$"
+                "pattern": "^[A-Za-z_-]+(.[A-Za-z_-]+)*$"
               }
             }
           }
