@@ -39,7 +39,7 @@
       "type": "object",
       "properties": {
         "x-bte-annotations": {
-          "description": "One or more x-bte annotations go here. One x-bte annotation describes a subset of data available using the API (semantics), how to query for this data, and how to process the response (assumed to be JSON). The main properties that define a unique x-bte annotation are core 'metaedge' info: input category, predicate, qualifier-set, and output category. Keys are user-defined names; usually, they note the dataset and semantic relationship.",
+          "description": "One or more x-bte annotations go here. One x-bte annotation describes a subset of data available using the API (semantics), how to query for this data, and how to process the response (assumed to be JSON). The main properties that define a unique x-bte annotation are core 'metaedge' info: input category, predicate, qualifier-set, and output category. Keys are user-defined names; usually, they note the dataset and type of biological relationship.",
           "type": "object",
           "minProperties": 1,
           "additionalProperties": false,
@@ -61,7 +61,7 @@
                   "type": "string"
                 },
                 "inputs": {
-                  "description": "Describes the input biological entities (and their IDs). These are put in the API request to retrieve their biological relationship data.",
+                  "description": "Describes the input biological entities (and their IDs). These are put in the API request to retrieve data on their relationships with other biological entities.",
                   "type": "object",
                   "additionalProperties": false,
                   "required": ["category", "namespaces"],
@@ -104,7 +104,7 @@
                   }
                 },
                 "predicate": {
-                  "description": "This is the biomedical-science semantic type of the relationship between the input and output biological entities. The value must be a predicate in the biolink-model: it should be the most specific predicate that matches the relationship. Predicates labeled 'mixin' should be used carefully (read yaml spec before using). The format is snake_case, no prefix. Validation is currently just on format, so it doesn't check whether the value actually exists in the biolink-model version the tool is using.",
+                  "description": "This is the (semantic) type of the relationship between the input and output biological entities. The value must be a predicate in the biolink-model: it should be the most specific predicate that matches the relationship. Predicates labeled 'mixin' should be used carefully (read yaml spec before using). The format is snake_case, no prefix. Validation is currently just on format, so it doesn't check whether the value actually exists in the biolink-model version the tool is using.",
                   "type": "string",
                   "pattern": "^[a-z]+(_[a-z]+)*$",
                   "$comment": "For full validation, this would need enum of biolink-model predicates. And would need to be maintained, up-to-date with biolink-model version the tool is using."
@@ -123,7 +123,7 @@
                   }
                 },
                 "outputs": {
-                  "description": "Describes the output biological entities (and their IDs). These should be in the API's response along with any data on the biological relationship between the input and output biological entities.",
+                  "description": "Describes the output biological entities (and their IDs). These should be in the API's response along with any data on the relationship between the input and output biological entities.",
                   "type": "object",
                   "additionalProperties": false,
                   "required": ["category", "namespaces"],
@@ -132,7 +132,7 @@
                       "$ref": "#/$defs/category"
                    },
                     "use_all_namespaces": {
-                      "description": "Only use when the 'namespaces' array has >1 item. One record is the response data for ONE specific relationship between an input and output biological entity. If 1 record has output IDs from >1 ID namespace listed in the 'namespaces' section, should the tool ingest all those IDs (true)? True implies that the API may actually return multiple output biological entities in 1 record. Or should the tool only ingest the ID(s) from 1 namespace - the first in the 'namespaces' section that it finds IDs for (false)? False implies that either (1) 1 record only has 1 output ID, or (2) the multiple output IDs in 1 record represent the same biological entity so only 1 of the IDs is needed. If this property isn't specified, the tool defaults to 'false' behavior. It may be rare to set this property to true.",
+                      "description": "Only use when the 'namespaces' array has >1 item. One record is the response data for the relationship between one input and one output biological entity. If 1 record has output IDs from >1 ID namespace listed in the 'namespaces' section, should the tool ingest all those IDs (true)? True implies that these IDs may represent separate biological entities according to the tool's ID-resolving service. Or should the tool only ingest the ID(s) from 1 namespace - the first in the 'namespaces' section that it finds IDs for (false)? False implies that either (1) 1 record only has 1 output ID, or (2) the multiple output IDs in 1 record represent the same biological entity so only 1 of the IDs is needed. If this property isn't specified, the tool defaults to 'false' behavior. It may be rare to set this property to true.",
                       "type": "boolean"
                     },
                     "namespaces": {
@@ -230,7 +230,7 @@
                   }
                 },
                 "provenance": {
-                  "description": "Info on where the relationship data comes from (sources) and how it was generated. There are different formats to cover a range of scenarios.",
+                  "description": "Info on where the biological relationship data comes from (sources) and how it was generated. There are different formats to cover a range of scenarios.",
                   "$comment": "complex!!! one of 3 schemas (two object, 1 array). Have some nested parts that are kinda repetitive, can make $ref to $def. BE CAREFUL OF RECURSIVE SCHEMAS, $REF TO ANOTHER $REF.",
                   "oneOf": [
                     {
@@ -253,7 +253,7 @@
                       }
                     },
                     {
-                      "description": "In this case, there is an API response-field with string values (basically keywords), which provides specific provenance info for each retrieved relationship (between a specific input and output ID). The annotator can use this format to map the response-field's values to different structured provenance data. All possible values for this response-field should be included in this mapping.",
+                      "description": "In this case, there is an API response-field with string values (basically keywords), which provides specific provenance info for each record. One record is the response data for the relationship between one input and one output biological entity. The annotator can use this format to map the response-field's values to different structured provenance data. All possible values for this response-field should be included in this mapping.",
                       "type": "object",
                       "additionalProperties": false,
                       "required": ["source_field", "mapping"],
@@ -294,32 +294,32 @@
                       "type": "string"
                     },
                     "ref_pmid": {
-                      "description": "The response-field's value is 1 or more PMIDs of publications that support this edge. These should be put into CURIE format (prefix PMID) and added to the contents of the 'biolink:publications' edge-attribute.",
+                      "description": "The response-field's value is 1 or more PMIDs of publications that support this record. These should be put into CURIE format (prefix PMID) and added to the contents of the 'biolink:publications' edge-attribute.",
                       "$comment": "Info: https://github.com/biothings/biothings_explorer/issues/677",
                       "type": "string"
                     },
                     "ref_url": {
-                      "description": "The response-field's value is 1 or more urls for webpages that support this edge. These should be kept as-is and added to the contents of the 'biolink:publications' edge-attribute.",
+                      "description": "The response-field's value is 1 or more urls to webpages that support this biological relationship. These should be kept as-is and added to the contents of the 'biolink:publications' edge-attribute.",
                       "$comment": "Info: https://github.com/biothings/biothings_explorer/issues/677",
                       "type": "string"
                     },
                     "ref_pmcid": {
-                      "description": "The response-field's value is 1 or more PMCIDs of publications that support this edge. These should be put into CURIE format (prefix PMCID?) and added to the contents of the 'biolink:publications' edge-attribute.",
+                      "description": "The response-field's value is 1 or more PMCIDs of publications that support this biological relationship. These should be put into CURIE format (prefix PMCID?) and added to the contents of the 'biolink:publications' edge-attribute.",
                       "$comment": "Info: https://github.com/biothings/biothings_explorer/issues/677",
                       "type": "string"
                     },
                     "ref_clinicaltrials": {
-                      "description": "The response-field's value is 1 or more clinical trial NCT IDs that support this edge. These should be put into CURIE format (prefix clinicaltrials, ID should start with NCT) and added to the contents of the 'biolink:publications' edge-attribute.",
+                      "description": "The response-field's value is 1 or more clinical trial NCT IDs that support this biological relationship. These should be put into CURIE format (prefix clinicaltrials, ID should start with NCT) and added to the contents of the 'biolink:publications' edge-attribute.",
                       "$comment": "Info: https://github.com/biothings/biothings_explorer/issues/677",
                       "type": "string"
                     },
                     "ref_doi": {
-                      "description": "The response-field's value is 1 or more DOI for publications that support this edge. These should be put into CURIE format (prefix doi) and added to the contents of the 'biolink:publications' edge-attribute.",
+                      "description": "The response-field's value is 1 or more DOI for publications that support this biological relationship. These should be put into CURIE format (prefix doi) and added to the contents of the 'biolink:publications' edge-attribute.",
                       "$comment": "Info: https://github.com/biothings/biothings_explorer/issues/677",
                       "type": "string"
                     },
                     "ref_isbn": {
-                      "description": "The response-field's value is 1 or more ISBN for publications that support this edge. These should be put into CURIE format (prefix isbn) and added to the contents of the 'biolink:publications' edge-attribute.",
+                      "description": "The response-field's value is 1 or more ISBN for publications that support this biological relationship. These should be put into CURIE format (prefix isbn) and added to the contents of the 'biolink:publications' edge-attribute.",
                       "$comment": "Info: https://github.com/biothings/biothings_explorer/issues/677",
                       "type": "string"
                     }
@@ -418,7 +418,7 @@
                 }
               },
               "record_url_field": {
-                "description": "Optional property to specify a response-field that provides urls to the source's webpages for each specific edge/relationship. Format: Dot-notation path to this response-field or other valid JSONata query.",
+                "description": "Optional property to specify a response-field that provides urls to the source's webpages. These webpages SHOULD be for specific relationships between input and output biological entities. Format: Dot-notation path to this response-field or other valid JSONata query.",
                 "$comment": "Original dev work: https://github.com/biothings/biothings_explorer/issues/803",
                 "type": "string"
               }
