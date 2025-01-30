@@ -61,7 +61,7 @@
                   "type": "string"
                 },
                 "inputs": {
-                  "description": "Describes the input bioentities (and their IDs). These are put in the API request to retrieve their biological relationship data.",
+                  "description": "Describes the input biological entities (and their IDs). These are put in the API request to retrieve their biological relationship data.",
                   "type": "object",
                   "additionalProperties": false,
                   "required": ["category", "namespaces"],
@@ -70,12 +70,12 @@
                        "$ref": "#/$defs/category"
                     },
                     "use_all_namespaces": {
-                      "description": "Only use when the namespaces array has >1 item. If an input entity has synonymous IDs from >1 namespace listed in the 'namespaces' section, should the tool generate queries using all of those IDs (true)? True implies that the API may have different data for the same biological thing but under IDs in different namespaces, and you want to retrieve all of that data. Or should the tool only use the IDs for 1 namespace - the first in the 'namespaces' section that it has IDs for (false)? False implies that the API has already done an 'entity-resolution' step and an ID from any namespace would retrieve the same data. If this property isn't specified, the tool defaults to 'false' behavior.",
+                      "description": "Only use when the 'namespaces' array has >1 item. If an input biological entity has synonymous IDs from >1 ID namespace listed in the 'namespaces' section, should the tool generate queries using all of those IDs (true)? True implies that the API may have different data for the same biological entity under different IDs from different namespaces, and you want to retrieve all of that data. Or should the tool only use the IDs for 1 namespace - the first in the 'namespaces' section that it has IDs for (false)? False implies that the API has already done an 'entity-resolution' step and an ID from any namespace would retrieve the same data. If this property isn't specified, the tool defaults to 'false' behavior.",
                       "type": "boolean",
                       "$comment": "While `outputs` also has this property, the description is different."
                     },
                     "namespaces": {
-                      "description": "List of possible ID namespaces for input bioentities. They should be in order of preference (see 'use_all_namespaces' property's description).",
+                      "description": "List of possible ID namespaces for input biological entities. They should be in order of preference (see 'use_all_namespaces' property's description).",
                       "$comment": "outputs also has this property. Right now, I'm defining the two separately because the required properties are different.",
                       "type": "array",
                       "minItems": 1,
@@ -104,13 +104,13 @@
                   }
                 },
                 "predicate": {
-                  "description": "This is the biomedical-science semantic type of the relationship between the input and output entities. The value must be a predicate in the biolink-model: it should be the most specific predicate that matches the relationship. Predicates labeled 'mixin' should be used carefully (read yaml spec before using). The format is snake_case, no prefix. Validation is currently just on format, so it doesn't check whether the value actually exists in the biolink-model version the tool is using.",
+                  "description": "This is the biomedical-science semantic type of the relationship between the input and output biological entities. The value must be a predicate in the biolink-model: it should be the most specific predicate that matches the relationship. Predicates labeled 'mixin' should be used carefully (read yaml spec before using). The format is snake_case, no prefix. Validation is currently just on format, so it doesn't check whether the value actually exists in the biolink-model version the tool is using.",
                   "type": "string",
                   "pattern": "^[a-z]+(_[a-z]+)*$",
                   "$comment": "For full validation, this would need enum of biolink-model predicates. And would need to be maintained, up-to-date with biolink-model version the tool is using."
                 },
                 "qualifiers": {
-                  "description": "This is 1 static set of biolink-model qualifiers that add nuance and detail to the relationship between the input and output entities. The keys should be specific qualifiers from the biolink-model, and the values should be from the biolink-model enums for those qualifiers. No prefixes are needed for keys or values.",
+                  "description": "This is 1 static set of biolink-model qualifiers that add nuance and detail to the relationship between the input and output biological entities. The keys should be specific qualifiers from the biolink-model, and the values should be from the biolink-model enums for those qualifiers. No prefixes are needed for keys or values.",
                   "type": "object",
                   "$comment": "Not specifying every recommended qualifier_type_id right now. TBH I'm not sure what a complete set would be. So giving the basic format. qualifier_type_id are snake_case and generally end in '_qualifier'. values are snake-case.",
                   "minProperties": 1,
@@ -123,7 +123,7 @@
                   }
                 },
                 "outputs": {
-                  "description": "Describes the output bioentities (and their IDs). These should be in the API's response along with any data on the biological relationship between the input and output bioentities.",
+                  "description": "Describes the output biological entities (and their IDs). These should be in the API's response along with any data on the biological relationship between the input and output biological entities.",
                   "type": "object",
                   "additionalProperties": false,
                   "required": ["category", "namespaces"],
@@ -132,11 +132,11 @@
                       "$ref": "#/$defs/category"
                    },
                     "use_all_namespaces": {
-                      "description": "Only use when the namespaces array has >1 item. One record is the response data for ONE specific relationship between an input and output biological entity. If 1 record has output IDs from >1 namespace listed in the 'namespaces' section, should the tool ingest all those IDs (true)? True implies that the API may actually return multiple output entities in 1 record. Or should the tool only ingest the ID(s) from 1 namespace - the first in the 'namespaces' section that it finds IDs for (false)? False implies that either (1) 1 record only has 1 output ID, or (2) the multiple output IDs in 1 record represent the same entity so only 1 of the IDs is needed. If this property isn't specified, the tool defaults to 'false' behavior. It may be rare to set this property to true.",
+                      "description": "Only use when the 'namespaces' array has >1 item. One record is the response data for ONE specific relationship between an input and output biological entity. If 1 record has output IDs from >1 ID namespace listed in the 'namespaces' section, should the tool ingest all those IDs (true)? True implies that the API may actually return multiple output biological entities in 1 record. Or should the tool only ingest the ID(s) from 1 namespace - the first in the 'namespaces' section that it finds IDs for (false)? False implies that either (1) 1 record only has 1 output ID, or (2) the multiple output IDs in 1 record represent the same biological entity so only 1 of the IDs is needed. If this property isn't specified, the tool defaults to 'false' behavior. It may be rare to set this property to true.",
                       "type": "boolean"
                     },
                     "namespaces": {
-                      "description": "List of possible ID namespaces for output bioentities. They should be in order of preference (see 'use_all_namespaces' property's description).",
+                      "description": "List of possible ID namespaces for output biological entities. They should be in order of preference (see 'use_all_namespaces' property's description).",
                       "type": "array",
                       "minItems": 1,
                       "items": {
@@ -158,7 +158,7 @@
                             "$ref": "#/$defs/replace_prefix"
                           },
                           "capture_regex": {
-                            "description": "Sometimes, the response-field's string value is not the expected format and cannot be handled with replace_prefix (suffixes, ID format isn't biolink-model or bioregistry standard, delimited string, etc). This property can be used to provide a capturing group (regex) to retrieve the ID in the expected format. Exact flavor of regex TBD, assume PCRE2 for now.",
+                            "description": "Sometimes, the response-field's string value is not the expected format and cannot be handled with replace_prefix (suffixes, ID format isn't biolink-model or bioregistry standard, delimited string, etc). This property can be used to provide a capturing group (regex) to retrieve the ID in its expected format. Exact flavor of regex TBD, assume PCRE2 for now.",
                             "type": "string"
                           }
                         }
@@ -167,7 +167,7 @@
                   }
                 },
                 "exclude_namespace_combos": {
-                  "description": "Only use this property if inputs.namespaces AND outputs.namespaces arrays both have >1 item. If a few input/output namespaces combos don't exist in the API's data, these combos can be listed here so the tool can skip them. If this property AND include_namespace_combos are not specified, the tool will assume that the API data may include all possible combos of input and output namespace.",
+                  "description": "Only use this property if inputs.namespaces AND outputs.namespaces arrays both have >1 item. If a few input/output ID-namespace combos don't exist in the API's data, these combos can be listed here so the tool can skip them. If this property AND include_namespace_combos are not specified, the tool will assume that the API data may include all possible combos of input and output ID namespaces.",
                   "type": "array",
                   "minItems": 1,
                   "items": {
@@ -175,7 +175,7 @@
                   }
                 },
                 "include_namespace_combos": {
-                  "description": "Similar to 'exclude_namespace_combos', except this property is for listing combos that exist in the API's data. Annotation writers SHOULD NOT specify both properties in the same annotation (just specify one). There may be edge-cases where it's preferable to use this property over exclude_namespace_combos. Ex: input/output have a LOT of namespaces but only a small amount of combos actually exist.",
+                  "description": "Similar to 'exclude_namespace_combos', except this property is for listing combos that exist in the API's data. Annotation writers SHOULD NOT specify both properties in the same annotation (just specify one). There may be edge-cases where it's preferable to use this property over exclude_namespace_combos. Ex: input/output have a LOT of possible ID namespaces but only a small amount of combos actually exist.",
                   "type": "array",
                   "$comment": "if exclude_namespace_combos is used, then this one shouldn't be used and vice versa. Add logic to schema later?",
                   "minItems": 1,
@@ -237,7 +237,7 @@
                       "$ref": "#/$defs/basic_provenance_info"
                     },
                     {
-                      "description": "In this case, the annotator wants to assign different provenance info depending on input/output ID namespace. The annotator can use this format to map different input/output namespace combos to different structured provenance data. All possible input/output namespace combos should be included in this mapping.",
+                      "description": "In this case, the annotator wants to assign different provenance info depending on input/output ID namespace. The annotator can use this format to map different input/output ID-namespace combos to different structured provenance data. All possible input/output ID-namespace combos should be included in this mapping.",
                       "type": "array",
                       "minItems": 1,
                       "items": {
@@ -277,13 +277,13 @@
                   ]
                 },
                 "response_mapping": {
-                  "description": "Map response-fields to TRAPI edge properties, generally edge attributes. The keys can be chosen from a set of keywords (linked to specific ways of parsing the response-field's value and setting up the TRAPI edge property), OR the keys can be CURIEs (prefix:ID) from the biolink-model or a standard ontology that describe the edge-attribute. The values should be dot-notation paths to the response-fields or other valid JSONata queries. Advice: users generally want references (publication IDs), publication text snippets (if text-mined), and other structured info.",
+                  "description": "Map response-fields to TRAPI edge properties, generally edge attributes. The mapping keys can be (1) keywords (linked to specific ways of parsing the response-field's value and setting up the TRAPI edge property) OR (2) CURIEs (ID-namespace-standard-prefix:ID-in-namespace-standard-format) for the type of data (generally from the biolink-model or a commonly-used ontology). The values should be dot-notation paths to the response-fields or other valid JSONata queries. Advice: users generally want references (publication IDs), publication text snippets (if text-mined), and other structured info.",
                   "type": "object",
                   "minProperties": 1,
                   "additionalProperties": false,
                   "patternProperties": {
                     "^([A-Za-z0-9_-.]+):([A-Za-z0-9_-]+)$": {
-                        "description": "patternProperties (keys) are CURIEs (prefix:ID) from the biolink-model or a standard ontology that describe the edge-attribute.",
+                        "description": "mapping keys are CURIEs (ID-namespace-standard-prefix:ID-in-namespace-standard-format) for the type of data (generally from the biolink-model or a commonly-used ontology).",
                         "type": "string"
                     }
                   },
@@ -326,7 +326,7 @@
                   }
                 },
                 "test_examples": {
-                  "description": "This section is optional but very useful for testing, so highly recommended to fill out. This is a list of input/output ID pairs that a tool should be able to retrieve from the API using this annotation. These IDs should be in CURIE format (namespace's standard prefix, colon-delimiter, ID in standard format for namespace).",
+                  "description": "This section is optional but very useful for testing, so highly recommended to fill out. This is a list of input/output ID pairs that a tool should be able to retrieve from the API using this annotation. These IDs should be in CURIE format (ID-namespace-standard-prefix:ID-in-namespace-standard-format).",
                   "type": "array",
                   "minItems": 1,
                   "items": {
@@ -428,7 +428,7 @@
       }
     },
     "by_fields_subschema": {
-      "description": "Sometimes, parameters/request_body values vary depending on input or output namespace - use this property to provide those different values by namespace. Other request_info will be inherited from the top-level request_info properties. The keys are the standard prefixes for ALL namespaces from the corresponding section ('inputs' or 'outputs'). The values are the namespace-specific parameters and/or request_body values. If by_input_namespace is used, then by_output_namespace SHOULD NOT be used, and vice versa. Notes: (1) it'll likely be rare to use by_output_namespace. (2) The annotator may NEED to use by_input_namespace when the API uses non-prefixed IDs and the IDs from different namespaces have the same format (ex: numeric). The annotator could write diff parameters/request_body to match each namespace's IDs to different namespace-specific data fields. This avoids accidentally matching IDs to the wrong namespace's data.",
+      "description": "Sometimes, parameters/request_body values vary depending on input or output ID namespace - use this property to provide those different values by namespace. Other request_info will be inherited from the top-level request_info properties. The keys are the 'prefix' values for ALL ID namespaces from the corresponding section ('inputs' or 'outputs'). The values are the namespace-specific parameters and/or request_body values. If by_input_namespace is used, then by_output_namespace SHOULD NOT be used, and vice versa. Notes: (1) it'll likely be rare to use by_output_namespace. (2) The annotator may NEED to use by_input_namespace when the API uses non-prefixed IDs and the IDs from different namespaces have the same format (ex: numeric). The annotator could write diff parameters/request_body to match each namespace's IDs to different namespace-specific data fields. This avoids accidentally matching IDs to the wrong namespace's data.",
       "type": "object",
       "minProperties": 1,
       "additionalProperties": false,
@@ -449,7 +449,7 @@
       }
     },
     "category": {
-      "description": "This is the biomedical-science semantic type of the entities represented by these IDs. The value must be a class (aka node category) in the biolink-model: it should be the most specific class that fits most of the entities. Avoid using classes labeled 'mixin' when possible. The format is PascalCase, no prefix. Validation is currently just on format, so it doesn't check whether the value actually exists in the biolink-model version the tool is using.",
+      "description": "This is the (semantic) type of biological entities represented by these IDs. The value must be a class (aka node category) in the biolink-model: it should be the most specific class that fits the most biological entities represented in the data. Avoid using classes labeled 'mixin' when possible. The format is PascalCase, no prefix. Validation is currently just on format, so it doesn't check whether the value actually exists in the biolink-model version the tool is using.",
       "type": "string",
       "pattern": "^([A-Z][a-z]+)+$",
       "$comment": "For full validation, this would need enum of acceptable biolink-model node categories (not mixins and must be bioentities?). And would need to be maintained, up-to-date with biolink-model version the tool is using."
@@ -463,23 +463,23 @@
       "type": "object"
     },
     "prefix": {
-      "description": "This is the standard prefix for the ID namespace. Its format should be (in order of preference): what the biolink-model uses, what [bioregistry](https://bioregistry.io/) specifies, or the prefix used by the resource that created the ID namespace. The delimiter is assumed to be ':' and should not be included.",
+      "description": "This is the ID namespace's standard prefix. This should be from (in order of preference): [biolink-model](https://github.com/biolink/biolink-model/blob/master/project/prefixmap/biolink_model_prefix_map.json), [bioregistry](https://bioregistry.io/), or the resource that created the ID namespace. The delimiter is assumed to be ':' and should not be included.",
       "type": "string",
       "pattern": "^[A-Za-z0-9_-.]+$"
     },
     "prefix_combo": {
-      "description": "2-item array: the first item is the input namespace's prefix, the second is output namespace's prefix.",
+      "description": "2-item array: the first item is 'prefix' value for the input ID namespace, the second is 'prefix' value for the output ID namespace.",
       "type": "array",
       "minItems": 2,
       "maxItems": 2,
       "items": {
-        "$comment": "This is the contents of the prefix sub-schema above. I can't use a $ref because json-schema does not allow $ref to refer to another $ref.",
+        "$comment": "This is the contents of the 'prefix' sub-schema above. I can't use a $ref because json-schema does not allow $ref to refer to another $ref.",
         "type": "string",
         "pattern": "^[A-Za-z0-9_-.]+$"
       }
     },
     "replace_prefix": {
-      "description": "Sometimes, an API will use a non-standard ID prefix or delimiter for entities (differs from the standard specified in 'prefix' and a colon-delimiter). This non-standard ID prefix AND its delimiter should be specified here. It is important to include this when the non-standard prefix must be added to input IDs for queries or will be in the output id_field's value.",
+      "description": "Sometimes, an API will use a non-standard ID prefix or delimiter for IDs (differs from the standard in 'prefix' and a colon-delimiter). This non-standard ID prefix AND its delimiter should be specified here. It is important to include this when the non-standard prefix must be added to input IDs for queries or will be in the output id_field's value.",
       "type": "string"
     },
     "request_body": {
