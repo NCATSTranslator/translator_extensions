@@ -5,11 +5,11 @@
   "type": "object",
   "properties": {
     "info": {
-      "description": "Required, fixed field in OpenAPI schema. Provides metadata about the API.",
+      "description": "Required, fixed property in OpenAPI schema. Provides metadata about the API.",
       "type": "object",
       "properties": {
         "x-bte": {
-          "description": "Optional field to provide API info that the tool needs for querying or post-processing.",
+          "description": "Optional property to provide API info that the tool needs for querying or post-processing.",
           "type": "object",
           "minProperties": 1,
           "additionalProperties": false,
@@ -35,11 +35,11 @@
       }
     },
     "components": {
-      "description": "Fixed field in OpenAPI schema.",
+      "description": "Fixed property in OpenAPI schema.",
       "type": "object",
       "properties": {
         "x-bte-annotations": {
-          "description": "One or more x-bte annotations go here. One x-bte annotation describes a subset of data available using the API (semantics), how to query for this data, and how to process the response (assumed to be JSON). The main fields that define a unique x-bte annotation are core 'metaedge' info: input category, predicate, qualifier-set, and output category. Keys are user-defined names; usually, they note the dataset and semantic relationship.",
+          "description": "One or more x-bte annotations go here. One x-bte annotation describes a subset of data available using the API (semantics), how to query for this data, and how to process the response (assumed to be JSON). The main properties that define a unique x-bte annotation are core 'metaedge' info: input category, predicate, qualifier-set, and output category. Keys are user-defined names; usually, they note the dataset and semantic relationship.",
           "type": "object",
           "minProperties": 1,
           "additionalProperties": false,
@@ -70,9 +70,9 @@
                        "$ref": "#/$defs/category"
                     },
                     "use_all_namespaces": {
-                      "description": "Only use when the namespaces array has >1 element. If an input entity has synonymous IDs from >1 namespace listed in the 'namespaces' section, should the tool generate queries using all of those IDs (true)? True implies that the API may have different data for the same biological thing but under IDs in different namespaces, and you want to retrieve all of that data. Or should the tool only use the IDs for 1 namespace - the first in the 'namespaces' section that it has IDs for (false)? False implies that the API has already done an 'entity-resolution' step and an ID from any namespace would retrieve the same data. If this field isn't specified, the tool defaults to 'false' behavior.",
+                      "description": "Only use when the namespaces array has >1 element. If an input entity has synonymous IDs from >1 namespace listed in the 'namespaces' section, should the tool generate queries using all of those IDs (true)? True implies that the API may have different data for the same biological thing but under IDs in different namespaces, and you want to retrieve all of that data. Or should the tool only use the IDs for 1 namespace - the first in the 'namespaces' section that it has IDs for (false)? False implies that the API has already done an 'entity-resolution' step and an ID from any namespace would retrieve the same data. If this property isn't specified, the tool defaults to 'false' behavior.",
                       "type": "boolean",
-                      "$comment": "While `outputs` also has this field, the description is different."
+                      "$comment": "While `outputs` also has this property, the description is different."
                     },
                     "namespaces": {
                       "description": "List of possible ID namespaces for input bioentities. They should be in order of preference (see 'use_all_namespaces' property's description).",
@@ -132,7 +132,7 @@
                       "$ref": "#/$defs/category"
                    },
                     "use_all_namespaces": {
-                      "description": "Only use when the namespaces array has >1 element. If 1 hit in the response has output IDs from >1 namespace listed in the 'namespaces' section, should the tool ingest all those IDs (true)? True implies that the API may return multiple entities in 1 hit. Or should the tool only ingest the ID(s) from 1 namespace - the first in the 'namespaces' section that it finds IDs for (false)? False implies that either (1) 1 hit only has 1 output ID, or (2) the multiple output IDs in 1 hit represent the same entity so only 1 of the IDs is needed. If this field isn't specified, the tool defaults to 'false' behavior. It may be rare to set this field to true.",
+                      "description": "Only use when the namespaces array has >1 element. If 1 hit in the response has output IDs from >1 namespace listed in the 'namespaces' section, should the tool ingest all those IDs (true)? True implies that the API may return multiple entities in 1 hit. Or should the tool only ingest the ID(s) from 1 namespace - the first in the 'namespaces' section that it finds IDs for (false)? False implies that either (1) 1 hit only has 1 output ID, or (2) the multiple output IDs in 1 hit represent the same entity so only 1 of the IDs is needed. If this property isn't specified, the tool defaults to 'false' behavior. It may be rare to set this property to true.",
                       "type": "boolean"
                     },
                     "namespaces": {
@@ -148,7 +148,7 @@
                             "$ref": "#/$defs/prefix"
                           },
                           "id_field": {
-                            "description": "Specifies the response-field that contains the output ID (assumes field's value is a single ID, using 'capture_regex' if needed). Format: Dot-notation path to this response-field or other valid JSONata query.",
+                            "description": "Specifies the response-field that contains the output ID (assumes response-field's value is a single ID, using 'capture_regex' if needed). Format: Dot-notation path to this response-field or other valid JSONata query.",
                             "type": "string"
                           },
                           "name_field": {
@@ -158,7 +158,7 @@
                             "$ref": "#/$defs/replace_prefix"
                           },
                           "capture_regex": {
-                            "description": "Sometimes, the response-field's string value is not the expected format and cannot be handled with replace_prefix (suffixes, ID format isn't biolink-model or bioregistry standard, delimited string, etc). This field can be used to provide a capturing group (regex) to retrieve the ID in the expected format. Exact flavor of regex TBD, assume PCRE2 for now.",
+                            "description": "Sometimes, the response-field's string value is not the expected format and cannot be handled with replace_prefix (suffixes, ID format isn't biolink-model or bioregistry standard, delimited string, etc). This property can be used to provide a capturing group (regex) to retrieve the ID in the expected format. Exact flavor of regex TBD, assume PCRE2 for now.",
                             "type": "string"
                           }
                         }
@@ -167,7 +167,7 @@
                   }
                 },
                 "exclude_namespace_combos": {
-                  "description": "Only use this field if inputs.namespaces AND outputs.namespaces both have >1 element. If a few input/output namespaces combos don't exist in the API's data, these combos can be listed here so the tool can skip them. If this field AND include_namespace_combos are not specified, the tool will assume that the API data may include all possible combos of input and output namespace.",
+                  "description": "Only use this property if inputs.namespaces AND outputs.namespaces arrays both have >1 item. If a few input/output namespaces combos don't exist in the API's data, these combos can be listed here so the tool can skip them. If this property AND include_namespace_combos are not specified, the tool will assume that the API data may include all possible combos of input and output namespace.",
                   "type": "array",
                   "minItems": 1,
                   "items": {
@@ -175,7 +175,7 @@
                   }
                 },
                 "include_namespace_combos": {
-                  "description": "Similar to 'exclude_namespace_combos', except this field is for listing combos that exist in the API's data. Annotation writers SHOULD NOT specify both fields in the same annotation (just specify one). There may be edge-cases where it's preferable to use this field over 'exclude...'. Ex: input/output have a LOT of namespaces but only a small amount of combos actually exist.",
+                  "description": "Similar to 'exclude_namespace_combos', except this property is for listing combos that exist in the API's data. Annotation writers SHOULD NOT specify both properties in the same annotation (just specify one). There may be edge-cases where it's preferable to use this property over exclude_namespace_combos. Ex: input/output have a LOT of namespaces but only a small amount of combos actually exist.",
                   "type": "array",
                   "$comment": "if exclude_namespace_combos is used, then this one shouldn't be used and vice versa. Add logic to schema later?",
                   "minItems": 1,
@@ -184,7 +184,7 @@
                   }
                 },
                 "request_info": {
-                  "description": "Info needed to generate the API request. If the request should include a request_body or parameters, this info MUST be specified - either directly under request_info (top-level) OR in by_input_namespace / by_output_namespace. If request_body/parameters exists in the top-level AND in an object within by_input_namespace / by_output_namespace, the version in the 'by' field will be used (overrides top-level, general version).",
+                  "description": "Info needed to generate the API request. If the request should include a request_body or parameters, this info MUST be specified - either directly under request_info (top-level) OR in by_input_namespace / by_output_namespace. If request_body/parameters exists in the top-level AND in an object within by_input_namespace / by_output_namespace, the version in the 'by' property will be used (overrides top-level, general version).",
                   "$comment": "Needs complex validation logic for {request_body, parameters, by_input_namespace, by output_namespace}: at least 1 of these needs to exist. If one of the by_... exist, than no other fields can (VS request_body, parameters can be together). Within by_..., they need at least 1 of {request_body, parameters}.",
                   "type": "object",
                   "additionalProperties": false,
@@ -207,7 +207,7 @@
                       "type": "boolean"
                     },
                     "content_type": {
-                      "description": "Use this field to specify the content type (aka media type) of the request body. If not specified, the default is 'application/json'. The annotation writer is responsible for specifying a request body that matches this content type.",
+                      "description": "Use this property to specify the content type (aka media type) of the request body. If not specified, the default is 'application/json'. The annotation writer is responsible for specifying a request body that matches this content type.",
                       "type": "string"
                     },
                     "use_pagination": {
@@ -253,13 +253,13 @@
                       }
                     },
                     {
-                      "description": "In this case, the API response has a field with string values (basically keywords), which provides specific provenance info for each retrieved relationship (between a specific input and output ID). The annotator can use this format to map the field's values to different structured provenance data. All possible values for this field should be included in this mapping.",
+                      "description": "In this case, there is an API response-field with string values (basically keywords), which provides specific provenance info for each retrieved relationship (between a specific input and output ID). The annotator can use this format to map the response-field's values to different structured provenance data. All possible values for this response-field should be included in this mapping.",
                       "type": "object",
                       "additionalProperties": false,
                       "required": ["source_field", "mapping"],
                       "properties": {
                         "source_field": {
-                          "description": "Specify the response-field that provides specific provenance info. Format: Dot-notation path to this response-field or other valid JSONata query.",
+                          "description": "Specifies the response-field that provides specific provenance info. Format: Dot-notation path to this response-field or other valid JSONata query.",
                           "type" : "string"
                         },
                         "mapping": {
@@ -384,7 +384,7 @@
           "enum": ["manual_agent", "automated_agent", "data_analysis_pipeline", "computational_model", "text_mining_agent", "image_processing_agent", "manual_validation_of_automated_agent", "not_provided"]
         },
         "api_is_aggregator": {
-          "description": "If this property is set to true, then the 'sources' property should not be present AND INSTEAD the tool should set the API's infores ID (provided in info.x-translator.infores) as the primary_knowledge_source. If this property is set to false, then the 'sources' property MUST be present to provide annotation-specific TRAPI source info and the tool will add the API infores ID as an aggregator_knowledge_source. If this field isn't specified, the tool defaults to 'false' behavior.",
+          "description": "If this property is set to true, then the 'sources' property should not be present AND INSTEAD the tool should set the API's infores ID (provided in info.x-translator.infores) as the primary_knowledge_source. If this property is set to false, then the 'sources' property MUST be present to provide annotation-specific TRAPI source info and the tool will add the API infores ID as an aggregator_knowledge_source. If this property isn't specified, the tool defaults to 'false' behavior.",
           "type": "boolean"
         },
         "sources": {
@@ -409,7 +409,7 @@
                 "enum": ["primary_knowledge_source", "aggregator_knowledge_source", "supporting_data_source"]
               },
               "upstream": {
-                "description": "Use to link a resource to the base resource(s) that it ingested. This field's value(s) should be (infores) ids from other source objects in the 'sources' array.",
+                "description": "Use to link a resource to the base resource(s) that it ingested. This property's value(s) should be (infores) ids from other source objects in the 'sources' array.",
                 "type": "array",
                 "minItems": 1,
                 "items": {
@@ -428,7 +428,7 @@
       }
     },
     "by_fields_subschema": {
-      "description": "Sometimes, parameters/request_body values vary depending on input or output namespace - use this field to provide those different values by namespace. Other request_info will be inherited from the top-level request_info properties. The keys are the standard prefixes for ALL namespaces from the corresponding section ('inputs' or 'outputs'). The values are the namespace-specific parameters and/or request_body values. If by_input_namespace is used, then by_output_namespace SHOULD NOT be used, and vice versa. Notes: (1) it'll likely be rare to use by_output_namespace. (2) The annotator may NEED to use by_input_namespace when the API uses non-prefixed IDs and the IDs from different namespaces have the same format (ex: numeric). The annotator could write diff parameters/request_body to match each namespace's IDs to different namespace-specific data fields. This avoids accidentally matching IDs to the wrong namespace's data.",
+      "description": "Sometimes, parameters/request_body values vary depending on input or output namespace - use this property to provide those different values by namespace. Other request_info will be inherited from the top-level request_info properties. The keys are the standard prefixes for ALL namespaces from the corresponding section ('inputs' or 'outputs'). The values are the namespace-specific parameters and/or request_body values. If by_input_namespace is used, then by_output_namespace SHOULD NOT be used, and vice versa. Notes: (1) it'll likely be rare to use by_output_namespace. (2) The annotator may NEED to use by_input_namespace when the API uses non-prefixed IDs and the IDs from different namespaces have the same format (ex: numeric). The annotator could write diff parameters/request_body to match each namespace's IDs to different namespace-specific data fields. This avoids accidentally matching IDs to the wrong namespace's data.",
       "type": "object",
       "minProperties": 1,
       "additionalProperties": false,
@@ -460,8 +460,7 @@
     },
     "parameters": {
       "description": "Specifies the request parameters. These DO NOT NEED to be specified in endpoint/method's subsection within the 'paths' section of the OpenAPI/SmartAPI spec. The annotation writer has the variables {{input_ids}} (array of IDs w/o prefix) and {{input_curies}} (array of IDs with prefix) to denote where the input IDs go in the parameters (if needed). Jinja2 templating is available to transform those arrays into delimited strings or specify more complex transforms.",
-      "type": "object",
-      "$comment": "used within 'by_' fields."
+      "type": "object"
     },
     "prefix": {
       "description": "This is the standard prefix for the ID namespace. Its format should be (in order of preference): what the biolink-model uses, what [bioregistry](https://bioregistry.io/) specifies, or the prefix used by the resource that created the ID namespace. The delimiter is assumed to be ':' and should not be included.",
@@ -485,8 +484,7 @@
     },
     "request_body": {
       "description": "Specifies the request body. The annotation writer has the variables {{input_ids}} (array of IDs w/o prefix) and {{input_curies}} (array of IDs with prefix) to denote where the input IDs go in the request body. Jinja2 templating is available to transform those arrays into delimited strings or specify more complex transforms.",
-      "type": ["object", "string"],
-      "$comment": "used within 'by_' fields."
+      "type": ["object", "string"]
     }
   }
 }
