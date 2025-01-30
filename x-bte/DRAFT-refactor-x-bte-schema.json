@@ -132,7 +132,7 @@
                       "$ref": "#/$defs/category"
                    },
                     "use_all_namespaces": {
-                      "description": "Only use when the namespaces array has >1 item. If 1 hit in the response has output IDs from >1 namespace listed in the 'namespaces' section, should the tool ingest all those IDs (true)? True implies that the API may return multiple entities in 1 hit. Or should the tool only ingest the ID(s) from 1 namespace - the first in the 'namespaces' section that it finds IDs for (false)? False implies that either (1) 1 hit only has 1 output ID, or (2) the multiple output IDs in 1 hit represent the same entity so only 1 of the IDs is needed. If this property isn't specified, the tool defaults to 'false' behavior. It may be rare to set this property to true.",
+                      "description": "Only use when the namespaces array has >1 item. One record is the response data for ONE specific relationship between an input and output biological entity. If 1 record has output IDs from >1 namespace listed in the 'namespaces' section, should the tool ingest all those IDs (true)? True implies that the API may actually return multiple output entities in 1 record. Or should the tool only ingest the ID(s) from 1 namespace - the first in the 'namespaces' section that it finds IDs for (false)? False implies that either (1) 1 record only has 1 output ID, or (2) the multiple output IDs in 1 record represent the same entity so only 1 of the IDs is needed. If this property isn't specified, the tool defaults to 'false' behavior. It may be rare to set this property to true.",
                       "type": "boolean"
                     },
                     "namespaces": {
