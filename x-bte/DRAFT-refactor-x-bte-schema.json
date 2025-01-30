@@ -70,7 +70,7 @@
                        "$ref": "#/$defs/category"
                     },
                     "use_all_namespaces": {
-                      "description": "Only use when the namespaces array has >1 element. If an input entity has synonymous IDs from >1 namespace listed in the 'namespaces' section, should the tool generate queries using all of those IDs (true)? True implies that the API may have different data for the same biological thing but under IDs in different namespaces, and you want to retrieve all of that data. Or should the tool only use the IDs for 1 namespace - the first in the 'namespaces' section that it has IDs for (false)? False implies that the API has already done an 'entity-resolution' step and an ID from any namespace would retrieve the same data. If this property isn't specified, the tool defaults to 'false' behavior.",
+                      "description": "Only use when the namespaces array has >1 item. If an input entity has synonymous IDs from >1 namespace listed in the 'namespaces' section, should the tool generate queries using all of those IDs (true)? True implies that the API may have different data for the same biological thing but under IDs in different namespaces, and you want to retrieve all of that data. Or should the tool only use the IDs for 1 namespace - the first in the 'namespaces' section that it has IDs for (false)? False implies that the API has already done an 'entity-resolution' step and an ID from any namespace would retrieve the same data. If this property isn't specified, the tool defaults to 'false' behavior.",
                       "type": "boolean",
                       "$comment": "While `outputs` also has this property, the description is different."
                     },
@@ -132,7 +132,7 @@
                       "$ref": "#/$defs/category"
                    },
                     "use_all_namespaces": {
-                      "description": "Only use when the namespaces array has >1 element. If 1 hit in the response has output IDs from >1 namespace listed in the 'namespaces' section, should the tool ingest all those IDs (true)? True implies that the API may return multiple entities in 1 hit. Or should the tool only ingest the ID(s) from 1 namespace - the first in the 'namespaces' section that it finds IDs for (false)? False implies that either (1) 1 hit only has 1 output ID, or (2) the multiple output IDs in 1 hit represent the same entity so only 1 of the IDs is needed. If this property isn't specified, the tool defaults to 'false' behavior. It may be rare to set this property to true.",
+                      "description": "Only use when the namespaces array has >1 item. If 1 hit in the response has output IDs from >1 namespace listed in the 'namespaces' section, should the tool ingest all those IDs (true)? True implies that the API may return multiple entities in 1 hit. Or should the tool only ingest the ID(s) from 1 namespace - the first in the 'namespaces' section that it finds IDs for (false)? False implies that either (1) 1 hit only has 1 output ID, or (2) the multiple output IDs in 1 hit represent the same entity so only 1 of the IDs is needed. If this property isn't specified, the tool defaults to 'false' behavior. It may be rare to set this property to true.",
                       "type": "boolean"
                     },
                     "namespaces": {
@@ -468,7 +468,7 @@
       "pattern": "^[A-Za-z0-9_-.]+$"
     },
     "prefix_combo": {
-      "description": "2-element array: the first element is the input namespace's prefix, the second is output namespace's prefix.",
+      "description": "2-item array: the first item is the input namespace's prefix, the second is output namespace's prefix.",
       "type": "array",
       "minItems": 2,
       "maxItems": 2,
