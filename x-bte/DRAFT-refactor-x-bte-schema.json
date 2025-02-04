@@ -57,7 +57,7 @@
               ],
               "properties": {
                 "response_field_root": {
-                  "description": "Response-fields are specified using the dot-notation path or other valid JSONata query. If every response-field in this annotation has the same root, that root can be specified in this optional property. Then every response-field only needs to specify the path from this root. Don't include a trailing dot.",
+                  "description": "Response-fields are specified using the dot-notation path or other valid JSONata query. If every response-field/JSONata query in this annotation involves the same root path, that root can be specified using this optional property. If this property is used, then all other dot-notation paths in this annotation SHOULD start from the specified root. For JSONata queries, the tool will assume that the specified root points to an iterable, so all JSONata queries in this annotation SHOULD be scoped to the individual items of that iterable. Format: don't include a trailing dot.",
                   "type": "string"
                 },
                 "inputs": {
@@ -289,7 +289,7 @@
                   },
                   "properties": {
                     "trapi_edge_attributes": {
-                      "description": "The response-field's value is a complete set of TRAPI edge-attributes (already in the desired format). The tool should ingest this with no changes.",
+                      "description": "The response-field's value is a complete set of TRAPI edge-attributes (already in the desired format). The tool should ingest this data without applying changes, EXCEPT in the case of knowledge_level/agent_type. If knowledge_level/agent_type edge-attributes exist in the ingested data, they will be overridden using data from the `provenance` section.",
                       "$comment": "Info: https://github.com/biothings/biothings_explorer/issues/314",
                       "type": "string"
                     },
