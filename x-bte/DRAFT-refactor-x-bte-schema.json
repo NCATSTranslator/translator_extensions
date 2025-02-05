@@ -58,7 +58,8 @@
               "properties": {
                 "response_field_root": {
                   "description": "Response-fields are specified using the dot-notation path or other valid JSONata query. If every response-field/JSONata query in this annotation involves the same root path, that root can be specified using this optional property. If this property is used, then all other dot-notation paths in this annotation SHOULD start from the specified root. For JSONata queries, the tool will assume that the specified root points to an iterable, so all JSONata queries in this annotation SHOULD be scoped to the individual items of that iterable. Format: don't include a trailing dot.",
-                  "type": "string"
+                  "type": "string",
+                  "pattern": "^(.)+(^.)$"
                 },
                 "inputs": {
                   "description": "Describes the input biological entities (and their IDs). These are put in the API request to retrieve data on their relationships with other biological entities.",
@@ -395,6 +396,33 @@
                 "name": {"const": "x-bte"}
               }
             }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "$comment": "If SmartAPI document has the info.x-bte section, it SHOULD also have the x-bte tag and components.x-bte-annotations section.",
+        "properties": {
+          "info": {
+            "required": ["x-bte"]
+          }
+        }
+      },
+      "then": {
+        "required": ["tags", "components"],
+        "properties": {
+          "tags": {
+            "contains": {
+              "type": "object",
+              "required": ["name"],
+              "properties": {
+                "name": {"const": "x-bte"}
+              }
+            }
+          },
+          "components": {
+            "required": ["x-bte-annotations"]
           }
         }
       }
