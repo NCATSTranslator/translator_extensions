@@ -354,9 +354,49 @@
   "allOf": [
     {
       "if": {
-        "$comment": "If document has x-bte tag or components.x-bte-annotations, then the other should also be present. See x-translator, x-trapi for examples of how to write this. Don't need to write out the tags section elsewhere in schema. There's also other possible if-then statements (look up 'if' in schema)."
+        "$comment": "If SmartAPI document has the x-bte tag, it SHOULD have the components.x-bte-annotations section. Dev note: ref x-translator schema had required properties in 'if' contents. Not clear if that's required.",
+        "properties": {
+          "tags": {
+            "contains": {
+              "type": "object",
+              "properties": {
+                "name": {"const": "x-bte"}
+              }
+            }
+          }
+        }
       },
       "then": {
+        "required": ["components"],
+        "properties": {
+          "components": {
+            "required": ["x-bte-annotations"]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "$comment": "If SmartAPI document has the components.x-bte-annotations section, it SHOULD have the  x-bte tag.",
+        "properties": {
+          "components": {
+            "required": ["x-bte-annotations"]
+          }
+        }
+      },
+      "then": {
+        "required": ["tags"],
+        "properties": {
+          "tags": {
+            "contains": {
+              "type": "object",
+              "required": ["name"],
+              "properties": {
+                "name": {"const": "x-bte"}
+              }
+            }
+          }
+        }
       }
     }
   ],
