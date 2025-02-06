@@ -102,6 +102,19 @@
                         }
                       }
                     }
+                  },
+                  "if": {
+                    "$comment": "If use_all_namespaces is present, the namespaces array should have >=2 items.",
+                    "required": ["use_all_namespaces"]
+                  },
+                  "then": {
+                    "required": ["namespaces"],
+                    "properties": {
+                      "namespaces": {
+                        "type": "array",
+                        "minItems": 2
+                      }
+                    }
                   }
                 },
                 "predicate": {
@@ -163,6 +176,19 @@
                             "type": "string"
                           }
                         }
+                      }
+                    }
+                  },
+                  "if": {
+                    "$comment": "If use_all_namespaces is present, the namespaces array should have >=2 items.",
+                    "required": ["use_all_namespaces"]
+                  },
+                  "then": {
+                    "required": ["namespaces"],
+                    "properties": {
+                      "namespaces": {
+                        "type": "array",
+                        "minItems": 2
                       }
                     }
                   }
