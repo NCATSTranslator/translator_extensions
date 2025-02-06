@@ -355,11 +355,13 @@
   "allOf": [
     {
       "if": {
-        "$comment": "If SmartAPI document has the x-bte tag, it SHOULD have the components.x-bte-annotations section. Dev note: ref x-translator schema had required properties in 'if' contents. Not clear if that's required.",
+        "$comment": "If SmartAPI document has the x-bte tag, it SHOULD have the components.x-bte-annotations section.",
+        "required": ["tags"],
         "properties": {
           "tags": {
             "contains": {
               "type": "object",
+              "required": ["name"],
               "properties": {
                 "name": {"const": "x-bte"}
               }
@@ -379,6 +381,7 @@
     {
       "if": {
         "$comment": "If SmartAPI document has the components.x-bte-annotations section, it SHOULD have the  x-bte tag.",
+        "required": ["components"],
         "properties": {
           "components": {
             "required": ["x-bte-annotations"]
@@ -403,6 +406,7 @@
     {
       "if": {
         "$comment": "If SmartAPI document has the info.x-bte section, it SHOULD also have the x-bte tag and components.x-bte-annotations section.",
+        "required": ["info"],
         "properties": {
           "info": {
             "required": ["x-bte"]
