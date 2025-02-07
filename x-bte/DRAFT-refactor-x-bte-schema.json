@@ -91,12 +91,12 @@
                           "name_field": {
                             "$ref": "#/$defs/name_field"
                           },
-                          "replace_prefix": {
-                            "$ref": "#/$defs/replace_prefix"
+                          "request_prefix": {
+                            "description": "Sometimes, in requests, the API expects prefixed IDs with DIFFERENT prefixes than what's specified in the 'prefix' property or with a delimiter between prefix and ID that isn't a colon. In these situations, the annotator should specify here the prefix AND delimiter that the API expects.",
+                            "type": "string"
                           },
-                          "id_field": {
-                            "description": "If request_info.support_batch is true, there should be a response-field that specifies the matched input ID. In this scenario, this property SHOULD be used to specify the dot-notation path to this response-field or other valid JSONata query.",
-                            "$comment": "(1) Not decided on the behavior. Need to discuss first - so wait on adding validation logic. (2) outputs also has this property. Right now, I'm defining them separately because the description is different.",
+                          "match_field": {
+                            "description": "If the annotation's request_info.support_batch is true, there should be a response-field that specifies the matched input ID. In this scenario, this property SHOULD be used to specify the dot-notation path to this response-field or other valid JSONata query. The returned value (of this field or JSONata query) SHOULD be an ID in namespace-standard format OR a CURIE (ID-namespace-standard-prefix:ID-in-namespace-standard-format), so it can be matched with the input biological entities' IDs. However, it is expected and fine that JSONata queries sometimes return empty strings (ex: capture regex for a specific namespace's IDs may not return anything because the match_field's value is actually from a different namespace).",
                             "type": "string"
                           }
                         }
