@@ -96,7 +96,7 @@
                             "type": "string"
                           },
                           "match_field": {
-                            "description": "If the annotation's request_info.support_batch is true, there should be a response-field that specifies the matched input ID. In this scenario, this property SHOULD be used to specify the dot-notation path to this response-field or other valid JSONata query. The returned value (of this field or JSONata query) SHOULD be an ID in namespace-standard format OR a CURIE (ID-namespace-standard-prefix:ID-in-namespace-standard-format), so it can be matched with the input biological entities' IDs. However, it is expected and fine that JSONata queries sometimes return empty strings (ex: capture regex for a specific namespace's IDs may not return anything because the match_field's value is actually from a different namespace).",
+                            "description": "If the annotation's request_info.support_batch is true, there should be a response-field that specifies the matched input ID. In this scenario, this property SHOULD be used to specify the dot-notation path to this response-field or other valid JSONata query. The returned value (of this response-field or JSONata query) SHOULD be an ID in namespace-standard format OR a CURIE (ID-namespace-standard-prefix:ID-in-namespace-standard-format), so it can be matched with the input biological entities' IDs. However, it is expected and fine that JSONata queries sometimes return empty strings (ex: capture regex for a specific namespace's IDs may not return anything because the match_field's value is actually from a different namespace).",
                             "type": "string"
                           }
                         }
@@ -145,12 +145,8 @@
                     "category": {
                       "$ref": "#/$defs/category"
                    },
-                    "use_all_namespaces": {
-                      "description": "Only use when the 'namespaces' array has >1 item. One record is the response data for the relationship between one input and one output biological entity. If 1 record has output IDs from >1 ID namespace listed in the 'namespaces' section, should the tool ingest all those IDs (true)? True implies that these IDs may represent separate biological entities according to the tool's ID-resolving service. Or should the tool only ingest the ID(s) from 1 namespace - the first in the 'namespaces' section that it finds IDs for (false)? False implies that either (1) 1 record only has 1 output ID, or (2) the multiple output IDs in 1 record represent the same biological entity so only 1 of the IDs is needed. If this property isn't specified, the tool defaults to 'false' behavior. It may be rare to set this property to true.",
-                      "type": "boolean"
-                    },
                     "namespaces": {
-                      "description": "List of possible ID namespaces for output biological entities. They should be in order of preference (see 'use_all_namespaces' property's description).",
+                      "description": "List of possible ID namespaces for output biological entities. Multiple namespaces should be listed in order of preference. When the tool is parsing one record (the response data for the relationship between one input and one output biological entity), it'll iterate through the namespace items in order until it successfully retrieves an output ID. The assumption is: if a record has multiple output IDs from multiple namespaces, those IDs all represent the same biological entity so the tool only needs one of those IDs to recognize the output entity.",
                       "type": "array",
                       "minItems": 1,
                       "items": {
@@ -162,33 +158,13 @@
                             "$ref": "#/$defs/prefix"
                           },
                           "id_field": {
-                            "description": "Specifies the response-field that contains the output ID (assumes response-field's value is a single ID, using 'capture_regex' if needed). Format: Dot-notation path to this response-field or other valid JSONata query.",
+                            "description": "Specifies the response-field for the output entity's ID. Format: Dot-notation path to this response-field or other valid JSONata query. The returned value (of this response-field or JSONata query) SHOULD be an ID in namespace-standard format OR a CURIE (ID-namespace-standard-prefix:ID-in-namespace-standard-format). However, it is expected and fine that JSONata queries sometimes return empty strings (ex: capture regex for a specific namespace's IDs may not return anything because the id_field's value is actually from a different namespace). Guidelines: (1) If a response-field returns output IDs from multiple namespaces, the returned value (JSONata can be used) MUST be a CURIE. (2) If the response-field only returns output IDs from 1 namespace, the returned value can be an ID (no prefix).",
                             "type": "string"
                           },
                           "name_field": {
                             "$ref": "#/$defs/name_field"
-                          },
-                          "replace_prefix": {
-                            "$ref": "#/$defs/replace_prefix"
-                          },
-                          "capture_regex": {
-                            "description": "Sometimes, the response-field's string value is not the expected format and cannot be handled with replace_prefix (suffixes, ID format isn't biolink-model or bioregistry standard, delimited string, etc). This property can be used to provide a capturing group (regex) to retrieve the ID in its expected format. Exact flavor of regex TBD, assume PCRE2 for now.",
-                            "type": "string"
                           }
                         }
-                      }
-                    }
-                  },
-                  "if": {
-                    "$comment": "If use_all_namespaces is present, the namespaces array should have >=2 items.",
-                    "required": ["use_all_namespaces"]
-                  },
-                  "then": {
-                    "required": ["namespaces"],
-                    "properties": {
-                      "namespaces": {
-                        "type": "array",
-                        "minItems": 2
                       }
                     }
                   }
@@ -575,10 +551,6 @@
         "type": "string",
         "pattern": "^[A-Za-z0-9_-.]+$"
       }
-    },
-    "replace_prefix": {
-      "description": "Sometimes, an API will use a non-standard ID prefix or delimiter for IDs (differs from the standard in 'prefix' and a colon-delimiter). This non-standard ID prefix AND its delimiter should be specified here. It is important to include this when the non-standard prefix must be added to input IDs for queries or will be in the output id_field's value.",
-      "type": "string"
     },
     "request_body": {
       "description": "Specifies the request body. The annotation writer has the variables {{input_ids}} (array of IDs w/o prefix) and {{input_curies}} (array of IDs with prefix) to denote where the input IDs go in the request body. Jinja2 templating is available to transform those arrays into delimited strings or specify more complex transforms.",
