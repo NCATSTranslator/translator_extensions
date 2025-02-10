@@ -187,7 +187,7 @@
                 },
                 "request_info": {
                   "description": "Info needed to generate the API request. If the request should include a request_body or parameters, this info MUST be specified - either directly under request_info (top-level) OR in by_input_namespace / by_output_namespace. If request_body/parameters exists in the top-level AND in an object within by_input_namespace / by_output_namespace, the version in the 'by' property will be used (overrides top-level, general version).",
-                  "$comment": "Needs complex validation logic for {request_body, parameters, by_input_namespace, by output_namespace}: at least 1 of these needs to exist. If one of the by_... exist, than no other fields can (VS request_body, parameters can be together). Within by_..., they need at least 1 of {request_body, parameters}.",
+                  "$comment": "This schema doesn't include logic on when request_body / parameters are required, because it depends on the API endpoint and it's complex (see 2nd sentence in description).",
                   "type": "object",
                   "additionalProperties": false,
                   "required": [
@@ -229,7 +229,27 @@
                     "by_output_namespace": {
                       "$ref": "#/$defs/by_fields_subschema"
                     }
-                  }
+                  },
+                  "allOf": [
+                    {
+                      "if": {
+                        "$comment": "Scenario A: If request_info has by_input_namespace property, then by_output_namespace SHOULD NOT be present",
+                        "required": ["by_input_namespace"]
+                      },
+                      "then": {
+                        "not": {"required": ["by_output_namespace"]}
+                      }
+                    },
+                    {
+                      "if": {
+                        "$comment": "Scenario B: If request_info has by_output_namespace property, then by_input_namespace SHOULD NOT be present",
+                        "required": ["by_output_namespace"]
+                      },
+                      "then": {
+                        "not": {"required": ["by_input_namespace"]}
+                      }
+                    }
+                  ]
                 },
                 "provenance": {
                   "description": "Info on where the biological relationship data comes from (sources) and how it was generated. There are different formats to cover a range of scenarios.",
