@@ -11,7 +11,7 @@
         "x-bte": {
           "description": "Optional property to provide API info that the tool needs for querying or post-processing.",
           "type": "object",
-          "minProperties": 1,
+          "required": ["batch_size_limit", "request_rate_limit"],
           "additionalProperties": false,
           "properties": {
             "batch_size_limit": {
@@ -387,7 +387,7 @@
   "allOf": [
     {
       "if": {
-        "$comment": "If SmartAPI document has the x-bte tag, it SHOULD have the components.x-bte-annotations section.",
+        "$comment": "If SmartAPI document has the x-bte tag, it SHOULD have the info.x-bte and components.x-bte-annotations sections.",
         "required": ["tags"],
         "properties": {
           "tags": {
@@ -402,8 +402,11 @@
         }
       },
       "then": {
-        "required": ["components"],
+        "required": ["info", "components"],
         "properties": {
+          "info": {
+            "required": ["x-bte"]
+          },
           "components": {
             "required": ["x-bte-annotations"]
           }
@@ -412,7 +415,7 @@
     },
     {
       "if": {
-        "$comment": "If SmartAPI document has the components.x-bte-annotations section, it SHOULD have the  x-bte tag.",
+        "$comment": "If SmartAPI document has the components.x-bte-annotations section, it SHOULD have the info.x-bte section and x-bte tag.",
         "required": ["components"],
         "properties": {
           "components": {
@@ -421,8 +424,11 @@
         }
       },
       "then": {
-        "required": ["tags"],
+        "required": ["info", "tags"],
         "properties": {
+          "info": {
+            "required": ["x-bte"]
+          },
           "tags": {
             "contains": {
               "type": "object",
