@@ -104,7 +104,7 @@
                     }
                   },
                   "if": {
-                    "$comment": "If use_all_namespaces is present, the namespaces array should have >=2 items.",
+                    "$comment": "If use_all_namespaces is present, the namespaces array SHOULD have >=2 items.",
                     "required": ["use_all_namespaces"]
                   },
                   "then": {
@@ -350,7 +350,7 @@
               "allOf": [
                 {
                   "if": {
-                    "$comment": "If the annotation's request_info.support_batch is true, the inputs.namespace items should have the match_field property.",
+                    "$comment": "Scenario 1: If the annotation's request_info.support_batch is true, the inputs.namespace items SHOULD have the match_field property.",
                     "required": ["request_info"],
                     "properties": {
                       "request_info": {
@@ -382,7 +382,7 @@
                 },
                 {
                   "if": {
-                    "$comment": "If annotation has exclude_namespace_combos property, inputs.namespaces AND outputs.namespaces arrays should both have >1 item, AND include_namespace_combos shouldn't be present. References on 'property must not be present': https://stackoverflow.com/q/30515253, https://stackoverflow.com/a/61062869/1320693",
+                    "$comment": "Scenario 2A: If annotation has exclude_namespace_combos property, BOTH inputs.namespaces AND outputs.namespaces arrays SHOULD have >1 item. Also, include_namespace_combos SHOULD NOT be present. References for 'if property x exists, property z must not': https://stackoverflow.com/q/30515253, https://stackoverflow.com/a/61062869/1320693",
                     "required": ["exclude_namespace_combos"]
                   },
                   "then": {
@@ -414,7 +414,7 @@
                 },
                 {
                   "if": {
-                    "$comment": "If annotation has include_namespace_combos property, inputs.namespaces AND outputs.namespaces arrays should both have >1 item, AND exclude_namespace_combos shouldn't be present. References on 'property must not be present': https://stackoverflow.com/q/30515253, https://stackoverflow.com/a/61062869/1320693",
+                    "$comment": "Scenario 2B: If annotation has include_namespace_combos property, BOTH inputs.namespaces AND outputs.namespaces arrays SHOULD have >1 item. Also, exclude_namespace_combos SHOULD NOT be present.",
                     "required": ["include_namespace_combos"]
                   },
                   "then": {
@@ -454,7 +454,7 @@
   "allOf": [
     {
       "if": {
-        "$comment": "If SmartAPI document has the x-bte tag, it SHOULD have the info.x-bte and components.x-bte-annotations sections.",
+        "$comment": "Scenario A: If SmartAPI document has the x-bte tag, it SHOULD also have the info.x-bte and components.x-bte-annotations sections.",
         "required": ["tags"],
         "properties": {
           "tags": {
@@ -482,7 +482,7 @@
     },
     {
       "if": {
-        "$comment": "If SmartAPI document has the components.x-bte-annotations section, it SHOULD have the info.x-bte section and x-bte tag.",
+        "$comment": "Scenario B: If SmartAPI document has the components.x-bte-annotations section, it SHOULD also have the info.x-bte section and x-bte tag.",
         "required": ["components"],
         "properties": {
           "components": {
@@ -510,7 +510,7 @@
     },
     {
       "if": {
-        "$comment": "If SmartAPI document has the info.x-bte section, it SHOULD also have the x-bte tag and components.x-bte-annotations section.",
+        "$comment": "Scenario C: If SmartAPI document has the info.x-bte section, it SHOULD also have the x-bte tag and components.x-bte-annotations section.",
         "required": ["info"],
         "properties": {
           "info": {
