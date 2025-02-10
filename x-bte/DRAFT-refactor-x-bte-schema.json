@@ -180,7 +180,6 @@
                 "include_namespace_combos": {
                   "description": "Similar to 'exclude_namespace_combos', except this property is for listing combos that exist in the API's data. Annotation writers SHOULD NOT specify both properties in the same annotation (just specify one). There may be edge-cases where it's preferable to use this property over exclude_namespace_combos. Ex: input/output have a LOT of possible ID namespaces but only a small amount of combos actually exist.",
                   "type": "array",
-                  "$comment": "if exclude_namespace_combos is used, then this one shouldn't be used and vice versa. Add logic to schema later?",
                   "minItems": 1,
                   "items": {
                     "$ref": "#/$defs/prefix_combo"
@@ -375,6 +374,70 @@
                             "items": {
                               "required": ["match_field"]
                             }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "if": {
+                    "$comment": "If annotation has exclude_namespace_combos property, inputs.namespaces AND outputs.namespaces arrays should both have >1 item, AND include_namespace_combos shouldn't be present. References on 'property must not be present': https://stackoverflow.com/q/30515253, https://stackoverflow.com/a/61062869/1320693",
+                    "required": ["exclude_namespace_combos"]
+                  },
+                  "then": {
+                    "required": ["inputs", "outputs"],
+                    "not": {"required": ["include_namespace_combos"]},
+                    "properties": {
+                      "inputs": {
+                        "type": "object",
+                        "required": ["namespaces"],
+                        "properties": {
+                          "namespaces": {
+                            "type": "array",
+                            "minItems": 2
+                          }
+                        }
+                      },
+                      "outputs": {
+                        "type": "object",
+                        "required": ["namespaces"],
+                        "properties": {
+                          "namespaces": {
+                            "type": "array",
+                            "minItems": 2
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "if": {
+                    "$comment": "If annotation has include_namespace_combos property, inputs.namespaces AND outputs.namespaces arrays should both have >1 item, AND exclude_namespace_combos shouldn't be present. References on 'property must not be present': https://stackoverflow.com/q/30515253, https://stackoverflow.com/a/61062869/1320693",
+                    "required": ["include_namespace_combos"]
+                  },
+                  "then": {
+                    "required": ["inputs", "outputs"],
+                    "not": {"required": ["exclude_namespace_combos"]},
+                    "properties": {
+                      "inputs": {
+                        "type": "object",
+                        "required": ["namespaces"],
+                        "properties": {
+                          "namespaces": {
+                            "type": "array",
+                            "minItems": 2
+                          }
+                        }
+                      },
+                      "outputs": {
+                        "type": "object",
+                        "required": ["namespaces"],
+                        "properties": {
+                          "namespaces": {
+                            "type": "array",
+                            "minItems": 2
                           }
                         }
                       }
