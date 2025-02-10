@@ -348,36 +348,40 @@
                   }
                 }
               },
-              "if": {
-                "$comment": "If the annotation's request_info.support_batch is true, the inputs.namespace items should have the match_field property.",
-                "required": ["request_info"],
-                "properties": {
-                  "request_info": {
-                    "type": "object",
-                    "required": ["support_batch"],
+              "allOf": [
+                {
+                  "if": {
+                    "$comment": "If the annotation's request_info.support_batch is true, the inputs.namespace items should have the match_field property.",
+                    "required": ["request_info"],
                     "properties": {
-                      "support_batch": {"const": true}
+                      "request_info": {
+                        "type": "object",
+                        "required": ["support_batch"],
+                        "properties": {
+                          "support_batch": {"const": true}
+                        }
+                      }
                     }
-                  }
-                }
-              },
-              "then": {
-                "required": ["inputs"],
-                "properties": {
-                  "inputs": {
-                    "type": "object",
-                    "required": ["namespaces"],
+                  },
+                  "then": {
+                    "required": ["inputs"],
                     "properties": {
-                      "namespaces": {
-                        "type": "array",
-                        "items": {
-                          "required": ["match_field"]
+                      "inputs": {
+                        "type": "object",
+                        "required": ["namespaces"],
+                        "properties": {
+                          "namespaces": {
+                            "type": "array",
+                            "items": {
+                              "required": ["match_field"]
+                            }
+                          }
                         }
                       }
                     }
                   }
                 }
-              }
+              ]
             }
           }
         }
