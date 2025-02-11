@@ -253,7 +253,7 @@
                 },
                 "provenance": {
                   "description": "Info on where the biological relationship data comes from (sources) and how it was generated. There are different formats to cover a range of scenarios.",
-                  "$comment": "complex!!! one of 3 schemas (two object, 1 array). Have some nested parts that are kinda repetitive, can make $ref to $def. BE CAREFUL OF RECURSIVE SCHEMAS, $REF TO ANOTHER $REF.",
+                  "$comment": "complex!!! one of 3 schemas (two object, 1 array). BE CAREFUL TO AVOID RECURSIVE SCHEMAS, $REF TO ANOTHER $REF: https://json-schema.org/understanding-json-schema/structuring#recursion",
                   "oneOf": [
                     {
                       "$ref": "#/$defs/basic_provenance_info"
@@ -271,11 +271,11 @@
                         },
                         "required": ["namespace_pair"],
                         "unevaluatedProperties": false,
-                        "$comment": "subschema basic_provenance_info also uses 'unevaluatedProperties: false'. Hopefully it's okay to have twice. If it's not, read https://json-schema.org/understanding-json-schema/reference/object#extending"
+                        "$comment": "subschema basic_provenance_info also uses 'unevaluatedProperties: false'. Hopefully it's okay to have twice. Ref: https://json-schema.org/understanding-json-schema/reference/object#extending"
                       }
                     },
                     {
-                      "description": "In this case, there is an API response-field with string values (basically keywords), which provides specific provenance info for each record. One record is the response data for the relationship between one input and one output biological entity. The annotator can use this format to map the response-field's values to different structured provenance data. All possible values for this response-field should be included in this mapping.",
+                      "description": "In this case, there is an API response-field with string values (basically keywords), which provides specific provenance info for each record (the response data for the relationship between one input and one output biological entity). The annotator can use this format to map the response-field's values to different structured provenance data. All possible values for this response-field should be included in this mapping.",
                       "type": "object",
                       "additionalProperties": false,
                       "required": ["source_field", "mapping"],
@@ -563,7 +563,7 @@
       "description": "This is the simplest case: all data retrieved using this annotation has the same, single set of provenance info.",
       "type": "object",
       "unevaluatedProperties": false,
-      "$comment": "add validation logic to this subschema. If api_is_aggregator is present, then sources is not and vice versa! That way source-info is always present. Also don't include any $ref in here.",
+      "$comment": "Don't include any $ref in here.",
       "required": [
         "knowledge_level", 
         "agent_type"
@@ -587,7 +587,6 @@
         },
         "sources": {
           "description": "List of sources for the data retrieved by this annotation.",
-          "$comment": "logic needed? If primary, no upstream. If aggregator, need upstream. Don't worry about supporting.",
           "type": "array",
           "minItems": 1,
           "items": {
@@ -608,6 +607,7 @@
               },
               "upstream": {
                 "description": "Use to link a resource to the base resource(s) that it ingested. This property's value(s) should be (infores) ids from other source objects in the 'sources' array.",
+                "$comment": "Should be used if role is aggregator. I'm not sure about other roles - I see a TRAPI documentation example where primary has upstream (supporting_data_source). So I'm not adding validation logic for other roles right now.",
                 "type": "array",
                 "minItems": 1,
                 "items": {
@@ -620,10 +620,50 @@
                 "$comment": "Original dev work: https://github.com/biothings/biothings_explorer/issues/803",
                 "type": "string"
               }
+            },
+            "allOf": [
+              {              
+                "if": {
+                  "$comment": "If role is aggregator, then 'upstream' property SHOULD be present. Not vice versa.",
+                  "required": ["role"],
+                  "properties": {
+                    "role": {"const": "aggregator_knowledge_source"}
+                  }
+                },
+                "then": {
+                  "required": ["upstream"]
+                }
+              }
+            ]
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "$comment": "Scenario A: If api_is_aggregator is true, then sources SHOULD NOT be present. This could be changed to 'source role can only be supporting_data_source', but then would need to change api_is_aggregator's description.",
+            "required": ["api_is_aggregator"],
+            "properties": {
+              "api_is_aggregator": {"const": true}
+            }
+          },
+          "then": {
+            "not": {"required": ["sources"]}
+          }
+        },
+        {
+          "if": {
+            "$comment": "Scenario B: If 'sources' is present, then api_is_aggregator SHOULD NOT be true. The IF could be changed to 'a source's role is primary or aggregator'.",
+            "required": ["sources"]
+          },
+          "then": {
+            "$comment": "not using 'required' here because this property can be missing",
+            "properties": {
+              "api_is_aggregator": {"const": false}
             }
           }
         }
-      }
+      ]
     },
     "by_fields_subschema": {
       "description": "Sometimes, parameters/request_body values vary depending on input or output ID namespace - use this property to provide those different values by namespace. Other request_info will be inherited from the top-level request_info properties. The keys are the 'prefix' values for ALL ID namespaces from the corresponding section ('inputs' or 'outputs'). The values are the namespace-specific parameters and/or request_body values. If by_input_namespace is used, then by_output_namespace SHOULD NOT be used, and vice versa. Notes: (1) it'll likely be rare to use by_output_namespace. (2) The annotator may NEED to use by_input_namespace when the API uses non-prefixed IDs and the IDs from different namespaces have the same format (ex: numeric). The annotator could write diff parameters/request_body to match each namespace's IDs to different namespace-specific data fields. This avoids accidentally matching IDs to the wrong namespace's data.",
