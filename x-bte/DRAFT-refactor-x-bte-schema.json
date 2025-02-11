@@ -303,6 +303,7 @@
                   "type": "object",
                   "minProperties": 1,
                   "additionalProperties": false,
+                  "$comment": "Potential logic: if trapi_edge_attributes exists, then no other response-mapping should. This involves changing this to oneOf two subschemas with separate descriptions: 1 for trapi_edge_attributes only, 1 for everything else.",
                   "patternProperties": {
                     "^([A-Za-z0-9_-.]+):([A-Za-z0-9_-.]+)$": {
                         "description": "mapping keys are CURIEs (ID-namespace-standard-prefix:ID-in-namespace-standard-format) for the type of data (generally from the biolink-model or a commonly-used ontology).",
