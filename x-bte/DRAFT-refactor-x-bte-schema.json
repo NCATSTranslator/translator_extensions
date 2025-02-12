@@ -58,8 +58,7 @@
               "properties": {
                 "response_field_root": {
                   "description": "Response-fields are specified using the dot-notation path or other valid JSONata query. If every response-field/JSONata query in this annotation involves the same root path, that root can be specified using this optional property. If this property is used, then all other dot-notation paths in this annotation SHOULD start from the specified root. For JSONata queries, the tool will assume that the specified root points to an iterable, so all JSONata queries in this annotation SHOULD be scoped to the individual items of that iterable. Format: don't include a trailing dot.",
-                  "type": "string",
-                  "pattern": "^(.)+(^.)$"
+                  "type": "string"
                 },
                 "inputs": {
                   "description": "Describes the input biological entities (and their IDs). These are put in the API request to retrieve data on their relationships with other biological entities.",
@@ -289,7 +288,7 @@
                           "type": "object",
                           "additionalProperties": false,
                           "patternProperties": {
-                            "^(.)+$": {
+                            "^.+$": {
                               "$ref": "#/$defs/basic_provenance_info"
                             }
                           }
@@ -305,7 +304,7 @@
                   "additionalProperties": false,
                   "$comment": "Potential logic: if trapi_edge_attributes exists, then no other response-mapping should. This involves changing this to oneOf two subschemas with separate descriptions: 1 for trapi_edge_attributes only, 1 for everything else.",
                   "patternProperties": {
-                    "^([A-Za-z0-9_-.]+):([A-Za-z0-9_-.]+)$": {
+                    "^([A-Za-z0-9._-]+):([A-Za-z0-9._-]+)$": {
                         "description": "mapping keys are CURIEs (ID-namespace-standard-prefix:ID-in-namespace-standard-format) for the type of data (generally from the biolink-model or a commonly-used ontology).",
                         "type": "string"
                     }
@@ -358,11 +357,11 @@
                     "properties": {
                       "input_curie": {
                         "type": "string",
-                        "pattern": "^([A-Za-z0-9_-.]+):([A-Za-z0-9_-.]+)$"
+                        "pattern": "^([A-Za-z0-9._-]+):([A-Za-z0-9._-]+)$"
                       },
                       "output_curie": {
                         "type": "string",
-                        "pattern": "^([A-Za-z0-9_-.]+):([A-Za-z0-9_-.]+)$"
+                        "pattern": "^([A-Za-z0-9._-]+):([A-Za-z0-9._-]+)$"
                       }
                     }
                   }
@@ -597,7 +596,7 @@
               "id": {
                 "description": "Should be in infores:ID format, where the resource ID is from Translator's infores registry",
                 "type": "string",
-                "pattern": "^infores:[A-Za-z0-9_-.]+$"
+                "pattern": "^infores:[A-Za-z0-9._-]+$"
               },
               "role": {
                 "description": "Roles are from the biolink-model",
@@ -612,7 +611,7 @@
                 "minItems": 1,
                 "items": {
                   "type": "string",
-                  "pattern": "^infores:[A-Za-z0-9_-.]+$"
+                  "pattern": "^infores:[A-Za-z0-9._-]+$"
                 }
               },
               "record_url_field": {
@@ -671,7 +670,7 @@
       "minProperties": 1,
       "additionalProperties": false,
       "patternProperties": {
-        "^[A-Za-z0-9_-.]+$": {
+        "^[A-Za-z0-9._-]+$": {
           "type": "object",
           "minProperties": 1,
           "additionalProperties": false,
@@ -703,7 +702,7 @@
     "prefix": {
       "description": "This is the ID namespace's standard prefix. This should be from (in order of preference): [biolink-model](https://github.com/biolink/biolink-model/blob/master/project/prefixmap/biolink_model_prefix_map.json), [bioregistry](https://bioregistry.io/), or the resource that created the ID namespace. The delimiter is assumed to be ':' and should not be included.",
       "type": "string",
-      "pattern": "^[A-Za-z0-9_-.]+$"
+      "pattern": "^[A-Za-z0-9._-]+$"
     },
     "prefix_combo": {
       "description": "2-item array: the first item is 'prefix' value for the input ID namespace, the second is 'prefix' value for the output ID namespace.",
@@ -713,7 +712,7 @@
       "items": {
         "$comment": "This is the contents of the 'prefix' sub-schema above. I can't use a $ref because json-schema does not allow $ref to refer to another $ref.",
         "type": "string",
-        "pattern": "^[A-Za-z0-9_-.]+$"
+        "pattern": "^[A-Za-z0-9._-]+$"
       }
     },
     "request_body": {
