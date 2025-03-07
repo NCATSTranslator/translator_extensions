@@ -129,7 +129,7 @@
                   "minProperties": 1,
                   "additionalProperties": false,
                   "patternProperties": {
-                    "^[a-z]+(_[a-z]+)*(_qualifier){1}$":
+                    "(^[a-z]+(_[a-z]+)*(_qualifier){1}$)|(^qualified_predicate$)":
                     {
                       "type": "string",
                       "pattern": "^[a-z]+(_[a-z]+)*$"
