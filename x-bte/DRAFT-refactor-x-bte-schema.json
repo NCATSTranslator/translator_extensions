@@ -301,54 +301,66 @@
                   ]
                 },
                 "response_mapping": {
-                  "description": "Map response-fields to TRAPI edge properties, generally edge attributes. The mapping keys can be (1) keywords (linked to specific ways of parsing the response-field's value and setting up the TRAPI edge property) OR (2) CURIEs (ID-namespace-standard-prefix:ID-in-namespace-standard-format) for the type of data (generally from the biolink-model or a commonly-used ontology). The values should be dot-notation paths to the response-fields or other valid JSONata queries. Advice: users generally want references (publication IDs), publication text snippets (if text-mined), and other structured info.",
-                  "type": "object",
-                  "minProperties": 1,
-                  "additionalProperties": false,
-                  "$comment": "Potential logic: if trapi_edge_attributes exists, then no other response-mapping should. This involves changing this to oneOf two subschemas with separate descriptions: 1 for trapi_edge_attributes only, 1 for everything else.",
-                  "patternProperties": {
-                    "^([A-Za-z0-9._-]+):([A-Za-z0-9._-]+)$": {
-                        "description": "mapping keys are CURIEs (ID-namespace-standard-prefix:ID-in-namespace-standard-format) for the type of data (generally from the biolink-model or a commonly-used ontology).",
-                        "type": "string"
+                  "$comment": "Two oneOf subschemas: 1 for mapping individual response fields to TRAPI edge attributes, 1 for mapping 1 response field that contains data already in TRAPI edge-attribute format.",
+                  "oneOf": [
+                    {
+                      "description": "Map individual response-fields to TRAPI edge attributes. The mapping keys can be (1) keywords (linked to specific ways of parsing the response-field's value and setting up the TRAPI edge attribute) OR (2) CURIEs (ID-namespace-standard-prefix:ID-in-namespace-standard-format) for the type of data (generally from the biolink-model or a commonly-used ontology). The values should be dot-notation paths to the response-fields or other valid JSONata queries. Advice: users generally want references (publication IDs), publication text snippets (if text-mined), and other structured info.",
+                      "type": "object",
+                      "minProperties": 1,
+                      "additionalProperties": false,
+                      "patternProperties": {
+                        "^([A-Za-z0-9._-]+):([A-Za-z0-9._-]+)$": {
+                            "description": "mapping keys are CURIEs (ID-namespace-standard-prefix:ID-in-namespace-standard-format) for the type of data (generally from the biolink-model or a commonly-used ontology).",
+                            "type": "string"
+                        }
+                      },
+                      "properties": {
+                        "ref_pmid": {
+                          "description": "The response-field's value is 1 or more PMIDs of publications that support this biological relationship. These should be put into CURIE format (prefix PMID) and added to the contents of the 'biolink:publications' edge-attribute.",
+                          "$comment": "Info: https://github.com/biothings/biothings_explorer/issues/677",
+                          "type": "string"
+                        },
+                        "ref_url": {
+                          "description": "The response-field's value is 1 or more urls to webpages that support this biological relationship. These should be kept as-is and added to the contents of the 'biolink:publications' edge-attribute.",
+                          "$comment": "Info: https://github.com/biothings/biothings_explorer/issues/677",
+                          "type": "string"
+                        },
+                        "ref_pmcid": {
+                          "description": "The response-field's value is 1 or more PMCIDs of publications that support this biological relationship. These should be put into CURIE format (prefix PMCID?) and added to the contents of the 'biolink:publications' edge-attribute.",
+                          "$comment": "Info: https://github.com/biothings/biothings_explorer/issues/677",
+                          "type": "string"
+                        },
+                        "ref_clinicaltrials": {
+                          "description": "The response-field's value is 1 or more clinical trial NCT IDs that support this biological relationship. These should be put into CURIE format (prefix clinicaltrials, ID should start with NCT) and added to the contents of the 'biolink:publications' edge-attribute.",
+                          "$comment": "Info: https://github.com/biothings/biothings_explorer/issues/677",
+                          "type": "string"
+                        },
+                        "ref_doi": {
+                          "description": "The response-field's value is 1 or more DOI for publications that support this biological relationship. These should be put into CURIE format (prefix doi) and added to the contents of the 'biolink:publications' edge-attribute.",
+                          "$comment": "Info: https://github.com/biothings/biothings_explorer/issues/677",
+                          "type": "string"
+                        },
+                        "ref_isbn": {
+                          "description": "The response-field's value is 1 or more ISBN for publications that support this biological relationship. These should be put into CURIE format (prefix isbn) and added to the contents of the 'biolink:publications' edge-attribute.",
+                          "$comment": "Info: https://github.com/biothings/biothings_explorer/issues/677",
+                          "type": "string"
+                        }
+                      }
+                    },
+                    {
+                      "description": "Use when the response has 1 field that contains a complete set of TRAPI edge-attributes (already in the desired format). When this property is used, there should be no other properties in the response_mapping section.",
+                      "type": "object",
+                      "required": ["trapi_edge_attributes"],
+                      "additionalProperties": false,
+                      "properties": {
+                        "trapi_edge_attributes": {
+                          "description": "The response-field's value is a complete set of TRAPI edge-attributes (already in the desired format). The tool should ingest this data without applying changes, EXCEPT in the case of knowledge_level/agent_type. If knowledge_level/agent_type edge-attributes exist in the ingested data, they will be overridden using data from the `provenance` section.",
+                          "$comment": "Info: https://github.com/biothings/biothings_explorer/issues/314",
+                          "type": "string"
+                        }
+                      }
                     }
-                  },
-                  "properties": {
-                    "trapi_edge_attributes": {
-                      "description": "The response-field's value is a complete set of TRAPI edge-attributes (already in the desired format). The tool should ingest this data without applying changes, EXCEPT in the case of knowledge_level/agent_type. If knowledge_level/agent_type edge-attributes exist in the ingested data, they will be overridden using data from the `provenance` section.",
-                      "$comment": "Info: https://github.com/biothings/biothings_explorer/issues/314",
-                      "type": "string"
-                    },
-                    "ref_pmid": {
-                      "description": "The response-field's value is 1 or more PMIDs of publications that support this biological relationship. These should be put into CURIE format (prefix PMID) and added to the contents of the 'biolink:publications' edge-attribute.",
-                      "$comment": "Info: https://github.com/biothings/biothings_explorer/issues/677",
-                      "type": "string"
-                    },
-                    "ref_url": {
-                      "description": "The response-field's value is 1 or more urls to webpages that support this biological relationship. These should be kept as-is and added to the contents of the 'biolink:publications' edge-attribute.",
-                      "$comment": "Info: https://github.com/biothings/biothings_explorer/issues/677",
-                      "type": "string"
-                    },
-                    "ref_pmcid": {
-                      "description": "The response-field's value is 1 or more PMCIDs of publications that support this biological relationship. These should be put into CURIE format (prefix PMCID?) and added to the contents of the 'biolink:publications' edge-attribute.",
-                      "$comment": "Info: https://github.com/biothings/biothings_explorer/issues/677",
-                      "type": "string"
-                    },
-                    "ref_clinicaltrials": {
-                      "description": "The response-field's value is 1 or more clinical trial NCT IDs that support this biological relationship. These should be put into CURIE format (prefix clinicaltrials, ID should start with NCT) and added to the contents of the 'biolink:publications' edge-attribute.",
-                      "$comment": "Info: https://github.com/biothings/biothings_explorer/issues/677",
-                      "type": "string"
-                    },
-                    "ref_doi": {
-                      "description": "The response-field's value is 1 or more DOI for publications that support this biological relationship. These should be put into CURIE format (prefix doi) and added to the contents of the 'biolink:publications' edge-attribute.",
-                      "$comment": "Info: https://github.com/biothings/biothings_explorer/issues/677",
-                      "type": "string"
-                    },
-                    "ref_isbn": {
-                      "description": "The response-field's value is 1 or more ISBN for publications that support this biological relationship. These should be put into CURIE format (prefix isbn) and added to the contents of the 'biolink:publications' edge-attribute.",
-                      "$comment": "Info: https://github.com/biothings/biothings_explorer/issues/677",
-                      "type": "string"
-                    }
-                  }
+                  ]
                 },
                 "test_examples": {
                   "description": "This section is optional but very useful for testing, so highly recommended to fill out. This is a list of input/output ID pairs that a tool should be able to retrieve from the API using this annotation. These IDs should be in CURIE format (ID-namespace-standard-prefix:ID-in-namespace-standard-format).",
