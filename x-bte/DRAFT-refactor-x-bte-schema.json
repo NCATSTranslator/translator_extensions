@@ -57,8 +57,8 @@
                 "provenance"
               ],
               "properties": {
-                "response_field_root": {
-                  "description": "Response-fields are specified using the dot-notation path or other valid JSONata query. If every response-field/JSONata query in this annotation involves the same root path, that root can be specified using this optional property. If this property is used, then all other dot-notation paths in this annotation SHOULD start from the specified root. For JSONata queries, the tool will assume that the specified root points to an iterable, so all JSONata queries in this annotation SHOULD be scoped to the individual items of that iterable. Format: don't include a trailing dot.",
+                "response_root": {
+                  "description": "The API response data SHOULD be an array of objects, with each object containing all info for 1 knowledge-graph edge. The tool will then iterate through these objects, so response-field specifications (dot-notation paths or JSONata queries) SHOULD be scoped to a single object. If the API response data is not in this format, this property SHOULD be used to provide the JSONata transformation needed to get the response data into this format. In some cases, the API response has a specific field with this data in this format; then, only the dot-notation path to this field is needed. When this property is used, all other response-field specifications should be written as if JSONata transformation has already been done.",
                   "type": "string"
                 },
                 "inputs": {
