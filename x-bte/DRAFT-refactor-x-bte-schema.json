@@ -11,13 +11,14 @@
         "x-bte": {
           "description": "Provides API info that the tool needs for querying or post-processing.",
           "type": "object",
-          "required": ["batch_size_limit", "request_rate_limit"],
+          "required": ["request_rate_limit"],
           "additionalProperties": false,
           "properties": {
             "batch_size_limit": {
-              "description": "Maximum number of input IDs per request (if an annotation's request_info.support_batch: true.",
+              "description": "Maximum number of input IDs per request. This property SHOULD be present if there is an x-bte annotation with request_info.support_batch: true.",
+              "$comment": "There's no validation logic is this doc to enforce this property's presence when there's a support_batch: true",
               "type": "integer"
-            },
+            }, 
             "request_rate_limit": {
               "description": "Maximum number of requests allowed per minute from each client.",
               "type": "integer"
