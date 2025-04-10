@@ -57,8 +57,8 @@
                 "provenance"
               ],
               "properties": {
-                "response_root": {
-                  "description": "The API response data SHOULD be an array of objects, with each object containing all info for 1 knowledge-graph edge. The tool will then iterate through these objects, so response-field specifications (dot-notation paths or JSONata queries) SHOULD be scoped to a single object. If the API response data is not in this format, this property SHOULD be used to provide the JSONata transformation needed to get the response data into this format. In some cases, the API response has a specific field with this data in this format; then, only the dot-notation path to this field is needed. When this property is used, all other response-field specifications should be written as if JSONata transformation has already been done.",
+                "preprocess": {
+                  "description": "The API response data SHOULD be an array of objects, with each object containing all info for 1 knowledge-graph edge. The tool will then iterate through these objects, so all response-field specifications (dot-notation paths or JSONata queries) SHOULD be scoped to a single object. If the API response data is not in this format, this property SHOULD be used to provide the JSONata transformation needed to get the response data into this format. If the API has a specific response-field containing all desired data already in this format, the JSONata transform is simply this response-field's dot-notation path. When this property is used, all response-field specifications SHOULD be written as if the JSONata transformation has already been done (also, remember to scope the response-field specifications to a single object in the transformed array!).",
                   "type": "string"
                 },
                 "inputs": {
