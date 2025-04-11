@@ -596,7 +596,7 @@
           "enum": ["manual_agent", "automated_agent", "data_analysis_pipeline", "computational_model", "text_mining_agent", "image_processing_agent", "manual_validation_of_automated_agent", "not_provided"]
         },
         "api_is_aggregator": {
-          "description": "If this property is set to true, then the 'sources' property should not be present AND INSTEAD the tool should set the API's infores ID (provided in info.x-translator.infores) as the primary_knowledge_source. If this property is set to false, then the 'sources' property MUST be present to provide annotation-specific TRAPI source info and the tool will add the API infores ID as an aggregator_knowledge_source. If this property isn't specified, the tool defaults to 'false' behavior.",
+          "description": "Should the tool treat the API's infores ID as an aggregator_knowledge_source and automatically add it to the TRAPI edge `sources` it constructs (true) or not (false)? Default: true. If true, the API's infores ID SHOULD NOT be added to the `sources` array, because the tool will add it. If false, the API's infores ID SHOULD be added to the `sources` array, because the tool will not add it.",
           "type": "boolean"
         },
         "sources": {
@@ -651,33 +651,7 @@
             ]
           }
         }
-      },
-      "allOf": [
-        {
-          "if": {
-            "$comment": "Scenario A: If api_is_aggregator is true, then sources SHOULD NOT be present. This could be changed to 'source role can only be supporting_data_source', but then would need to change api_is_aggregator's description.",
-            "required": ["api_is_aggregator"],
-            "properties": {
-              "api_is_aggregator": {"const": true}
-            }
-          },
-          "then": {
-            "not": {"required": ["sources"]}
-          }
-        },
-        {
-          "if": {
-            "$comment": "Scenario B: If 'sources' is present, then api_is_aggregator SHOULD NOT be true. The IF could be changed to 'a source's role is primary or aggregator'.",
-            "required": ["sources"]
-          },
-          "then": {
-            "$comment": "not using 'required' here because this property can be missing",
-            "properties": {
-              "api_is_aggregator": {"const": false}
-            }
-          }
-        }
-      ]
+      }
     },
     "by_fields_subschema": {
       "description": "Sometimes, parameters/request_body values vary depending on input or output ID namespace - use this property to provide those different values by namespace. Other request_info will be inherited from the top-level request_info properties. The keys are the 'prefix' values for ALL ID namespaces from the corresponding section ('inputs' or 'outputs'). The values are the namespace-specific parameters and/or request_body values. If by_input_namespace is used, then by_output_namespace SHOULD NOT be used, and vice versa. Notes: (1) it'll likely be rare to use by_output_namespace. (2) The annotator may NEED to use by_input_namespace when the API uses non-prefixed IDs and the IDs from different namespaces have the same format (ex: numeric). The annotator could write diff parameters/request_body to match each namespace's IDs to different namespace-specific data fields. This avoids accidentally matching IDs to the wrong namespace's data.",
