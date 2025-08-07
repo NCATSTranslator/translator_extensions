@@ -24,7 +24,11 @@
                 "KP",
                 "ARA",
                 "ARS",
-                "Utility"
+                "Utility",
+                "DINGO",
+                "DAWG",
+                "SHEPHERD",
+                "COCO"
               ]
             },
             "team": {
@@ -49,7 +53,10 @@
                   "Expander Agent",
                   "Exploring Agent",
                   "Link Brokers",
-                  "Standards Reference Implementation Team"
+                  "Standards Reference Implementation Team",
+                  "DOGSLED",
+                  "DOGSURF",
+                  "CATRAX"
                 ]
               }
             },

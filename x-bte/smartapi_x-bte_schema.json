@@ -1,0 +1,264 @@
+{
+    "title": "The x-bte extension in SmartAPI",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "description": "Schema for the x-bte extension. Assumes that the components section is used to list the operation contents, which are then referenced in lists hanging off the endpoints that should be used by BTE",
+    "properties": {
+        "components": {
+            "type": "object",
+            "properties": {
+                "x-bte-kgs-operations": {
+                    "type": "object",
+                    "description": "This a collection of operations, the patternProperties is a regex used to match the operation name, which is what the user defines",
+                    "minProperties": 1,
+                    "patternProperties": {
+                        "^[A-Za-z0-9_-]+$": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/$defs/operation"
+                            },
+                            "minItems": 1,
+                            "maxItems": 1,
+                            "description": "maxItems is set to 1, currently value is set as 1-element array"
+                        }
+                    }
+                },
+                "x-bte-response-mapping": {
+                    "$ref": "#/$defs/responseMapping"
+                }
+            }
+        }
+    },
+    "allOf": [
+        {
+            "if": {
+                "properties": {
+                    "components": {
+                        "properties": {
+                            "x-bte-kgs-operations": {
+                                "type": "object"
+                            }
+                        },
+                        "required": ["x-bte-kgs-operations"]
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "components": {
+                        "properties": {
+                            "x-bte-kgs-operations": {
+                                "type": "object",
+                                "patternProperties": {
+                                    "^[A-Za-z0-9_-]+$": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "required": ["supportBatch"],
+                                            "properties": {
+                                                "supportBatch": {
+                                                    "type": "boolean"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "x-bte-response-mapping": {
+                                "$ref": "#/$defs/responseMapping"
+                            }
+                        },
+                        "required": ["x-bte-response-mapping"]
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "components": {
+                        "properties": {
+                            "x-bte-response-mapping": {
+                                "type": "object"
+                            }
+                        },
+                        "required": ["x-bte-response-mapping"]
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "components": {
+                        "properties": {
+                            "x-bte-kgs-operations": {
+                                "type": "object",
+                                "patternProperties": {
+                                    "^[A-Za-z0-9_-]+$": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "required": ["supportBatch"],
+                                            "properties": {
+                                                "supportBatch": {
+                                                    "type": "boolean"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "required": ["x-bte-kgs-operations"]
+                    }
+                }
+            }
+        }
+    ],
+    "$defs": {
+        "operation": {
+            "type": "object",
+            "properties": {
+                "supportBatch": {
+                    "type": "boolean"
+                },
+                "useTemplating": {
+                    "type": "boolean"
+                },
+                "inputs": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "string"
+                            },
+                            "semantic": {
+                                "type": "string"
+                            }
+                        },
+                        "required": ["id", "semantic"]
+                    },
+                    "minItems": 1,
+                    "maxItems": 1,
+                    "description": "maxItems is set to 1, current design set as 1-element array"
+                },
+                "requestBody": {
+                    "type": "object",
+                    "properties": {
+                        "body": {
+                            "type": ["object", "string"]
+                        }
+                    },
+                    "required": ["body"]
+                },
+                "requestBodyType": {
+                    "type": "string",
+                    "enum": ["object"]
+                },
+                "outputs": {
+                    "type": "array",
+                    "description": "The outputs of the operation are same as inputs, possible modification in future",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "string"
+                            },
+                            "semantic": {
+                                "type": "string"
+                            }
+                        },
+                        "required": ["id", "semantic"]
+                    },
+                    "minItems": 1,
+                    "maxItems": 1
+                },
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "fields": {
+                            "type": "string"
+                        },
+                        "size": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "predicate": {
+                    "type": "string"
+                },
+                "source": {
+                    "type": "string",
+                    "pattern": "^infores:.+"
+                },
+                "qualifiers": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    },
+                    "minProperties": 1
+                },
+                "knowledge_level": {
+                    "type": "string"
+                },
+                "agent_type": {
+                    "type": "string"
+                },
+                "testExamples": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "qInput": {
+                                "type": "string"
+                            },
+                            "oneOutput": {
+                                "type": "string"
+                            }
+                        },
+                        "required": ["qInput", "oneOutput"]
+                    }
+                },
+                "response_mapping": {
+                    "$ref": "#/$defs/responseMapping"
+                }
+            },
+            "required": ["supportBatch", "useTemplating", "inputs", "outputs", "predicate", "response_mapping"]
+        },
+        "responseMapping": {
+            "type": "object",
+            "minProperties": 1,
+            "description": "This a collection of response mappings, the patternProperties is a regex used to match the response mapping names.",
+            "patternProperties": {
+                "^[A-Za-z0-9_:-]+$": {
+                    "type": "object",
+                    "description": "This is for the name of other response mapping keys, that are not defined in properties."
+                }
+            },
+            "properties": {
+                "source_url": {
+                    "type": "string"
+                },
+                "edge-attributes": {
+                    "type": "string"
+                },
+                "trapi_sources": {
+                    "type": "string"
+                },
+                "ref_input": {
+                    "type": "string"
+                },
+                "ref_output": {
+                    "type": "string"
+                },
+                "input_name": {
+                    "type": "string"
+                },
+                "output_name": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
